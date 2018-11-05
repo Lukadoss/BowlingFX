@@ -1,5 +1,6 @@
 package es.ulpgc.bowling;
 
+import es.ulpgc.bowling.controllers.GuiController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +11,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("views/mainWindow.fxml"));
+        Parent root = FXMLLoader.load(GuiController.class.getResource("../../../../resources/mainWindow.fxml"));
         primaryStage.setTitle("Bowling");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.setMinWidth(620);
