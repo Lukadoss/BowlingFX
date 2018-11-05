@@ -37,6 +37,7 @@ public class GuiController {
     }
 
     public void getListOfGames(ActionEvent actionEvent) {
+        outputArea.clear();
         out("\n");
         try (
                 Statement stmnt = connection.createStatement();
@@ -54,6 +55,7 @@ public class GuiController {
     }
 
     public void getListOfLeaderboard(ActionEvent actionEvent) {
+        outputArea.clear();
         out("\n");
         try (
                 Statement stmnt = connection.createStatement();
@@ -73,7 +75,7 @@ public class GuiController {
     }
 
     public void newGame(ActionEvent actionEvent) {
-
+        outputArea.clear();
         butGames.setDisable(true);
         butLead.setDisable(true);
 

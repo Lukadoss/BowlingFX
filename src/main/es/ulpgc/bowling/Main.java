@@ -10,7 +10,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("mainWindow.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("views/mainWindow.fxml"));
         primaryStage.setTitle("Bowling");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.setMinWidth(620);
