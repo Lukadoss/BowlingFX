@@ -113,6 +113,14 @@ public class BowlingGameTest {
     }
 
     @Test
+    public void given_a_strike_followed_by_strike_followed_by_rolls_frame_should_be_three_and_score_of_roll() {
+        assertThat(playerScore(10, 10, 3, 3).frames().size()).isEqualTo(3);
+        assertThat(playerScore(10, 10, 3, 3).sumScore(0)).isEqualTo(23);
+        assertThat(playerScore(10, 10, 3, 3).sumScore(1)).isEqualTo(39);
+        assertThat(playerScore(10, 10, 3, 3).sumScore(2)).isEqualTo(45);
+    }
+
+    @Test
     public void given_a_multiple_strike_followed_by_strike() {
         assertThat(playerScore(10, 10, 10, 10).frames().size()).isEqualTo(4);
         assertThat(playerScore(10, 10, 10, 10).sumScore(0)).isEqualTo(30);
@@ -179,5 +187,35 @@ public class BowlingGameTest {
         assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(7)).isEqualTo(240);
         assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(8)).isEqualTo(270);
         assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(9)).isEqualTo(300);
+    }
+
+    @Test
+    public void given_perfect_game_missing_last_frame() {
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10).frames().size()).isEqualTo(10);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(0)).isEqualTo(30);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(1)).isEqualTo(60);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(2)).isEqualTo(90);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(3)).isEqualTo(120);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(4)).isEqualTo(150);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(5)).isEqualTo(180);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(6)).isEqualTo(210);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(7)).isEqualTo(240);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(8)).isNull();
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(9)).isNull();
+    }
+
+    @Test
+    public void given_perfect_game_missing_last_frame_2() {
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).frames().size()).isEqualTo(10);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(0)).isEqualTo(30);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(1)).isEqualTo(60);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(2)).isEqualTo(90);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(3)).isEqualTo(120);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(4)).isEqualTo(150);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(5)).isEqualTo(180);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(6)).isEqualTo(210);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(7)).isEqualTo(240);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(8)).isEqualTo(270);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(9)).isNull();
     }
 }
