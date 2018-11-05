@@ -14,10 +14,12 @@ public class Player {
 
     public List<Frame> frames() {
         ArrayList<Frame> frames = new ArrayList<>();
-        for (int i = 0; i < rolls.size();) {
-            Frame frame = new Frame(this, i);
+        int frameCnt = 0;
+        for (int rollCnt = 0; rollCnt < rolls.size();) {
+            Frame frame = new Frame(this, rollCnt, frameCnt);
             frames.add(frame);
-            i += frame.isStrike() ? 1 : 2;
+            rollCnt += frame.isStrike() ? 1 : 2;
+            frameCnt++;
         }
         return frames;
     }
@@ -32,6 +34,30 @@ public class Player {
     }
 
     public Frame frame(int i) {
-        return frames().get(i);
+        try {
+            return frames().get(i);
+        }
+        catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    public Integer sumScore(int frame) {
+        Integer sum = 0;
+        for (int i = 0; i <= frame; i++) {
+            if (frame(i).score() == null) { return null; }
+            sum += frame(i).score();
+        }
+        return sum;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.name);
+        for (int i = 0; i < rolls.size(); i++) {
+            sb.append(" " + rolls.get(i));
+        }
+        return sb.toString();
     }
 }
