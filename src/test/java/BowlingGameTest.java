@@ -153,16 +153,31 @@ public class BowlingGameTest {
 
     @Test
     public void given_full_game_consecutive_spares() {
-        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 4).frames().size()).isEqualTo(10);
-        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 4).sumScore(0)).isEqualTo(12);
-        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 4).sumScore(1)).isEqualTo(27);
-        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 4).sumScore(2)).isEqualTo(43);
-        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 4).sumScore(3)).isEqualTo(56);
-        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 4).sumScore(4)).isEqualTo(68);
-        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 4).sumScore(5)).isEqualTo(84);
-        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 4).sumScore(6)).isEqualTo(103);
-        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 4).sumScore(7)).isEqualTo(122);
-        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 4).sumScore(8)).isEqualTo(136);
-        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 4).sumScore(9)).isEqualTo(144);
+        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 6, 4).frames().size()).isEqualTo(10);
+        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 6, 4).sumScore(0)).isEqualTo(12);
+        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 6, 4).sumScore(1)).isEqualTo(27);
+        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 6, 4).sumScore(2)).isEqualTo(43);
+        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 6, 4).sumScore(3)).isEqualTo(56);
+        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 6, 4).sumScore(4)).isEqualTo(68);
+        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 6, 4).sumScore(5)).isEqualTo(84);
+        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 6, 4).sumScore(6)).isEqualTo(103);
+        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 6, 4).sumScore(7)).isEqualTo(122);
+        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 6, 4).sumScore(8)).isEqualTo(136);
+        assertThat(playerScore(1, 9, 2, 8, 5, 5, 6, 4, 3, 7, 2, 8, 6, 4, 9, 1, 9, 1, 4, 6, 4).sumScore(9)).isEqualTo(150);
+    }
+
+    @Test
+    public void given_perfect_game() {
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).frames().size()).isEqualTo(10);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(0)).isEqualTo(30);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(1)).isEqualTo(60);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(2)).isEqualTo(90);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(3)).isEqualTo(120);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(4)).isEqualTo(150);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(5)).isEqualTo(180);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(6)).isEqualTo(210);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(7)).isEqualTo(240);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(8)).isEqualTo(270);
+        assertThat(playerScore(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10).sumScore(9)).isEqualTo(300);
     }
 }

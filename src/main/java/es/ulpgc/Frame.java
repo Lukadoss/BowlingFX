@@ -13,13 +13,18 @@ public class Frame {
 
     public Integer score() {
         if (!isTerminated()) return null;
+        if (isLastFrame() && (isStrike() || isSpare())) return roll(rollIndex) + roll(rollIndex + 1) + roll(rollIndex + 2);
         if (isSpare()) return roll(rollIndex) + roll(rollIndex + 1) + roll(rollIndex + 2);
         if (isStrike()) {
             if (player.frame(frameIndex + 1) == null) return null;
-            if (player.frame(frameIndex + 1).isStrike() && (player.frame(frameIndex + 2) == null)) return null;
+            if (player.frame(frameIndex + 1).isStrike() && (player.frame(frameIndex + 2)) == null && !player.frame(frameIndex + 1).isLastFrame()) return null;
             return roll(rollIndex) + roll(rollIndex + 1) + roll(rollIndex + 2);
         }
         return roll(rollIndex) + roll(rollIndex + 1);
+    }
+
+    public boolean isLastFrame() {
+        return this.frameIndex == 9;
     }
 
     private Integer roll(int rollIndex) {
@@ -28,7 +33,6 @@ public class Frame {
 
     private boolean isTerminated() {
         return this.rollIndex != player.getRolls().size() - rollsToTerminate();
-
     }
 
     private int rollsToTerminate() {
@@ -38,7 +42,6 @@ public class Frame {
     public boolean isSpare() {
         if (rollIndex + 1 >= player.getRolls().size()) return false;
         return roll(rollIndex) + roll(rollIndex + 1) == 10;
-
     }
 
     public boolean isStrike() {

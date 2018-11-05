@@ -18,7 +18,7 @@ public class Player {
         for (int rollCnt = 0; rollCnt < rolls.size();) {
             Frame frame = new Frame(this, rollCnt, frameCnt);
             frames.add(frame);
-            rollCnt += frame.isStrike() ? 1 : 2;
+            rollCnt += frame.isLastFrame() ? 3 : (frame.isStrike()) ? 1 : 2;
             frameCnt++;
         }
         return frames;
