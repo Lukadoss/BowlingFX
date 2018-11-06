@@ -12,8 +12,6 @@ public class Game {
         if (!name.isEmpty()) this.name = name;
         else {
             this.name = "Just a game";
-            //Master functionality, bowlingController is like cloud/database
-            //this.name = "Game "+bc.getListOfGames().size();
         }
         this.players = players;
 

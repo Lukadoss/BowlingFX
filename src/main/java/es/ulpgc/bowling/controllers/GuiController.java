@@ -1,10 +1,12 @@
 package es.ulpgc.bowling.controllers;
 
+import es.ulpgc.bowling.models.Game;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 
 import java.sql.*;
 
@@ -12,16 +14,19 @@ public class GuiController {
     public TextArea outputArea;
     public TextField console;
     public Button butGames, butLead;
-    private int numOfPlayers = 0;
+    private boolean newGame;
+    private int numOfPlayers;
     private Connection connection;
 
     //If you want to acces remote DB, use another thread. I am lazy and using local..
     public void initialize() {
+        newGame = false;
+        numOfPlayers = 0;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:bowling.db");
             //connection = DriverManager.getConnection(Config.MYSQL_URL, Config.MYSQL_USERNAME, Config.MYSQL_PASSWORD);
         } catch (SQLException e) {
-            System.out.println("Could not connect to DB server. Error: " + e.getMessage());
+            System.out.println("Could not connect to DB server. Error: \n" + e.getMessage());
             shutdown();
         }
     }
@@ -76,9 +81,12 @@ public class GuiController {
 
     public void newGame(ActionEvent actionEvent) {
         outputArea.clear();
+        console.clear();
+        outputArea.setText("Write the name of the game: ");
+        console.setPromptText("Write here");
+        newGame = true;
         butGames.setDisable(true);
         butLead.setDisable(true);
-
     }
 
 
@@ -93,6 +101,9 @@ public class GuiController {
     @FXML
     private void executeCommand(ActionEvent actionEvent) {
         if (!console.getText().isEmpty()){
+            if (newGame){
+                new Game(console.getText(),0);
+            }
             switch(console.getText()){
                 case "clear":
                     outputArea.clear();
@@ -111,5 +122,11 @@ public class GuiController {
             }
         }
         System.exit(0);
+    }
+
+    public void getInput(KeyEvent keyEvent) {
+        if (newGame){
+            outputArea.setText("Write the name of the game: "+console.getText());
+        }
     }
 }
