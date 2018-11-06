@@ -1,4 +1,4 @@
-package es.ulpgc.dao;
+package es.ulpgc.bowling.dao;
 
 import javax.persistence.Entity;
 import java.util.List;
