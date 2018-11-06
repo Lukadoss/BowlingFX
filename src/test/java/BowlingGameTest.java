@@ -1,6 +1,4 @@
-import es.ulpgc.Game;
-import es.ulpgc.Player;
-import org.junit.After;
+import es.ulpgc.bowling.models.Player;
 import org.junit.Before;
 import org.junit.Test;
 
