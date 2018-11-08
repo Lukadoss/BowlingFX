@@ -3,20 +3,20 @@ package es.ulpgc.bowling.service;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerService {
+public class PlayerServiceImpl {
     private List<Integer> rolls;
     private String name;
 
-    public PlayerService(String name) {
+    public PlayerServiceImpl(String name) {
         this.name = name;
         this.rolls = new ArrayList<>();
     }
 
-    public List<FrameService> frames() {
-        ArrayList<FrameService> frames = new ArrayList<>();
+    public List<FrameServiceImpl> frames() {
+        ArrayList<FrameServiceImpl> frames = new ArrayList<>();
         int frameCnt = 0;
         for (int rollCnt = 0; rollCnt < rolls.size();) {
-            FrameService frame = new FrameService(this, rollCnt, frameCnt);
+            FrameServiceImpl frame = new FrameServiceImpl(this, rollCnt, frameCnt);
             frames.add(frame);
             rollCnt += frame.isLastFrame() ? 3 : (frame.isStrike()) ? 1 : 2;
             frameCnt++;
@@ -24,7 +24,7 @@ public class PlayerService {
         return frames;
     }
 
-    public PlayerService roll(int pins) {
+    public PlayerServiceImpl roll(int pins) {
         rolls.add(pins);
         return this;
     }
@@ -33,7 +33,7 @@ public class PlayerService {
         return this.rolls;
     }
 
-    public FrameService frame(int i) {
+    public FrameServiceImpl frame(int i) {
         if (frames().size() <= i) return null;
         return frames().get(i);
     }

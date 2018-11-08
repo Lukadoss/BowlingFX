@@ -6,23 +6,23 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LineService {
+public class LineServiceImpl {
 
-    Logger logger = LoggerFactory.getLogger(LineService.class);
+    Logger logger = LoggerFactory.getLogger(LineServiceImpl.class);
 
     private Integer lineNumber;
-    private List<GameService> games;
+    private List<GameServiceImpl> games;
 
-    public LineService(int lineNumber) {
+    public LineServiceImpl(int lineNumber) {
         this(lineNumber, new ArrayList<>());
     }
 
-    public LineService(int lineNumber, ArrayList<GameService> games) {
+    public LineServiceImpl(int lineNumber, ArrayList<GameServiceImpl> games) {
         this.lineNumber = lineNumber;
         this.games = games;
     }
 
-    public LineService addGame(GameService game) {
+    public LineServiceImpl addGame(GameServiceImpl game) {
         if (!hasRunningGame()) {
             this.games.add(game);
             logger.debug("Starting new game");
@@ -36,8 +36,8 @@ public class LineService {
         return getRunningGame() != null;
     }
 
-    public GameService getRunningGame() {
-        for (GameService game : games) {
+    public GameServiceImpl getRunningGame() {
+        for (GameServiceImpl game : games) {
             if (game.isRunning()) return game;
         }
         return null;
@@ -47,7 +47,7 @@ public class LineService {
         return this.lineNumber;
     }
 
-    public List<GameService> getGames() {
+    public List<GameServiceImpl> getGames() {
         return this.games;
     }
 }

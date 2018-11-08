@@ -1,11 +1,11 @@
 package es.ulpgc.bowling.service;
 
-public class FrameService {
+public class FrameServiceImpl {
     private int rollIndex;
     private int frameIndex;
-    private PlayerService player;
+    private PlayerServiceImpl player;
 
-    public FrameService(PlayerService player, int rollIndex, int frameIndex) {
+    public FrameServiceImpl(PlayerServiceImpl player, int rollIndex, int frameIndex) {
         this.rollIndex = rollIndex;
         this.frameIndex = frameIndex;
         this.player = player;
@@ -50,6 +50,6 @@ public class FrameService {
 
     @Override
     public String toString(){
-        return String.format("FrameService %d, score %d", frameIndex, score());
+        return String.format("FrameServiceImpl %d, score %d", frameIndex, score());
     }
 }

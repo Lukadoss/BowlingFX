@@ -6,27 +6,27 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BowlingService {
+public class BowlingServiceImpl {
 
-    Logger logger = LoggerFactory.getLogger(BowlingService.class);
+    Logger logger = LoggerFactory.getLogger(BowlingServiceImpl.class);
 
-    private List<LineService> lines;
+    private List<LineServiceImpl> lines;
 
-    public BowlingService(List<LineService> lines) {
+    public BowlingServiceImpl(List<LineServiceImpl> lines) {
         this.lines = lines;
     }
 
-    public BowlingService() {
+    public BowlingServiceImpl() {
         this(new ArrayList<>());
     }
 
-    public BowlingService addLine(LineService line) {
+    public BowlingServiceImpl addLine(LineServiceImpl line) {
         this.lines.add(line);
         logger.debug("Adding line " + line.toString());
         return this;
     }
 
-    public List<LineService> getLines() {
+    public List<LineServiceImpl> getLines() {
         return this.lines;
     }
 }

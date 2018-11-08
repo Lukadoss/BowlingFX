@@ -9,19 +9,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameService {
+public class GameServiceImpl {
 
-    Logger logger = LoggerFactory.getLogger(GameService.class);
+    Logger logger = LoggerFactory.getLogger(GameServiceImpl.class);
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    private List<PlayerService> players;
+    private List<PlayerServiceImpl> players;
 
     private Integer totalScore;
     private String id;
 
-    public GameService(ArrayList<PlayerService> players) {
+    public GameServiceImpl(ArrayList<PlayerServiceImpl> players) {
         this.startTime = LocalDateTime.now();
         this.endTime = null;
         this.totalScore = 0;
@@ -29,34 +29,34 @@ public class GameService {
         logger.debug("Startin game at time " + startTime);
     }
 
-    public GameService() {
+    public GameServiceImpl() {
         this(new ArrayList<>());
     }
 
-    public GameService addPlayer(PlayerService player) {
+    public GameServiceImpl addPlayer(PlayerServiceImpl player) {
         if (isRunning()) {
             if (!players.contains(player)) {
                 this.players.add(player);
                 logger.debug("Adding " + player.toString() + " to game " + this.toString());
             } else {
-                logger.warn("PlayerService " + player.toString() + " is already in game " + this.toString());
+                logger.warn("PlayerServiceImpl " + player.toString() + " is already in game " + this.toString());
             }
         } else {
-            logger.warn("GameService " + this.toString() + "already finished");
+            logger.warn("GameServiceImpl " + this.toString() + "already finished");
         }
         return this;
     }
 
-    public GameService removePlayer(PlayerService player) {
+    public GameServiceImpl removePlayer(PlayerServiceImpl player) {
         if (isRunning()) {
             if (players.contains(player)) {
                 this.players.remove(player);
                 logger.debug("Removing " + player.toString() + " from game " + this.toString());
             } else {
-                logger.warn("PlayerService " + player.toString() + " is not in game " + this.toString());
+                logger.warn("PlayerServiceImpl " + player.toString() + " is not in game " + this.toString());
             }
         } else {
-            logger.warn("GameService " + this.toString() + "already finished");
+            logger.warn("GameServiceImpl " + this.toString() + "already finished");
         }
         return this;
     }
@@ -73,7 +73,7 @@ public class GameService {
 //    int players;
 //    GuiController bc;
 //
-//    public GameService(String name, int players) {
+//    public GameServiceImpl(String name, int players) {
 //        bc = new GuiController();
 //        if (!name.isEmpty()) this.name = name;
 //        else {
