@@ -1,22 +1,22 @@
-package es.ulpgc.bowling.models;
+package es.ulpgc.bowling.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
+public class PlayerService {
     private List<Integer> rolls;
     private String name;
 
-    public Player(String name) {
+    public PlayerService(String name) {
         this.name = name;
         this.rolls = new ArrayList<>();
     }
 
-    public List<Frame> frames() {
-        ArrayList<Frame> frames = new ArrayList<>();
+    public List<FrameService> frames() {
+        ArrayList<FrameService> frames = new ArrayList<>();
         int frameCnt = 0;
         for (int rollCnt = 0; rollCnt < rolls.size();) {
-            Frame frame = new Frame(this, rollCnt, frameCnt);
+            FrameService frame = new FrameService(this, rollCnt, frameCnt);
             frames.add(frame);
             rollCnt += frame.isLastFrame() ? 3 : (frame.isStrike()) ? 1 : 2;
             frameCnt++;
@@ -24,7 +24,7 @@ public class Player {
         return frames;
     }
 
-    public Player roll(int pins) {
+    public PlayerService roll(int pins) {
         rolls.add(pins);
         return this;
     }
@@ -33,7 +33,7 @@ public class Player {
         return this.rolls;
     }
 
-    public Frame frame(int i) {
+    public FrameService frame(int i) {
         if (frames().size() <= i) return null;
         return frames().get(i);
     }
