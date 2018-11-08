@@ -1,5 +1,5 @@
-import es.ulpgc.bowling.service.BowlingService;
-import es.ulpgc.bowling.service.LineService;
+import es.ulpgc.bowling.service.BowlingServiceImpl;
+import es.ulpgc.bowling.service.LineServiceImpl;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,31 +12,31 @@ public class BowlingTest {
 
     @Test
     public void constructorEmptyTest() {
-        BowlingService bowling = new BowlingService();
+        BowlingServiceImpl bowling = new BowlingServiceImpl();
         assertThat(bowling.getLines().size()).isZero();
     }
 
     @Test
     public void constructorOneLineTest() {
-        List<LineService> lines = new ArrayList<>();
-        lines.add(new LineService(1));
-        BowlingService bowling = new BowlingService(lines);
+        List<LineServiceImpl> lines = new ArrayList<>();
+        lines.add(new LineServiceImpl(1));
+        BowlingServiceImpl bowling = new BowlingServiceImpl(lines);
         assertThat(bowling.getLines().size()).isEqualTo(1);
     }
 
     @Test
     public void constructorTwoLinesTest() {
-        List<LineService> lines = new ArrayList<>();
-        lines.add(new LineService(1));
-        lines.add(new LineService(2));
-        BowlingService bowling = new BowlingService(lines);
+        List<LineServiceImpl> lines = new ArrayList<>();
+        lines.add(new LineServiceImpl(1));
+        lines.add(new LineServiceImpl(2));
+        BowlingServiceImpl bowling = new BowlingServiceImpl(lines);
         assertThat(bowling.getLines().size()).isEqualTo(2);
     }
 
     @Test
     public void addLineTest() {
-        BowlingService bowling = new BowlingService();
-        bowling.addLine(new LineService(1));
+        BowlingServiceImpl bowling = new BowlingServiceImpl();
+        bowling.addLine(new LineServiceImpl(1));
         assertThat(bowling.getLines().size()).isEqualTo(1);
     }
 }
