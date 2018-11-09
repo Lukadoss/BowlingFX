@@ -3,12 +3,18 @@ package es.ulpgc.bowling.controllers;
 import es.ulpgc.bowling.models.Game;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.*;
+import java.util.Objects;
 
 public class GuiController {
     public TextArea outputArea;
@@ -28,16 +34,6 @@ public class GuiController {
         } catch (SQLException e) {
             System.out.println("Could not connect to DB server. Error: \n" + e.getMessage());
             shutdown();
-        }
-    }
-
-    private boolean checkInput(int x) {
-        if (x <= 8 && x > 0) {
-            numOfPlayers = x;
-            return false;
-        } else {
-            System.out.println("Wrong input! Number of players must be between 1-8");
-            return true;
         }
     }
 
@@ -80,13 +76,18 @@ public class GuiController {
     }
 
     public void newGame(ActionEvent actionEvent) {
-        outputArea.clear();
-        console.clear();
-        outputArea.setText("Write the name of the game: ");
-        console.setPromptText("Write here");
-        newGame = true;
-        butGames.setDisable(true);
-        butLead.setDisable(true);
+        Parent root;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("newGame.fxml")));
+            Stage stage = new Stage();
+            stage.setTitle("New game");
+            stage.setScene(new Scene(root, 300, 110));
+            stage.setResizable(false);
+            stage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
