@@ -1,4 +1,4 @@
-import es.ulpgc.bowling.service.PlayerServiceImpl;
+import es.ulpgc.bowling.javafx.Player;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,8 +8,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BowlingGameTest {
 
-    private PlayerServiceImpl playerScore(int... rolls){
-        PlayerServiceImpl playerScore = new PlayerServiceImpl("Luis");
+    private Player playerScore(int... rolls){
+        Player playerScore = new Player("Luis");
         stream(rolls).forEach(pins -> playerScore.roll(pins));
         return playerScore;
     }

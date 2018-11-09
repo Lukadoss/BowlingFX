@@ -4,23 +4,11 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Bowling {
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    Long id;
+public class Bowling extends BaseEntity {
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="bowling_id")
     private List<Line> lines;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public List<Line> getLines() {
         return lines;

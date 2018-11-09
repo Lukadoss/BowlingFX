@@ -5,11 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class Game {
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    Long id;
+public class Game extends BaseEntity {
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="game_id")
@@ -21,14 +17,6 @@ public class Game {
     private LocalDateTime started;
 
     private LocalDateTime ended;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public List<Player> getPlayers() {
         return players;

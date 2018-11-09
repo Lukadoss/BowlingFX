@@ -3,11 +3,7 @@ package es.ulpgc.bowling.entity;
 import javax.persistence.*;
 
 @Entity
-public class Frame {
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    Long id;
+public class Frame extends BaseEntity {
 
     @ManyToOne
     private Player player;
@@ -15,14 +11,6 @@ public class Frame {
     private Integer rollIndex;
 
     private Integer frameIndex;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Player getPlayer() {
         return player;

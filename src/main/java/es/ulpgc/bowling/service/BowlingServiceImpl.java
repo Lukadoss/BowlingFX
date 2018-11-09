@@ -1,32 +1,22 @@
 package es.ulpgc.bowling.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import es.ulpgc.bowling.entity.Bowling;
+import es.ulpgc.bowling.repository.BowlingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.validation.Errors;
 
-import java.util.ArrayList;
-import java.util.List;
+public class BowlingServiceImpl extends BaseServiceImpl<Bowling> implements BowlingService {
 
-public class BowlingServiceImpl {
+    @Autowired
+    BowlingRepository repository;
 
-    Logger logger = LoggerFactory.getLogger(BowlingServiceImpl.class);
-
-    private List<LineServiceImpl> lines;
-
-    public BowlingServiceImpl(List<LineServiceImpl> lines) {
-        this.lines = lines;
+    @Override
+    public CrudRepository<Bowling, Long> getRepository() {
+        return repository;
     }
 
-    public BowlingServiceImpl() {
-        this(new ArrayList<>());
-    }
-
-    public BowlingServiceImpl addLine(LineServiceImpl line) {
-        this.lines.add(line);
-        logger.debug("Adding line " + line.toString());
-        return this;
-    }
-
-    public List<LineServiceImpl> getLines() {
-        return this.lines;
+    @Override
+    public void specificValidator(Bowling entity, Errors errors) {
     }
 }

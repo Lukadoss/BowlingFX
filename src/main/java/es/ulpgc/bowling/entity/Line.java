@@ -4,11 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Line {
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    Long id;
+public class Line extends BaseEntity {
 
     @ManyToOne
     private Bowling bowling;
@@ -16,14 +12,6 @@ public class Line {
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="line_id")
     private List<Game> games;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Bowling getBowling() {
         return bowling;

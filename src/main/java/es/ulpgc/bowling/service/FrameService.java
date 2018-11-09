@@ -1,4 +1,4 @@
 package es.ulpgc.bowling.service;
 
-public class LineServiceImpl {
+public interface FrameService {
 }

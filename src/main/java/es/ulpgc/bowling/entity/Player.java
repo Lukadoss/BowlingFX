@@ -4,11 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Player {
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    Long id;
+public class Player extends BaseEntity {
 
     private String name;
 
@@ -18,14 +14,6 @@ public class Player {
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="player_id")
     private List<Frame> frames;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
