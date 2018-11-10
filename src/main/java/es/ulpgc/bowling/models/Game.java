@@ -1,19 +1,11 @@
 package es.ulpgc.bowling.models;
 
-import es.ulpgc.bowling.controllers.GuiController;
-
 public class Game {
-    String name;
-    int players;
-    GuiController bc;
+    private String name;
+    private int players;
 
     public Game(String name, int players) {
-        bc = new GuiController();
-        if (!name.isEmpty()) this.name = name;
-        else {
-            this.name = "Just a game";
-        }
+        this.name = name;
         this.players = players;
-
     }
 }

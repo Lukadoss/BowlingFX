@@ -1,6 +1,5 @@
 package es.ulpgc.bowling.controllers;
 
-import es.ulpgc.bowling.models.Game;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,14 +18,10 @@ public class GuiController {
     public TextArea outputArea;
     public TextField console;
     public Button butGames, butLead;
-    private boolean newGame;
-    private int numOfPlayers;
-    private Connection connection;
+    public static Connection connection;
 
     //If you want to acces remote DB, use another thread. I am lazy and using local..
     public void initialize() {
-        newGame = false;
-        numOfPlayers = 0;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:bowling.db");
             //connection = DriverManager.getConnection(Config.MYSQL_URL, Config.MYSQL_USERNAME, Config.MYSQL_PASSWORD);
@@ -76,6 +70,9 @@ public class GuiController {
     }
 
     public void newGame(ActionEvent actionEvent) {
+        console.clear();
+        outputArea.clear();
+
         Parent root;
         try {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("newGame.fxml")));
@@ -102,9 +99,6 @@ public class GuiController {
     @FXML
     private void executeCommand(ActionEvent actionEvent) {
         if (!console.getText().isEmpty()){
-            if (newGame){
-                new Game(console.getText(),0);
-            }
             switch(console.getText()){
                 case "clear":
                     outputArea.clear();
@@ -123,11 +117,5 @@ public class GuiController {
             }
         }
         System.exit(0);
-    }
-
-    public void getInput(KeyEvent keyEvent) {
-        if (newGame){
-            outputArea.setText("Write the name of the game: "+console.getText());
-        }
     }
 }
