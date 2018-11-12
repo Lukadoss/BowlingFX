@@ -5,19 +5,15 @@ import es.ulpgc.bowling.entity.Line;
 
 import java.util.Collection;
 
-public interface GameService {
+public interface GameService extends BaseService<Game> {
 
     Collection<Game> findGamesByLine(Line line);
-
-    Game add(Line line);
 
     Collection<Game> findRunningGames();
 
     Game findRunningGameOnLine(Line line);
 
     Integer findLineNumber(Game game);
-
-    Game findGameById(Long id);
 
     Game endGame(Game game);
 

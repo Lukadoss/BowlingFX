@@ -4,8 +4,10 @@ import es.ulpgc.bowling.entity.Bowling;
 import es.ulpgc.bowling.repository.BowlingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
+@Service
 public class BowlingServiceImpl extends BaseServiceImpl<Bowling> implements BowlingService {
 
     @Autowired

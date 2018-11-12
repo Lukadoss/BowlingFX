@@ -17,4 +17,9 @@ public class Bowling extends BaseEntity {
     public void setLines(List<Line> lines) {
         this.lines = lines;
     }
+
+    @Override
+    public String toString() {
+        return "Bowling=[id=" + this.id +", lines=]";
+    }
 }

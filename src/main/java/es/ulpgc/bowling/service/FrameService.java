@@ -1,4 +1,7 @@
 package es.ulpgc.bowling.service;
 
-public interface FrameService {
+import es.ulpgc.bowling.entity.Frame;
+
+public interface FrameService extends BaseService<Frame> {
+
 }

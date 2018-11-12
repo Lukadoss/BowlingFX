@@ -38,4 +38,9 @@ public class Player extends BaseEntity {
     public void setFrames(List<Frame> frames) {
         this.frames = frames;
     }
+
+    @Override
+    public String toString() {
+        return "Player=[id=" + this.id + ", name=" + name + ", game=" + game + ", frames=]";
+    }
 }

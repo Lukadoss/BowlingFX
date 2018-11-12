@@ -49,4 +49,9 @@ public class Game extends BaseEntity {
     public void setEnded(LocalDateTime ended) {
         this.ended = ended;
     }
+
+    @Override
+    public String toString() {
+        return "Game=[id=" + this.id +", line="+ line.toString() + ", started=" + started + ", ended=" + ended + ", players=]";
+    }
 }
