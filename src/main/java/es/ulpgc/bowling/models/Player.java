@@ -6,10 +6,12 @@ import java.util.List;
 public class Player {
     private List<Integer> rolls;
     private String name;
+    private int topScore;
 
     public Player(String name) {
         this.name = name;
         this.rolls = new ArrayList<>();
+        this.topScore = 0;
     }
 
     public List<Frame> frames() {
@@ -49,6 +51,18 @@ public class Player {
             sum += frame(i).score();
         }
         return sum;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void setTopScore(int score){
+        this.topScore = score;
+    }
+
+    public int getTopScore(){
+        return topScore;
     }
 
     @Override

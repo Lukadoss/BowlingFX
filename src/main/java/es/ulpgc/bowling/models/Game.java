@@ -2,10 +2,18 @@ package es.ulpgc.bowling.models;
 
 public class Game {
     private String name;
-    private int players;
+    private int score;
 
-    public Game(String name, int players) {
+    public Game(String name, int score) {
         this.name = name;
-        this.players = players;
+        this.score = score;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public int getScore(){
+        return score;
     }
 }
