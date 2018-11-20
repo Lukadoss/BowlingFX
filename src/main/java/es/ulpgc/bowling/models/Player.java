@@ -6,12 +6,12 @@ import java.util.List;
 public class Player {
     private List<Integer> rolls;
     private String name;
-    private int topScore;
+    private int totalScore;
 
     public Player(String name) {
         this.name = name;
         this.rolls = new ArrayList<>();
-        this.topScore = 0;
+        this.totalScore = 0;
     }
 
     public List<Frame> frames() {
@@ -57,12 +57,12 @@ public class Player {
         return name;
     }
 
-    public void setTopScore(int score){
-        this.topScore = score;
+    public void setTotalScore(int score){
+        this.totalScore = score;
     }
 
-    public int getTopScore(){
-        return topScore;
+    public int getTotalScore(){
+        return totalScore;
     }
 
     @Override

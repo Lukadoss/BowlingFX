@@ -1,5 +1,6 @@
 package es.ulpgc.bowling.controllers;
 
+import es.ulpgc.bowling.GameState;
 import es.ulpgc.bowling.models.Game;
 import es.ulpgc.bowling.models.Player;
 import javafx.event.ActionEvent;
@@ -31,10 +32,14 @@ public class NewGameController {
     private int numOfPlayers;
     private HashMap<Label, TextField> comboList;
     private ArrayList<String> names;
+    private ArrayList<Player> players;
+    private Game game;
+    private GuiController gc = null;
 
     public void initialize() {
         comboList = new HashMap<>();
         names = new ArrayList<>();
+        players = new ArrayList<>();
     }
 
     public void cancel(ActionEvent actionEvent) {
@@ -58,9 +63,11 @@ public class NewGameController {
                 }
             });
             if (isOkay.get()) {
-                new Game(gameName, numOfPlayers);
-                names.forEach(Player::new);
+                game = new Game(gameName);
+                names.forEach(e -> players.add(new Player(e)));
                 ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
+                gc.setGameState(GameState.RUNNING);
+                gc.newGameGui();
             }
         }
     }
@@ -126,5 +133,17 @@ public class NewGameController {
 
             anchorPane.getChildren().addAll(l, t);
         }
+    }
+
+    public Game getGame(){
+        return game;
+    }
+
+    public ArrayList<Player> getPlayers(){
+        return players;
+    }
+
+    public void setGuiController(GuiController guiController) {
+        this.gc = guiController;
     }
 }

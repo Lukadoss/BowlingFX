@@ -1,5 +1,6 @@
 package es.ulpgc.bowling.controllers;
 
+import es.ulpgc.bowling.GameState;
 import es.ulpgc.bowling.models.Game;
 import es.ulpgc.bowling.models.Player;
 import javafx.collections.FXCollections;
@@ -13,20 +14,23 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class GuiController {
     public TextArea outputArea;
     public TextField console;
     public Button butGames, butLead;
-    private static Connection connection;
     public TableView mainTable;
     public Pane mainPane;
+
+    private static Connection connection;
+    private static GameState gameState = GameState.IN_LOBBY;
+    private NewGameController ngc = null;
 
     //If you want to acces remote DB, use another thread. I am lazy and using local..
     public void initialize() {
@@ -54,29 +58,27 @@ public class GuiController {
     }
 
     public void getListOfGames(ActionEvent actionEvent) {
-        ResultSet rs = sqlExec("SELECT game.title, SUM(player.top_score) as sum from game\n" +
+        ResultSet rs = sqlExec("SELECT game.title, SUM(player.total_score) as sum, game.id from game\n" +
                 "LEFT JOIN player ON game.id = player.game_id\n" +
                 "GROUP BY game.id ORDER BY sum DESC;");
         TableColumn<Game, String> game_title = new TableColumn<>("Game title");
         game_title.setMinWidth(100);
-        game_title.setCellValueFactory(
-                new PropertyValueFactory<>("name"));
+        game_title.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         TableColumn<Game, String> best_score = new TableColumn<>("Achieved score");
         best_score.setMinWidth(100);
-        best_score.setCellValueFactory(
-                new PropertyValueFactory<>("score"));
+        best_score.setCellValueFactory(new PropertyValueFactory<>("score"));
 
-        TableColumn actionCol = new TableColumn("Action");
+        TableColumn actionCol = new TableColumn("Game details");
         actionCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
-        Callback<TableColumn<Player, String>, TableCell<Player, String>> cellFactory
+        Callback<TableColumn<Game, String>, TableCell<Game, String>> cellFactory
                 = //
-                new Callback<TableColumn<Player, String>, TableCell<Player, String>>() {
+                new Callback<TableColumn<Game, String>, TableCell<Game, String>>() {
                     @Override
-                    public TableCell call(final TableColumn<Player, String> param) {
-                        final TableCell<Player, String> cell = new TableCell<Player, String>() {
+                    public TableCell call(final TableColumn<Game, String> param) {
+                        final TableCell<Game, String> cell = new TableCell<Game, String>() {
 
-                            final Button btn = new Button("Game details");
+                            final Button btn = new Button("Statistics");
 
                             @Override
                             public void updateItem(String item, boolean empty) {
@@ -85,10 +87,7 @@ public class GuiController {
                                     setGraphic(null);
                                     setText(null);
                                 } else {
-                                    btn.setOnAction(event -> {
-                                        Player person = getTableView().getItems().get(getIndex());
-                                        System.out.println(person.getName());
-                                    });
+                                    btn.setOnAction(event -> showGameStats(getTableView().getItems().get(getIndex()).getId()));
                                     setGraphic(btn);
                                     setText(null);
                                 }
@@ -96,16 +95,34 @@ public class GuiController {
                         };
                         return cell;
                     }
-                };
-        actionCol.setCellFactory(cellFactory);
 
+                    private void showGameStats(int id) {
+                        FXMLLoader root;
+                        try {
+                            root = new FXMLLoader(getClass().getClassLoader().getResource(("gameStats.fxml")));
+                            Stage stage = new Stage(StageStyle.DECORATED);
+                            stage.setTitle("Game statistics");
+                            stage.setScene(new Scene(root.load()));
+                            stage.setResizable(false);
+                            stage.show();
+                            root.<GameStatsController>getController().initGame(id);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+        actionCol.setStyle("-fx-aligment: CENTER-RIGHT");
+        actionCol.setCellFactory(cellFactory);
         mainTable.getColumns().clear();
         mainTable.getColumns().addAll(game_title, best_score, actionCol);
 
         ArrayList<Game> list = new ArrayList<>();
         try {
             while (rs.next()) {
-                list.add(new Game(rs.getString(1), rs.getInt(2)));
+                Game g = new Game(rs.getString(1));
+                g.setScore(rs.getInt(2));
+                g.setId(rs.getInt(3));
+                list.add(g);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -116,17 +133,15 @@ public class GuiController {
     }
 
     public void getListOfLeaderboard(ActionEvent actionEvent) {
-        ResultSet rs = sqlExec("SELECT * FROM player ORDER BY top_score DESC");
+        ResultSet rs = sqlExec("SELECT * FROM player ORDER BY total_score DESC");
 
         TableColumn<Player, String> player_name = new TableColumn<>("Player name");
         player_name.setMinWidth(100);
-        player_name.setCellValueFactory(
-                new PropertyValueFactory<>("name"));
+        player_name.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         TableColumn<Player, String> best_score = new TableColumn<>("Best score");
         best_score.setMinWidth(100);
-        best_score.setCellValueFactory(
-                new PropertyValueFactory<>("topScore"));
+        best_score.setCellValueFactory(new PropertyValueFactory<>("totalScore"));
 
         mainTable.getColumns().clear();
         mainTable.getColumns().addAll(player_name, best_score);
@@ -135,7 +150,7 @@ public class GuiController {
         try {
             while (rs.next()) {
                 Player p = new Player(rs.getString("name"));
-                p.setTopScore(rs.getInt("top_score"));
+                p.setTotalScore(rs.getInt("total_score"));
                 list.add(p);
             }
         } catch (SQLException e) {
@@ -146,47 +161,59 @@ public class GuiController {
         mainTable.setItems(data);
     }
 
-    private String drawLine() {
-        //Text t = new Text("-");
-        //int x = (int) (outputArea.getWidth()/t.getLayoutBounds().getWidth());
-        return new String(new char[50]).replace("\0", "-");
-    }
-
     public void newGame(ActionEvent actionEvent) throws InterruptedException {
         console.clear();
         outputArea.clear();
+        setGameState(GameState.STARTING);
 
-        Parent root;
         try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("newGame.fxml")));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("newGame.fxml"));
+            Parent root = loader.load();
+            ngc = loader.getController();
+            ngc.setGuiController(this);
+
             Stage stage = new Stage();
             stage.setTitle("New game");
-            stage.setScene(new Scene(root, 300, 110));
+            stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            setGameState(GameState.IN_LOBBY);
         }
-
-        mainTable.setVisible(false);
-        outputArea.setVisible(true);
     }
-
 
     private void out(String one) {
         outputArea.setText(one + "\n" + outputArea.getText());
     }
 
     private void formattedOutput(String one, String two) {
-        out(String.format("%-34s%1s%15s", one,"|", two));
+        out(String.format("%-34s%1s%15s", one, "|", two));
+    }
+
+    private String drawLine() {
+        //Text t = new Text("-");
+        //int x = (int) (outputArea.getWidth()/t.getLayoutBounds().getWidth());
+        return new String(new char[50]).replace("\0", "-");
     }
 
     @FXML
     private void executeCommand(ActionEvent actionEvent) {
+        out("\n");
         if (!console.getText().isEmpty()) {
             switch (console.getText()) {
                 case "clear":
                     outputArea.clear();
+                    break;
+                case "status":
+                    out("Game status: "+gameState.name());
+                    break;
+                case "players":
+                    for(Player p : ngc.getPlayers()) out(p.getName());
+                    out("Currently playing players:");
+                    break;
+                case "game":
+                    out("Current score for game \""+ngc.getGame().getName()+"\" is "+ngc.getGame().getScore());
                     break;
             }
         }
@@ -204,7 +231,7 @@ public class GuiController {
         System.exit(0);
     }
 
-    public static ResultSet sqlExec(String sql) {
+    static ResultSet sqlExec(String sql) {
         ResultSet rs = null;
         try {
             Statement stmnt = connection.createStatement();
@@ -213,5 +240,17 @@ public class GuiController {
             e.printStackTrace();
         }
         return rs;
+    }
+
+    public void setGameState(GameState g){
+        gameState = g;
+    }
+
+    public void newGameGui(){
+        mainTable.setVisible(false);
+        outputArea.setVisible(true);
+        butLead.setDisable(true);
+        butGames.setDisable(true);
+        console.setDisable(false);
     }
 }
