@@ -21,7 +21,6 @@ public class GameStatsController {
     }
 
     public void initGame(int id){
-        System.out.println(id);
         ResultSet rs = GuiController.sqlExec("SELECT title FROM game WHERE id = "+id);
         try {
             gameNameLabel.setText(rs.getString(1));

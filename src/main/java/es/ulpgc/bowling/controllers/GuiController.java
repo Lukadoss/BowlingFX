@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class GuiController {
     public TextArea outputArea;
     public TextField console;
-    public Button butGames, butLead;
+    public Button butGames, butLead, butNewGame;
     public TableView mainTable;
     public Pane mainPane;
 
@@ -165,6 +165,7 @@ public class GuiController {
         console.clear();
         outputArea.clear();
         setGameState(GameState.STARTING);
+        butNewGame.setDisable(true);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("newGame.fxml"));
@@ -177,8 +178,10 @@ public class GuiController {
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
+            stage.setOnHidden(e->butNewGame.setDisable(false));
         } catch (IOException e) {
             e.printStackTrace();
+            butNewGame.setDisable(true);
             setGameState(GameState.IN_LOBBY);
         }
     }
@@ -199,9 +202,17 @@ public class GuiController {
 
     @FXML
     private void executeCommand(ActionEvent actionEvent) {
-        out("\n");
         if (!console.getText().isEmpty()) {
+            out("\n");
             switch (console.getText()) {
+                case "help":
+                    out("Commands:\nclear - clears the output area\nstatus - Returns current game status\nplayers - shows all players in game\ngame - returns" +
+                            " sum of current ingame score");
+                    break;
+                case "h":
+                    out("Commands:\nclear - clears the output area\nstatus - Returns current game status\nplayers - shows all players in game\ngame - returns" +
+                            " sum of current ingame score");
+                    break;
                 case "clear":
                     outputArea.clear();
                     break;
@@ -215,6 +226,8 @@ public class GuiController {
                 case "game":
                     out("Current score for game \""+ngc.getGame().getName()+"\" is "+ngc.getGame().getScore());
                     break;
+                default:
+                    out("Command not found! ---Write \"help\" to see all commands---");
             }
         }
         console.clear();
