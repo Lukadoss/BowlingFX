@@ -1,23 +1,27 @@
 package es.ulpgc.bowling.controllers;
 
+import es.ulpgc.bowling.entity.Line;
 import es.ulpgc.bowling.service.LineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
 @Controller
 @RequestMapping("/line")
-public class LineController {
+public class LineController extends BaseController<Line, LineService> {
 
     @Autowired
     LineService service;
 
-    @RequestMapping("/")
-    public String welcome(Map<String, Object> model) {
-        model.put("message", service.getAll().get(0).toString());
-        return "bowling";
+    @RequestMapping("/{id}")
+    public ModelAndView welcome(Map<String, Object> model, @PathVariable Long id) {
+        Line line = service.get(id);
+        model.put("line", line);
+        return new ModelAndView("line", model);
     }
 
     public LineService getService() {

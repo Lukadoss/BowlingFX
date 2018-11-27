@@ -13,12 +13,12 @@
 
     <div class="starter-template">
         <h1>Bowling</h1>
-        <c:forEach items="${bowlings}" var="bowling">
-            <h2>Welcome to Bowling building (id=${bowling.id}) </h2>
-            <c:forEach items="${bowling.lines}" var="line">
-                <span>Choose line <a href="/line/${line.id}">${line.id}</a></span><br>
+
+            <h2>Line number ${line.id} </h2>
+            <c:forEach items="${line.games}" var="game">
+
+                <span>Start or continue <a href="/game/${game.id}">${game.id}</a></span><br>
             </c:forEach>
-        </c:forEach>
     </div>
 
 </div>
