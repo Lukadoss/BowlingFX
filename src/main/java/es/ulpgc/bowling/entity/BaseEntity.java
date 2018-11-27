@@ -1,15 +1,13 @@
 package es.ulpgc.bowling.entity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @MappedSuperclass
 public class BaseEntity implements Serializable {
 
     @Id
+    @Column
     @GeneratedValue(strategy=GenerationType.AUTO)
     Long id;
 

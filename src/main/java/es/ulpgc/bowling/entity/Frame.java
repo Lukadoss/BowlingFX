@@ -8,8 +8,10 @@ public class Frame extends BaseEntity {
     @ManyToOne
     private Player player;
 
+    @Column
     private Integer rollIndex;
 
+    @Column
     private Integer frameIndex;
 
     public Player getPlayer() {

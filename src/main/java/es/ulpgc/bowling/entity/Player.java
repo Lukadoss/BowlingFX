@@ -6,10 +6,16 @@ import java.util.List;
 @Entity
 public class Player extends BaseEntity {
 
+    @Column
     private String name;
 
     @ManyToOne
     private Game game;
+
+    @ElementCollection
+    @CollectionTable(name="Rolls", joinColumns=@JoinColumn(name="player_id"))
+    @Column
+    private List<Integer> rolls;
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="player_id")
@@ -29,6 +35,14 @@ public class Player extends BaseEntity {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public List<Integer> getRolls() {
+        return rolls;
+    }
+
+    public void setRolls(List<Integer> rolls) {
+        this.rolls = rolls;
     }
 
     public List<Frame> getFrames() {

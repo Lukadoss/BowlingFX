@@ -2,22 +2,20 @@ package es.ulpgc.bowling.service;
 
 import es.ulpgc.bowling.entity.Game;
 import es.ulpgc.bowling.entity.Line;
+import es.ulpgc.bowling.entity.Player;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface GameService extends BaseService<Game> {
 
-    Collection<Game> findGamesByLine(Line line);
+    Game addPlayer(Game g, Player p);
 
-    Collection<Game> findRunningGames();
+    Game removePlayer(Game g, Player p);
 
-    Game findRunningGameOnLine(Line line);
+    Game startGame(Game g);
 
-    Integer findLineNumber(Game game);
+    Game endGame(Game g);
 
-    Game endGame(Game game);
-
-    Boolean isRunning(Game game);
-
-    Integer score(Game game);
+    Boolean isRunning(Game g);
 }

@@ -2,19 +2,25 @@ package es.ulpgc.bowling.service;
 
 import es.ulpgc.bowling.entity.Game;
 import es.ulpgc.bowling.entity.Line;
+import es.ulpgc.bowling.entity.Player;
 import es.ulpgc.bowling.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class GameServiceImpl extends BaseServiceImpl<Game> implements GameService{
 
     @Autowired
     GameRepository repository;
+
+    @Autowired
+    PlayerService playerService;
 
     @Override
     public CrudRepository<Game, Long> getRepository() {
@@ -27,37 +33,60 @@ public class GameServiceImpl extends BaseServiceImpl<Game> implements GameServic
     }
 
     @Override
-    public Collection<Game> findGamesByLine(Line line) {
-        return null;
+    public Game addPlayer(Game g, Player p) {
+
+        if (isRunning(g)) {
+            if (!g.getPlayers().contains(p)) {
+                g.getPlayers().add(p);
+
+            } else {
+//                logger.warn("Player " + player.toString() + " is already in game " + this.toString());
+            }
+        } else {
+//            logger.warn("Game " + this.toString() + "already finished");
+        }
+        return g;
     }
 
     @Override
-    public Collection<Game> findRunningGames() {
-        return null;
+    public Game removePlayer(Game g, Player p) {
+        if (isRunning(g)) {
+            if (g.getPlayers().contains(p)) {
+                g.getPlayers().remove(p);
+//                logger.debug("Removing " + player.toString() + " from game " + this.toString());
+            } else {
+//                logger.warn("Player " + player.toString() + " is not in game " + this.toString());
+            }
+        } else {
+//            logger.warn("Game " + this.toString() + "already finished");
+        }
+        return g;
     }
 
     @Override
-    public Game findRunningGameOnLine(Line line) {
-        return null;
+    public Game startGame(Game g) {
+        if (g == null) {
+            g = new Game();
+            g.setStarted(LocalDateTime.now());
+            g.setEnded(null);
+        }
+        repository.save(g);
+        return g;
     }
 
     @Override
-    public Integer findLineNumber(Game game) {
-        return null;
+    public Game endGame(Game g) {
+        g.setEnded(LocalDateTime.now());
+        repository.save(g);
+        return g;
     }
 
     @Override
-    public Game endGame(Game game) {
-        return null;
+    public Boolean isRunning(Game g) {
+        return g.getEnded() == null;
     }
 
-    @Override
-    public Boolean isRunning(Game game) {
-        return null;
-    }
-
-    @Override
-    public Integer score(Game game) {
-        return null;
+    public PlayerService getPlayerService() {
+        return this.playerService;
     }
 }

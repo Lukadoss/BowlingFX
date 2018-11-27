@@ -18,3 +18,14 @@ insert into Player (id, name, game_id) values (1, 'david', 1);
 insert into Player (id, name, game_id) values (2, 'jan', 1);
 insert into Player (id, name, game_id) values (3, 'tomas', 1);
 insert into Player (id, name, game_id) values (4, 'petr', 1);
+
+insert into Rolls (player_id, rolls) values (1, 1);
+insert into Rolls (player_id, rolls) values (1, 1);
+insert into Rolls (player_id, rolls) values (1, 1);
+insert into Rolls (player_id, rolls) values (1, 1);
+insert into Rolls (player_id, rolls) values (1, 1);
+insert into Rolls (player_id, rolls) values (1, 1);
+insert into Rolls (player_id, rolls) values (1, 1);
+insert into Rolls (player_id, rolls) values (1, 1);
+insert into Rolls (player_id, rolls) values (1, 1);
+insert into Rolls (player_id, rolls) values (1, 1);

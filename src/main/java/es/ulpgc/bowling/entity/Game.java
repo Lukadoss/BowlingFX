@@ -14,8 +14,10 @@ public class Game extends BaseEntity {
     @ManyToOne
     private Line line;
 
+    @Column
     private LocalDateTime started;
 
+    @Column
     private LocalDateTime ended;
 
     public List<Player> getPlayers() {
