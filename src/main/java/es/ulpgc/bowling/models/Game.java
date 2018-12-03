@@ -1,19 +1,30 @@
 package es.ulpgc.bowling.models;
 
-import es.ulpgc.bowling.controllers.GuiController;
-
 public class Game {
-    String name;
-    int players;
-    GuiController bc;
+    private String name;
+    private int score;
+    private int id = -1;
 
-    public Game(String name, int players) {
-        bc = new GuiController();
-        if (!name.isEmpty()) this.name = name;
-        else {
-            this.name = "Just a game";
-        }
-        this.players = players;
+    public Game(String name) {
+        this.name = name;
+        this.score = 0;
+    }
 
+    public String getName(){
+        return name;
+    }
+
+    public void setScore(int score){ this.score = score;}
+
+    public int getScore(){
+        return score;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId(){
+        return id;
     }
 }
