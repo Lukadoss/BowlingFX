@@ -22,13 +22,13 @@ public class GuiController {
     public void initialize() {
         newGame = false;
         numOfPlayers = 0;
-        try {
-            connection = DriverManager.getConnection("jdbc:sqlite:bowling.db");
-            //connection = DriverManager.getConnection(Config.MYSQL_URL, Config.MYSQL_USERNAME, Config.MYSQL_PASSWORD);
-        } catch (SQLException e) {
-            System.out.println("Could not connect to DB server. Error: \n" + e.getMessage());
-            shutdown();
-        }
+//        try {
+//            connection = DriverManager.getConnection("jdbc:sqlite:bowling.db");
+//            //connection = DriverManager.getConnection(Config.MYSQL_URL, Config.MYSQL_USERNAME, Config.MYSQL_PASSWORD);
+//        } catch (SQLException e) {
+//            System.out.println("Could not connect to DB server. Error: \n" + e.getMessage());
+//            shutdown();
+//        }
     }
 
     private boolean checkInput(int x) {
