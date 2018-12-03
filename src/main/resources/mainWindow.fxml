@@ -4,9 +4,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -20,30 +22,36 @@
                </font>
             </Label>
          </top>
-         <center>
-            <TextArea fx:id="outputArea" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets left="10.0" right="10.0" />
-               </BorderPane.margin>
-               <font>
-                  <Font name="Monospaced Regular" size="12.0" />
-               </font>
-            </TextArea>
-         </center>
          <bottom>
-            <TextField fx:id="console" onAction="#executeCommand" onKeyReleased="#getInput"
-                       promptText="this is console for developers.. for now" BorderPane.alignment="CENTER">
+            <TextField fx:id="console" disable="true" onAction="#executeCommand" promptText="this is console for developers.. for now" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </BorderPane.margin>
             </TextField>
          </bottom>
+         <center>
+            <Pane fx:id="mainPane" BorderPane.alignment="CENTER">
+               <children>
+                  <TextArea fx:id="outputArea" editable="false" prefHeight="304.0" prefWidth="500.0" visible="false">
+                     <font>
+                        <Font name="Monospaced Regular" size="12.0" />
+                     </font>
+                  </TextArea>
+                  <TableView fx:id="mainTable" prefHeight="303.0" prefWidth="500.0" />
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </BorderPane.margin>
+            </Pane>
+         </center>
       </BorderPane>
    </center>
    <left>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: black; -fx-border-width: 0 1 0 0; -fx-background-color: #eaeaea;" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="17.0" layoutY="20.0" mnemonicParsing="false" onAction="#newGame" text="New game" wrapText="true">
+            <Button fx:id="butNewGame" layoutX="17.0" layoutY="20.0" mnemonicParsing="false" onAction="#newGame"
+                    text="New game"
+                    wrapText="true">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
                </VBox.margin>
