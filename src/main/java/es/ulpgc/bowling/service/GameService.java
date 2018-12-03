@@ -1,21 +1,19 @@
-package es.ulpgc.bowling.service;
-
-import es.ulpgc.bowling.entity.Game;
-import es.ulpgc.bowling.entity.Line;
-import es.ulpgc.bowling.entity.Player;
-
-import java.util.Collection;
-import java.util.List;
-
-public interface GameService extends BaseService<Game> {
-
-    Game addPlayer(Game g, Player p);
-
-    Game removePlayer(Game g, Player p);
-
-    Game startGame(Game g);
-
-    Game endGame(Game g);
-
-    Boolean isRunning(Game g);
-}
+//package es.ulpgc.bowling.service;
+//
+//import es.ulpgc.bowling.entity.GameEntity;
+//import es.ulpgc.bowling.entity.PlayerEntity;
+//
+//import java.util.List;
+//
+//public interface GameService extends BaseService<GameEntity> {
+//
+//    GameEntity addPlayer(GameEntity g, PlayerEntity p);
+//
+//    GameEntity removePlayer(GameEntity g, PlayerEntity p);
+//
+//    GameEntity startGame(GameEntity g);
+//
+//    GameEntity endGame(GameEntity g);
+//
+//    Boolean isRunning(GameEntity g);
+//}

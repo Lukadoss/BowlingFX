@@ -1,6 +1,6 @@
 package es.ulpgc.bowling.repository;
 
-import es.ulpgc.bowling.entity.Bowling;
+import es.ulpgc.bowling.entity.BowlingEntity;
 
-public interface BowlingRepository extends BaseRepository<Bowling> {
+public interface BowlingRepository extends BaseRepository<BowlingEntity> {
 }

@@ -3,23 +3,23 @@ package es.ulpgc.bowling.entity;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-public class Player extends BaseEntity {
+@Entity(name = "PLAYER")
+public class PlayerEntity extends BaseEntity {
 
     @Column
     private String name;
 
     @ManyToOne
-    private Game game;
+    private GameEntity game;
 
     @ElementCollection
-    @CollectionTable(name="Rolls", joinColumns=@JoinColumn(name="player_id"))
+    @CollectionTable(name="ROLLS", joinColumns=@JoinColumn(name="player_id"))
     @Column
     private List<Integer> rolls;
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="player_id")
-    private List<Frame> frames;
+    private List<FrameEntity> frames;
 
     public String getName() {
         return name;
@@ -29,11 +29,11 @@ public class Player extends BaseEntity {
         this.name = name;
     }
 
-    public Game getGame() {
+    public GameEntity getGame() {
         return game;
     }
 
-    public void setGame(Game game) {
+    public void setGame(GameEntity game) {
         this.game = game;
     }
 
@@ -45,16 +45,16 @@ public class Player extends BaseEntity {
         this.rolls = rolls;
     }
 
-    public List<Frame> getFrames() {
+    public List<FrameEntity> getFrames() {
         return frames;
     }
 
-    public void setFrames(List<Frame> frames) {
+    public void setFrames(List<FrameEntity> frames) {
         this.frames = frames;
     }
 
     @Override
     public String toString() {
-        return "Player=[id=" + this.id + ", name=" + name + ", game=" + game + ", frames=]";
+        return "PlayerEntity=[id=" + this.id + ", name=" + name + ", game=" + game + ", frames=]";
     }
 }

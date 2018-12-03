@@ -4,15 +4,15 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-public class Game extends BaseEntity {
+@Entity(name = "GAME")
+public class GameEntity extends BaseEntity {
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="game_id")
-    private List<Player> players;
+    private List<PlayerEntity> players;
 
     @ManyToOne
-    private Line line;
+    private LineEntity line;
 
     @Column
     private LocalDateTime started;
@@ -20,19 +20,19 @@ public class Game extends BaseEntity {
     @Column
     private LocalDateTime ended;
 
-    public List<Player> getPlayers() {
+    public List<PlayerEntity> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
+    public void setPlayers(List<PlayerEntity> players) {
         this.players = players;
     }
 
-    public Line getLine() {
+    public LineEntity getLine() {
         return line;
     }
 
-    public void setLine(Line line) {
+    public void setLine(LineEntity line) {
         this.line = line;
     }
 
@@ -54,6 +54,6 @@ public class Game extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Game=[id=" + this.id +", line="+ line.toString() + ", started=" + started + ", ended=" + ended + ", players=]";
+        return "GameEntity=[id=" + this.id +", line="+ line.toString() + ", started=" + started + ", ended=" + ended + ", players=]";
     }
 }

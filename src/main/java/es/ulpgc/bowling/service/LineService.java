@@ -1,15 +1,15 @@
-package es.ulpgc.bowling.service;
-
-import es.ulpgc.bowling.entity.Bowling;
-import es.ulpgc.bowling.entity.Line;
-
-import java.util.Collection;
-
-public interface LineService extends BaseService<Line> {
-
-    Collection<Line> findLinesByBowling(Bowling bowling);
-
-    Collection<Line> findLinesThatHavePlayingGame(Bowling bowling);
-
-    Line findByLineNumber(Integer lineNumber);
-}
+//package es.ulpgc.bowling.service;
+//
+//import es.ulpgc.bowling.entity.BowlingEntity;
+//import es.ulpgc.bowling.entity.LineEntity;
+//
+//import java.util.Collection;
+//
+//public interface LineService extends BaseService<LineEntity> {
+//
+//    Collection<LineEntity> findLinesByBowling(BowlingEntity bowling);
+//
+//    Collection<LineEntity> findLinesThatHavePlayingGame(BowlingEntity bowling);
+//
+//    LineEntity findByLineNumber(Integer lineNumber);
+//}

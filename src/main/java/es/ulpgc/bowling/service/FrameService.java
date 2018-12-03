@@ -1,12 +1,12 @@
-package es.ulpgc.bowling.service;
-
-import es.ulpgc.bowling.entity.Frame;
-
-public interface FrameService extends BaseService<Frame> {
-
-    Integer getFrameScore(Frame f);
-
-    Boolean isLastFrame(Frame f);
-
-    Boolean isStrike(Frame f);
-}
+//package es.ulpgc.bowling.service;
+//
+//import es.ulpgc.bowling.entity.FrameEntity;
+//
+//public interface FrameService extends BaseService<FrameEntity> {
+//
+//    Integer getFrameScore(FrameEntity f);
+//
+//    Boolean isLastFrame(FrameEntity f);
+//
+//    Boolean isStrike(FrameEntity f);
+//}

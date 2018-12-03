@@ -12,21 +12,65 @@
 
 <h1 class="title">Bowling Score Card</h1>
 <h2> Playing on line: ${game.line} </h2>
-    <c:forEach var="player" items="${game.players}">
+    <c:forEach var="player" items="${players}" varStatus="loop">
         <h4>Player: ${player.name}</h4>
-        <div id="buttons" class="buttons">
-            Pins Hit:
-            <button type="button" onclick="pinHit(0)"  class="btn btn-primary">Gutter</button>
-            <button type="button" onclick="pinHit(1)"  class="btn btn-primary">1</button>
-            <button type="button" onclick="pinHit(2)"  class="btn btn-primary">2</button>
-            <button type="button" onclick="pinHit(3)"  class="btn btn-primary">3</button>
-            <button type="button" onclick="pinHit(4)"  class="btn btn-primary">4</button>
-            <button type="button" onclick="pinHit(5)"  class="btn btn-primary">5</button>
-            <button type="button" onclick="pinHit(6)"  class="btn btn-primary">6</button>
-            <button type="button" onclick="pinHit(7)"  class="btn btn-primary">7</button>
-            <button type="button" onclick="pinHit(8)"  class="btn btn-primary">8</button>
-            <button type="button" onclick="pinHit(9)"  class="btn btn-primary">9</button>
-            <button type="button" onclick="pinHit(10)"  class="btn btn-primary">10</button>
+        <div id="buttons" class="row">
+
+            <form class="col-sm" method="POST" action="${game.id}/${player.id}/0">
+                <button type="submit" class="btn btn-primary">
+                    Gutter
+                </button>
+            </form>
+            <form class="col-sm" method="POST" action="${game.id}/${player.id}/1">
+                <button type="submit" class="btn btn-primary">
+                    1
+                </button>
+            </form>
+            <form class="col-sm" method="POST" action="${game.id}/${player.id}/2">
+                <button type="submit" class="btn btn-primary">
+                    2
+                </button>
+            </form>
+            <form class="col-sm" method="POST" action="${game.id}/${player.id}/3">
+                <button type="submit" class="btn btn-primary">
+                    3
+                </button>
+            </form>
+            <form class="col-sm" method="POST" action="${game.id}/${player.id}/4">
+                <button type="submit" class="btn btn-primary">
+                    4
+                </button>
+            </form>
+            <form class="col-sm" method="POST" action="${game.id}/${player.id}/5">
+                <button type="submit" class="btn btn-primary">
+                    5
+                </button>
+            </form>
+            <form class="col-sm" method="POST" action="${game.id}/${player.id}/6">
+                <button type="submit" class="btn btn-primary">
+                    6
+                </button>
+            </form>
+            <form class="col-sm" method="POST" action="${game.id}/${player.id}/7">
+                <button type="submit" class="btn btn-primary">
+                    7
+                </button>
+            </form>
+            <form class="col-sm" method="POST" action="${game.id}/${player.id}/8">
+                <button type="submit" class="btn btn-primary">
+                    8
+                </button>
+            </form>
+            <form class="col-sm" method="POST" action="${game.id}/${player.id}/9">
+                <button type="submit" class="btn btn-primary">
+                    9
+                </button>
+            </form>
+            <form class="col-sm" method="POST" action="${game.id}/${player.id}/10">
+                <button type="submit" class="btn btn-primary">
+                    10
+                </button>
+            </form>
         </div>
         <div id='scorecard'>
             <table id='scorecardTable' class='scorecard' cellpadding='1' cellspacing='0'>
@@ -34,16 +78,20 @@
                     <c:forEach var="i" begin="1" end="10">
                         <th colspan='6'>Frame ${i}</th>
                     </c:forEach>
+                    <th colspan='6'>Score</th>
                 </tr>
                 <tr>
-                    <c:forEach var="i" begin="1" end="10">
-                        <td colspan='3'></td>  <td id="frame${i}"colspan='3'>${player.rolls[i]}</td>
+                    <c:forEach var="i" begin="0" end="17" step="2">
+                        <td colspan='2'></td>  <td class='bordered' id="frame${i}"colspan='2'>${player.rolls[i]}</td> <td class='bordered' id="frame${i+1}"colspan='2'>${player.rolls[i+1]}</td>
                     </c:forEach>
+                    <td class='bordered' id="frame${18}"colspan='2'>${player.rolls[18]}</td>  <td class='bordered' id="frame${19}"colspan='2'>${player.rolls[19]}</td>  <td class='bordered' id="frame${20}"colspan='2'>${player.rolls[20]}</td>
+                    <td colspan='6'></td>
                 </tr>
                 <tr>
                     <c:forEach var="i" begin="0" end="9">
-                        <td colspan='6'id="marker${i}">${player.frames[i]}</td>
+                        <td colspan='6'id="marker${i}">${player.frameScores[i]}</td>
                     </c:forEach>
+                    <td colspan='6'>${player.score}</td>
                 </tr>
             </table>
         </div>

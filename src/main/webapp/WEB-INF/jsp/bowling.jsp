@@ -14,9 +14,10 @@
     <div class="starter-template">
         <h1>Bowling</h1>
         <c:forEach items="${bowlings}" var="bowling">
-            <h2>Welcome to Bowling building (id=${bowling.id}) </h2>
+            <h2>Welcome to Bowling game</h2>
             <c:forEach items="${bowling.lines}" var="line">
-                <span>Choose line <a href="/line/${line.id}">${line.id}</a></span><br>
+                <span>Line <a href="/line/${line.id}">${line.id}</a></span><br>
+                <c:if test="{line.}"
             </c:forEach>
         </c:forEach>
     </div>

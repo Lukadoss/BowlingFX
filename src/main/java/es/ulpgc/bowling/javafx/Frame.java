@@ -50,6 +50,6 @@ public class Frame {
 
     @Override
     public String toString(){
-        return String.format("Frame %d, score %d", frameIndex, score());
+        return String.format("FrameEntity %d, score %d", frameIndex, score());
     }
 }

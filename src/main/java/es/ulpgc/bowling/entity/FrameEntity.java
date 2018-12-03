@@ -2,11 +2,11 @@ package es.ulpgc.bowling.entity;
 
 import javax.persistence.*;
 
-@Entity
-public class Frame extends BaseEntity {
+@Entity(name = "FRAME")
+public class FrameEntity extends BaseEntity {
 
     @ManyToOne
-    private Player player;
+    private PlayerEntity player;
 
     @Column
     private Integer rollIndex;
@@ -14,11 +14,11 @@ public class Frame extends BaseEntity {
     @Column
     private Integer frameIndex;
 
-    public Player getPlayer() {
+    public PlayerEntity getPlayer() {
         return player;
     }
 
-    public void setPlayer(Player player) {
+    public void setPlayer(PlayerEntity player) {
         this.player = player;
     }
 

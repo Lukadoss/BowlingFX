@@ -1,22 +1,20 @@
-package es.ulpgc.bowling.service;
-
-import es.ulpgc.bowling.entity.Game;
-import es.ulpgc.bowling.entity.Player;
-import es.ulpgc.bowling.entity.Frame;
-
-import java.util.List;
-
-public interface PlayerService extends BaseService<Player> {
-
-    List<Player> findPlayersByGame(Game game);
-
-    Integer score(Player p);
-
-    Integer scoreUntilFrame(Player p, int frame);
-
-    Frame getFrame(Player p, int i);
-
-    List<Frame> getFrames(Player p);
-
-    List<Integer> getRolls(Player p);
-}
+//package es.ulpgc.bowling.service;
+//
+//import es.ulpgc.bowling.entity.GameEntity;
+//import es.ulpgc.bowling.entity.PlayerEntity;
+//import es.ulpgc.bowling.entity.FrameEntity;
+//
+//import java.util.List;
+//
+//public interface PlayerService extends BaseService<PlayerEntity> {
+//
+//    List<PlayerEntity> findPlayersByGame(GameEntity game);
+//
+//    FrameEntity getFrame(PlayerEntity p, int i);
+//
+//    List<FrameEntity> getFrames(PlayerEntity p);
+//
+//    List<Integer> getRolls(PlayerEntity p);
+//
+//    void addRoll(PlayerEntity p, int pins);
+//}

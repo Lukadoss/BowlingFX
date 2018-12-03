@@ -1,15 +1,17 @@
 package es.ulpgc.bowling.controllers;
 
-import es.ulpgc.bowling.models.Game;
+import es.ulpgc.bowling.javafx.Game;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 
+@Component
 public class GuiController {
     public TextArea outputArea;
     public TextField console;
@@ -56,7 +58,7 @@ public class GuiController {
             e.printStackTrace();
         }
         out("-----------------------------------");
-        out("Game title");
+        out("GameEntity title");
     }
 
     public void getListOfLeaderboard(ActionEvent actionEvent) {
@@ -102,7 +104,7 @@ public class GuiController {
     private void executeCommand(ActionEvent actionEvent) {
         if (!console.getText().isEmpty()){
             if (newGame){
-                new Game(console.getText(),0);
+               // new Game(console.getText(),0);
             }
             switch(console.getText()){
                 case "clear":

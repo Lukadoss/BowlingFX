@@ -2,6 +2,7 @@ package es.ulpgc.bowling.javafx;
 
 //import es.ulpgc.bowling.controllers.GuiController;
 
+import es.ulpgc.bowling.controllers.GuiController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +40,10 @@ public class Game {
                 this.players.add(player);
                 logger.debug("Adding " + player.toString() + " to game " + this.toString());
             } else {
-                logger.warn("Player " + player.toString() + " is already in game " + this.toString());
+                logger.warn("PlayerEntity " + player.toString() + " is already in game " + this.toString());
             }
         } else {
-            logger.warn("Game " + this.toString() + "already finished");
+            logger.warn("GameEntity " + this.toString() + "already finished");
         }
         return this;
     }
@@ -53,10 +54,10 @@ public class Game {
                 this.players.remove(player);
                 logger.debug("Removing " + player.toString() + " from game " + this.toString());
             } else {
-                logger.warn("Player " + player.toString() + " is not in game " + this.toString());
+                logger.warn("PlayerEntity " + player.toString() + " is not in game " + this.toString());
             }
         } else {
-            logger.warn("Game " + this.toString() + "already finished");
+            logger.warn("GameEntity " + this.toString() + "already finished");
         }
         return this;
     }
@@ -69,17 +70,4 @@ public class Game {
     public boolean isRunning() {
         return this.endTime == null;
     }
- //    String name;
-//    int players;
-//    GuiController bc;
-//
-//    public Game(String name, int players) {
-//        bc = new GuiController();
-//        if (!name.isEmpty()) this.name = name;
-//        else {
-//            this.name = "Just a game";
-//        }
-//        this.players = players;
-//
-//    }
 }

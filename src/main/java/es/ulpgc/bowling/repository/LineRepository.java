@@ -1,7 +1,7 @@
 package es.ulpgc.bowling.repository;
 
-import es.ulpgc.bowling.entity.Line;
+import es.ulpgc.bowling.entity.LineEntity;
 
-public interface LineRepository extends BaseRepository<Line> {
+public interface LineRepository extends BaseRepository<LineEntity> {
 
 }
