@@ -12,7 +12,9 @@
          <font>
             <Font name="Arial Bold" size="25.0" />
          </font></Label>
-      <ListView fx:id="graphicList" layoutY="35.0" prefHeight="25.0" prefWidth="300.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="40.0" />
+      <ListView fx:id="graphicList" layoutY="35.0" prefHeight="25.0" prefWidth="300.0"
+                style="-fx-font-family: Monospaced 12px;" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0"
+                AnchorPane.topAnchor="40.0" />
       <Button mnemonicParsing="false" onAction="#cancel" prefWidth="55.0" text="Cancel" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="15.0" />
    </children>
 </AnchorPane>

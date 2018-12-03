@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class GameStatsController {
     public AnchorPane anchorPane;
     public Label gameNameLabel;
-    public ListView graphicList;
+    public ListView<String> graphicList;
 
     public void cancel(ActionEvent actionEvent) {
         ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
@@ -29,9 +29,9 @@ public class GameStatsController {
         }
         rs = GuiController.sqlExec("SELECT name, total_score FROM player LEFT JOIN game WHERE game.id = game_id AND game.id = "+id);
         try {
-            ObservableList list = FXCollections.observableArrayList();
+            ObservableList<String> list = FXCollections.observableArrayList();
             while (rs.next()) {
-                list.add(rs.getString(1)+" : "+rs.getString(2));
+                list.add(String.format("%-32s%s", rs.getString(1), rs.getString(2)));
             }
             graphicList.setItems(list);
             graphicList.setPrefHeight(24*list.size());
@@ -40,5 +40,4 @@ public class GameStatsController {
         }
         anchorPane.getScene().getWindow().setHeight(anchorPane.getHeight()+graphicList.getPrefHeight());
     }
-
 }

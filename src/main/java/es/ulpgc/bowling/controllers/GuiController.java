@@ -28,12 +28,14 @@ public class GuiController {
     public TableView mainTable;
     public Pane mainPane;
 
+
     private static Connection connection;
     private static GameState gameState = GameState.IN_LOBBY;
-    private NewGameController ngc = null;
-
+    private ArrayList<NewGameController> ngcList;
+    private int currentGameId = 0;
     //If you want to acces remote DB, use another thread. I am lazy and using local..
     public void initialize() {
+        ngcList = new ArrayList<>();
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:bowling.db");
             //connection = DriverManager.getConnection(Config.MYSQL_URL, Config.MYSQL_USERNAME, Config.MYSQL_PASSWORD);
@@ -170,8 +172,8 @@ public class GuiController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("newGame.fxml"));
             Parent root = loader.load();
-            ngc = loader.getController();
-            ngc.setGuiController(this);
+            ngcList.add(loader.getController());
+            ngcList.get(ngcList.size()-1).setGuiController(this);
 
             Stage stage = new Stage();
             stage.setTitle("New game");
@@ -218,13 +220,15 @@ public class GuiController {
                     break;
                 case "status":
                     out("Game status: "+gameState.name());
+                    for(NewGameController c : ngcList) out(c.getGame().getId()+") "+c.getGame().getName());
+                    out("Number of games: "+ngcList.size());
                     break;
                 case "players":
-                    for(Player p : ngc.getPlayers()) out(p.getName());
+                    for(Player p : ngcList.get(currentGameId).getPlayers()) out(p.getName());
                     out("Currently playing players:");
                     break;
                 case "game":
-                    out("Current score for game \""+ngc.getGame().getName()+"\" is "+ngc.getGame().getScore());
+                    out("Current score for game \""+ngcList.get(currentGameId).getGame().getName()+"\" is "+ngcList.get(currentGameId).getGame().getScore());
                     break;
                 default:
                     out("Command not found! ---Write \"help\" to see all commands---");

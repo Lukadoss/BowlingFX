@@ -30,14 +30,14 @@ public class NewGameController {
     private boolean playersLoad = true;
     private String gameName;
     private int numOfPlayers;
-    private HashMap<Label, TextField> comboList;
+    private HashMap<Label, TextField> nameFields;
     private ArrayList<String> names;
     private ArrayList<Player> players;
     private Game game;
     private GuiController gc = null;
 
     public void initialize() {
-        comboList = new HashMap<>();
+        nameFields = new HashMap<>();
         names = new ArrayList<>();
         players = new ArrayList<>();
     }
@@ -53,7 +53,7 @@ public class NewGameController {
         } else {
             names.clear();
             AtomicBoolean isOkay = new AtomicBoolean(true);
-            comboList.forEach((k, v) -> {
+            nameFields.forEach((k, v) -> {
                 if (v.getText().isEmpty()) {
                     isOkay.set(false);
                     k.setStyle("-fx-text-fill: #ff0000");
@@ -129,8 +129,8 @@ public class NewGameController {
             t.setPrefWidth(240);
             t.setId(i + "");
 //            t.setItems(FXCollections.observableArrayList(list));
-            comboList.put(l, t);
 
+            nameFields.put(l, t);
             anchorPane.getChildren().addAll(l, t);
         }
     }
