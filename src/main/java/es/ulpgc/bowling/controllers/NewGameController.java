@@ -1,8 +1,7 @@
 package es.ulpgc.bowling.controllers;
 
-import es.ulpgc.bowling.GameState;
-import es.ulpgc.bowling.models.Game;
-import es.ulpgc.bowling.models.Player;
+import es.ulpgc.bowling.javafx.Game;
+import es.ulpgc.bowling.javafx.Player;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -63,10 +62,9 @@ public class NewGameController {
                 }
             });
             if (isOkay.get()) {
-                game = new Game(gameName);
+                //game = new Game(gameName);
                 names.forEach(e -> players.add(new Player(e)));
                 ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
-                gc.setGameState(GameState.RUNNING);
                 gc.newGameGui();
             }
         }

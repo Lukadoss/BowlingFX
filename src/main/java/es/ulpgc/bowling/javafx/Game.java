@@ -2,7 +2,6 @@ package es.ulpgc.bowling.javafx;
 
 //import es.ulpgc.bowling.controllers.GuiController;
 
-import es.ulpgc.bowling.controllers.GuiController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +26,7 @@ public class Game {
         this.endTime = null;
         this.totalScore = 0;
         this.players = players;
-        logger.debug("Startin game at time " + startTime);
+        logger.debug("Starting game at time " + startTime);
     }
 
     public Game() {

@@ -1,8 +1,8 @@
 package es.ulpgc.bowling.controllers;
 
+import com.sun.media.jfxmedia.logging.Logger;
 import es.ulpgc.bowling.javafx.Game;
-import es.ulpgc.bowling.GameState;
-import es.ulpgc.bowling.models.Player;
+import es.ulpgc.bowling.javafx.Player;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,16 +11,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
-import org.springframework.stereotype.Component;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.sql.*;
@@ -36,19 +32,20 @@ public class GuiController {
 
 
     private static Connection connection;
-    private static GameState gameState = GameState.IN_LOBBY;
     private ArrayList<NewGameController> ngcList;
     private int currentGameId = 0;
     //If you want to acces remote DB, use another thread. I am lazy and using local..
     public void initialize() {
         ngcList = new ArrayList<>();
-//        try {
-//            connection = DriverManager.getConnection("jdbc:sqlite:bowling.db");
-//            //connection = DriverManager.getConnection(Config.MYSQL_URL, Config.MYSQL_USERNAME, Config.MYSQL_PASSWORD);
-//        } catch (SQLException e) {
-//            System.out.println("Could not connect to DB server. Error: \n" + e.getMessage());
-//            shutdown();
-//        }
+        try {
+            Class.forName("org.h2.Driver");
+            connection = DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "");
+//            connection = DriverManager.getConnection(Config.MYSQL_URL, Config.MYSQL_USERNAME, Config.MYSQL_PASSWORD);
+        } catch (Exception e) {
+            Logger.logMsg(Logger.ERROR, e.getMessage());
+            System.out.println(e.getMessage());
+            shutdown();
+        }
         resizePanels();
         mainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
@@ -95,7 +92,7 @@ public class GuiController {
                                     setGraphic(null);
                                     setText(null);
                                 } else {
-                                    btn.setOnAction(event -> showGameStats(getTableView().getItems().get(getIndex()).getId()));
+                                    //btn.setOnAction(event -> showGameStats(getTableView().getItems().get(getIndex()).getId()));
                                     setGraphic(btn);
                                     setText(null);
                                 }
@@ -127,10 +124,10 @@ public class GuiController {
         ArrayList<Game> list = new ArrayList<>();
         try {
             while (rs.next()) {
-                Game g = new Game(rs.getString(1));
-                g.setScore(rs.getInt(2));
-                g.setId(rs.getInt(3));
-                list.add(g);
+//                Game g = new Game(rs.getString(1));
+//                g.setScore(rs.getInt(2));
+//                g.setId(rs.getInt(3));
+//                list.add(g);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -172,7 +169,6 @@ public class GuiController {
     public void newGame(ActionEvent actionEvent) throws InterruptedException {
         console.clear();
         outputArea.clear();
-        setGameState(GameState.STARTING);
         butNewGame.setDisable(true);
 
         try {
@@ -190,7 +186,6 @@ public class GuiController {
         } catch (IOException e) {
             e.printStackTrace();
             butNewGame.setDisable(true);
-            setGameState(GameState.IN_LOBBY);
         }
     }
 
@@ -225,16 +220,16 @@ public class GuiController {
                     outputArea.clear();
                     break;
                 case "status":
-                    out("Game status: "+gameState.name());
-                    for(NewGameController c : ngcList) out(c.getGame().getId()+") "+c.getGame().getName());
+//                    out("Game status: "+game.isRunning());
+//                    for(NewGameController c : ngcList) out(c.getGame().getId()+") "+c.getGame().getName());
                     out("Number of games: "+ngcList.size());
                     break;
                 case "players":
-                    for(Player p : ngcList.get(currentGameId).getPlayers()) out(p.getName());
+//                    for(Player p : ngcList.get(currentGameId).getPlayers()) out(p.getName());
                     out("Currently playing players:");
                     break;
                 case "game":
-                    out("Current score for game \""+ngcList.get(currentGameId).getGame().getName()+"\" is "+ngcList.get(currentGameId).getGame().getScore());
+//                    out("Current score for game \""+ngcList.get(currentGameId).getGame().getName()+"\" is "+ngcList.get(currentGameId).getGame().getScore());
                     break;
                 default:
                     out("Command not found! ---Write \"help\" to see all commands---");
@@ -263,10 +258,6 @@ public class GuiController {
             e.printStackTrace();
         }
         return rs;
-    }
-
-    public void setGameState(GameState g){
-        gameState = g;
     }
 
     public void newGameGui(){
