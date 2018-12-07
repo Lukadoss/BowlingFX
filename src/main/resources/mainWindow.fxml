@@ -17,25 +17,19 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.ulpgc.bowling.controllers.GuiController">
     <center>
         <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <top>
-                <Label fx:id="mainLabel" text="The Bowling bars" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                <Label fx:id="mainLabel" text="Bowling bars" textAlignment="CENTER" BorderPane.alignment="CENTER">
                     <font>
                         <Font name="Impact" size="37.0" />
                     </font>
                 </Label>
             </top>
-            <bottom>
-                <TextField fx:id="console" disable="true" onAction="#executeCommand" promptText="this is console for developers.. for now" BorderPane.alignment="CENTER">
-                    <BorderPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                    </BorderPane.margin>
-                </TextField>
-            </bottom>
             <center>
                 <Pane fx:id="mainPane" BorderPane.alignment="CENTER">
                     <children>
@@ -53,30 +47,40 @@
                             <rowConstraints>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
-                     <children>
-                        <ImageView fx:id="iv1" fitHeight="150.0" fitWidth="200.0" nodeOrientation="INHERIT" onMouseReleased="#getClickedBowlingBar" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                           <image>
-                              <Image url="@duck.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <effect>
-                              <DropShadow color="RED" height="20.0" radius="9.5" spread="0.1" width="20.0" />
-                           </effect>
-                        </ImageView>
-                        <ImageView fx:id="iv2" fitHeight="150.0" fitWidth="200.0" layoutX="10.0" layoutY="81.0" nodeOrientation="INHERIT" onMouseReleased="#getClickedBowlingBar" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                           <image>
-                              <Image url="@lucky.png" />
-                           </image>
-                           <effect>
-                              <DropShadow color="#00ff1a" height="20.0" radius="9.5" spread="0.1" width="20.0" />
-                           </effect>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </children>
+                            <children>
+                                <Circle fx:id="c1" fill="#ff00001a" onMouseReleased="#getClickedBowlingBar" radius="110.0" stroke="RED" strokeType="INSIDE" strokeWidth="0.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </Circle>
+                                <ImageView fitHeight="150.0" fitWidth="200.0" mouseTransparent="true" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                    <image>
+                                        <Image url="@duck.png" />
+                                    </image>
+                                    <cursor>
+                                        <Cursor fx:constant="DEFAULT" />
+                                    </cursor>
+                                    <effect>
+                                        <DropShadow color="RED" height="20.0" radius="9.5" spread="0.1" width="20.0" />
+                                    </effect>
+                                </ImageView>
+                                <Circle fx:id="c2" fill="#02ff001a" layoutX="130.0" layoutY="156.0" onMouseReleased="#getClickedBowlingBar" radius="110.0" stroke="#00ff0f" strokeType="INSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </Circle>
+                                <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="10.0" layoutY="81.0" mouseTransparent="true" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                    <image>
+                                        <Image url="@lucky.png" />
+                                    </image>
+                                    <effect>
+                                        <DropShadow color="#00ff1a" height="20.0" radius="9.5" spread="0.1" width="20.0" />
+                                    </effect>
+                                    <cursor>
+                                        <Cursor fx:constant="DEFAULT" />
+                                    </cursor>
+                                </ImageView>
+                            </children>
                         </GridPane>
                     </children>
                     <BorderPane.margin>
@@ -84,12 +88,20 @@
                     </BorderPane.margin>
                 </Pane>
             </center>
+            <bottom>
+                <TextField fx:id="console" disable="true" onAction="#executeCommand" promptText="this is console for developers.. for now" visible="false" BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </BorderPane.margin>
+                </TextField>
+            </bottom>
         </BorderPane>
     </center>
     <left>
-        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: black; -fx-border-width: 0 1 0 0; -fx-background-color: #eaeaea;" BorderPane.alignment="CENTER">
+        <VBox fx:id="settingsVBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0"
+              style="-fx-border-color: black; -fx-border-width: 0 1 0 0; -fx-background-color: #eaeaea;" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="butNewGame" layoutX="17.0" layoutY="20.0" mnemonicParsing="false" onAction="#newGame" text="New game" wrapText="true">
+                <Button layoutX="17.0" layoutY="20.0" mnemonicParsing="false" onAction="#newGame" text="New game" wrapText="true">
                     <VBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
                     </VBox.margin>
@@ -97,17 +109,22 @@
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Button>
-                <Separator prefWidth="200.0">
+                <Button layoutX="17.0" layoutY="10.0" mnemonicParsing="false" onAction="#getListOfLeaderboard" text="Leaderboards">
                     <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets top="20.0" />
                     </VBox.margin>
-                </Separator>
-                <Button fx:id="butLead" layoutX="17.0" layoutY="10.0" mnemonicParsing="false" onAction="#getListOfLeaderboard" text="Leaderboards">
+                </Button>
+                <Button layoutX="17.0" layoutY="35.0" mnemonicParsing="false" onAction="#getListOfGames" text="Top games">
                     <VBox.margin>
                         <Insets top="10.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="butGames" layoutX="17.0" layoutY="35.0" mnemonicParsing="false" onAction="#getListOfGames" text="Top games">
+                <Separator layoutX="10.0" layoutY="75.0" prefWidth="200.0">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </Separator>
+                <Button layoutX="22.0" layoutY="123.0" mnemonicParsing="false" onAction="#goBack" text="Back">
                     <VBox.margin>
                         <Insets top="10.0" />
                     </VBox.margin>

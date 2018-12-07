@@ -10,6 +10,15 @@ insert into Line (id, bowling_id) values (6, 1);
 insert into Line (id, bowling_id) values (7, 1);
 insert into Line (id, bowling_id) values (8, 1);
 
+insert into Line (id, bowling_id) values (9, 2);
+insert into Line (id, bowling_id) values (10, 2);
+insert into Line (id, bowling_id) values (11, 2);
+insert into Line (id, bowling_id) values (12, 2);
+insert into Line (id, bowling_id) values (13, 2);
+insert into Line (id, bowling_id) values (14, 2);
+insert into Line (id, bowling_id) values (15, 2);
+insert into Line (id, bowling_id) values (16, 2);
+
 insert into Game (id, line_id) values (1, 1);
 insert into Game (id, line_id) values (2, 3);
 insert into Game (id, line_id) values (3, 5);

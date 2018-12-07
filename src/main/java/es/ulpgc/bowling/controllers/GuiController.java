@@ -4,6 +4,7 @@ import es.ulpgc.bowling.entity.BowlingEntity;
 import es.ulpgc.bowling.entity.LineEntity;
 import es.ulpgc.bowling.javafx.Line;
 import es.ulpgc.bowling.repository.BowlingRepository;
+import es.ulpgc.bowling.repository.LineRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,14 +14,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -30,15 +31,18 @@ import java.util.ArrayList;
 public class GuiController {
     public TextArea outputArea;
     public TextField console;
-    public Button butGames, butLead, butNewGame;
     public TableView mainTable;
     public Pane mainPane;
     public Label mainLabel;
-    public ImageView iv1, iv2;
     public GridPane bowlingGridPane;
+    public Circle c1, c2;
+    public VBox settingsVBox;
 
     @Autowired
     private BowlingRepository bowlRepo;
+
+    @Autowired
+    private LineRepository lineRepo;
 
     private BowlingEntity bowlingEntity;
 
@@ -71,13 +75,8 @@ public class GuiController {
     public void newGameGui(){
         mainTable.setVisible(false);
         outputArea.setVisible(true);
-        butLead.setDisable(true);
-        butGames.setDisable(true);
+        settingsVBox.setDisable(true);
         console.setDisable(false);
-    }
-
-    public CrudRepository<BowlingEntity, Integer> getRepository() {
-        return bowlRepo;
     }
 
     public void getListOfGames(ActionEvent actionEvent) {
@@ -187,7 +186,7 @@ public class GuiController {
     public void newGame(ActionEvent actionEvent) throws InterruptedException {
         console.clear();
         outputArea.clear();
-        butNewGame.setDisable(true);
+        settingsVBox.setDisable(true);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/newGame.fxml"));
@@ -200,10 +199,10 @@ public class GuiController {
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
-            stage.setOnHidden(e->butNewGame.setDisable(false));
+            stage.setOnHidden(e->settingsVBox.setDisable(true));
         } catch (IOException e) {
             e.printStackTrace();
-            butNewGame.setDisable(true);
+            settingsVBox.setDisable(false);
         }
     }
 
@@ -251,18 +250,21 @@ public class GuiController {
     }
 
     public void getClickedBowlingBar(MouseEvent mouseEvent) {
-        switch (((ImageView)mouseEvent.getSource()).getId()){
-            case "iv1":
-                bowlingEntity = getRepository().findById(1).get();
+        switch (((Circle)mouseEvent.getSource()).getId()){
+            case "c1":
+                bowlingEntity = bowlRepo.findById(1).get();
                 mainLabel.setText(bowlingEntity.getName());
                 break;
-            case "iv2":
-                bowlingEntity = getRepository().findById(2).get();
+            case "c2":
+                bowlingEntity = bowlRepo.findById(2).get();
                 mainLabel.setText(bowlingEntity.getName());
                 break;
             default:
                 break;
         }
+        System.out.println(bowlingEntity);
+
+        changeWindowItems(true);
 
         mainTable.getColumns().clear();
         mainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -274,11 +276,28 @@ public class GuiController {
 
         ArrayList<LineEntity> list = new ArrayList<>();
 //        mm.map(bowlingEntity.getLines(),Line.class);
-        Iterable<LineEntity> i = bowlingEntity.getLines();
+//        Iterable<LineEntity> i = bowlingEntity.getLines();
 
-        i.forEach(list::add);
-        ObservableList<LineEntity> data = FXCollections.observableList(list);
+        //i.forEach(list::add);
+        ObservableList<LineEntity> data = FXCollections.observableList(lineRepo.findByBowlingId(bowlingEntity.getId()));
         mainTable.setItems(data);
 
+    }
+
+    private void changeWindowItems(boolean next) {
+        if (next){
+            bowlingGridPane.setVisible(false);
+            mainTable.setVisible(true);
+            settingsVBox.setDisable(false);
+        }else{
+            bowlingGridPane.setVisible(true);
+            mainTable.setVisible(false);
+            settingsVBox.setDisable(true);
+            mainLabel.setText("Bowling bars");
+        }
+    }
+
+    public void goBack(ActionEvent actionEvent) {
+        changeWindowItems(false);
     }
 }
