@@ -1,8 +1,9 @@
 package es.ulpgc.bowling.controllers;
 
-import com.sun.media.jfxmedia.logging.Logger;
-import es.ulpgc.bowling.javafx.Game;
-import es.ulpgc.bowling.javafx.Player;
+import es.ulpgc.bowling.entity.BowlingEntity;
+import es.ulpgc.bowling.entity.LineEntity;
+import es.ulpgc.bowling.javafx.Line;
+import es.ulpgc.bowling.repository.BowlingRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,14 +13,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Callback;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.sql.*;
 import java.util.ArrayList;
 
 @Component
@@ -29,141 +33,155 @@ public class GuiController {
     public Button butGames, butLead, butNewGame;
     public TableView mainTable;
     public Pane mainPane;
+    public Label mainLabel;
+    public ImageView iv1, iv2;
+    public GridPane bowlingGridPane;
 
+    @Autowired
+    private BowlingRepository bowlRepo;
 
-    private static Connection connection;
+    private BowlingEntity bowlingEntity;
+
+    private ModelMapper mm = new ModelMapper();
+
     private ArrayList<NewGameController> ngcList;
-    private int currentGameId = 0;
+
     //If you want to acces remote DB, use another thread. I am lazy and using local..
     public void initialize() {
         ngcList = new ArrayList<>();
-        try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "");
-//            connection = DriverManager.getConnection(Config.MYSQL_URL, Config.MYSQL_USERNAME, Config.MYSQL_PASSWORD);
-        } catch (Exception e) {
-            Logger.logMsg(Logger.ERROR, e.getMessage());
-            System.out.println(e.getMessage());
-            shutdown();
-        }
         resizePanels();
-        mainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     private void resizePanels() {
         mainPane.widthProperty().addListener((observable, oldValue, newValue) -> {
             mainTable.setPrefWidth(mainPane.getLayoutBounds().getWidth());
             outputArea.setPrefWidth(mainPane.getLayoutBounds().getWidth());
+            bowlingGridPane.setPrefWidth(mainPane.getLayoutBounds().getWidth());
         });
 
         mainPane.heightProperty().addListener((observable, oldValue, newValue) -> {
             mainTable.setPrefHeight(mainPane.getLayoutBounds().getHeight());
             outputArea.setPrefHeight(mainPane.getLayoutBounds().getHeight());
+            bowlingGridPane.setPrefHeight(mainPane.getLayoutBounds().getHeight());
         });
+
+
+    }
+
+    public void newGameGui(){
+        mainTable.setVisible(false);
+        outputArea.setVisible(true);
+        butLead.setDisable(true);
+        butGames.setDisable(true);
+        console.setDisable(false);
+    }
+
+    public CrudRepository<BowlingEntity, Integer> getRepository() {
+        return bowlRepo;
     }
 
     public void getListOfGames(ActionEvent actionEvent) {
-        ResultSet rs = sqlExec("SELECT game.title, SUM(player.total_score) as sum, game.id from game\n" +
-                "LEFT JOIN player ON game.id = player.game_id\n" +
-                "GROUP BY game.id ORDER BY sum DESC;");
-        TableColumn<Game, String> game_title = new TableColumn<>("Game title");
-        game_title.setMinWidth(100);
-        game_title.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn<Game, String> best_score = new TableColumn<>("Achieved score");
-        best_score.setMinWidth(100);
-        best_score.setCellValueFactory(new PropertyValueFactory<>("score"));
-
-        TableColumn actionCol = new TableColumn("Game details");
-        actionCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
-        Callback<TableColumn<Game, String>, TableCell<Game, String>> cellFactory
-                = //
-                new Callback<TableColumn<Game, String>, TableCell<Game, String>>() {
-                    @Override
-                    public TableCell call(final TableColumn<Game, String> param) {
-                        final TableCell<Game, String> cell = new TableCell<Game, String>() {
-
-                            final Button btn = new Button("Statistics");
-
-                            @Override
-                            public void updateItem(String item, boolean empty) {
-                                super.updateItem(item, empty);
-                                if (empty) {
-                                    setGraphic(null);
-                                    setText(null);
-                                } else {
-                                    //btn.setOnAction(event -> showGameStats(getTableView().getItems().get(getIndex()).getId()));
-                                    setGraphic(btn);
-                                    setText(null);
-                                }
-                            }
-                        };
-                        return cell;
-                    }
-
-                    private void showGameStats(int id) {
-                        FXMLLoader root;
-                        try {
-                            root = new FXMLLoader(getClass().getClassLoader().getResource(("gameStats.fxml")));
-                            Stage stage = new Stage(StageStyle.DECORATED);
-                            stage.setTitle("Game statistics");
-                            stage.setScene(new Scene(root.load()));
-                            stage.setResizable(false);
-                            stage.show();
-                            root.<GameStatsController>getController().initGame(id);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-        actionCol.setStyle("-fx-aligment: CENTER-RIGHT");
-        actionCol.setCellFactory(cellFactory);
-        mainTable.getColumns().clear();
-        mainTable.getColumns().addAll(game_title, best_score, actionCol);
-
-        ArrayList<Game> list = new ArrayList<>();
-        try {
-            while (rs.next()) {
-//                Game g = new Game(rs.getString(1));
-//                g.setScore(rs.getInt(2));
-//                g.setId(rs.getInt(3));
-//                list.add(g);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        ObservableList<Game> data = FXCollections.observableList(list);
-        mainTable.setItems(data);
+//        ResultSet rs = sqlExec("SELECT game.title, SUM(player.total_score) as sum, game.id from game\n" +
+//                "LEFT JOIN player ON game.id = player.game_id\n" +
+//                "GROUP BY game.id ORDER BY sum DESC;");
+//        TableColumn<Game, String> game_title = new TableColumn<>("Game title");
+//        game_title.setMinWidth(100);
+//        game_title.setCellValueFactory(new PropertyValueFactory<>("name"));
+//
+//        TableColumn<Game, String> best_score = new TableColumn<>("Achieved score");
+//        best_score.setMinWidth(100);
+//        best_score.setCellValueFactory(new PropertyValueFactory<>("score"));
+//
+//        TableColumn actionCol = new TableColumn("Game details");
+//        actionCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
+//        Callback<TableColumn<Game, String>, TableCell<Game, String>> cellFactory
+//                = //
+//                new Callback<TableColumn<Game, String>, TableCell<Game, String>>() {
+//                    @Override
+//                    public TableCell call(final TableColumn<Game, String> param) {
+//                        final TableCell<Game, String> cell = new TableCell<Game, String>() {
+//
+//                            final Button btn = new Button("Statistics");
+//
+//                            @Override
+//                            public void updateItem(String item, boolean empty) {
+//                                super.updateItem(item, empty);
+//                                if (empty) {
+//                                    setGraphic(null);
+//                                    setText(null);
+//                                } else {
+//                                    //btn.setOnAction(event -> showGameStats(getTableView().getItems().get(getIndex()).getId()));
+//                                    setGraphic(btn);
+//                                    setText(null);
+//                                }
+//                            }
+//                        };
+//                        return cell;
+//                    }
+//
+//                    private void showGameStats(int id) {
+//                        FXMLLoader root;
+//                        try {
+//                            root = new FXMLLoader(getClass().getClassLoader().getResource(("gameStats.fxml")));
+//                            Stage stage = new Stage(StageStyle.DECORATED);
+//                            stage.setTitle("Game statistics");
+//                            stage.setScene(new Scene(root.load()));
+//                            stage.setResizable(false);
+//                            stage.show();
+//                            root.<GameStatsController>getController().initGame(id);
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                };
+//        actionCol.setStyle("-fx-aligment: CENTER-RIGHT");
+//        actionCol.setCellFactory(cellFactory);
+//        mainTable.getColumns().clear();
+//        mainTable.getColumns().addAll(game_title, best_score, actionCol);
+//
+//        ArrayList<Game> list = new ArrayList<>();
+//        try {
+//            while (rs.next()) {
+////                Game g = new Game(rs.getString(1));
+////                g.setScore(rs.getInt(2));
+////                g.setId(rs.getInt(3));
+////                list.add(g);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        ObservableList<Game> data = FXCollections.observableList(list);
+//        mainTable.setItems(data);
     }
 
     public void getListOfLeaderboard(ActionEvent actionEvent) {
-        ResultSet rs = sqlExec("SELECT * FROM player ORDER BY total_score DESC");
-
-        TableColumn<Player, String> player_name = new TableColumn<>("Player name");
-        player_name.setMinWidth(100);
-        player_name.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn<Player, String> best_score = new TableColumn<>("Best score");
-        best_score.setMinWidth(100);
-        best_score.setCellValueFactory(new PropertyValueFactory<>("totalScore"));
-
-        mainTable.getColumns().clear();
-        mainTable.getColumns().addAll(player_name, best_score);
-
-        ArrayList<Player> list = new ArrayList<>();
-        try {
-            while (rs.next()) {
-                Player p = new Player(rs.getString("name"));
-                p.setTotalScore(rs.getInt("total_score"));
-                list.add(p);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        ObservableList<Player> data = FXCollections.observableList(list);
-        mainTable.setItems(data);
+//        ResultSet rs = sqlExec("SELECT * FROM player ORDER BY total_score DESC");
+//
+//        TableColumn<Player, String> player_name = new TableColumn<>("Player name");
+//        player_name.setMinWidth(100);
+//        player_name.setCellValueFactory(new PropertyValueFactory<>("name"));
+//
+//        TableColumn<Player, String> best_score = new TableColumn<>("Best score");
+//        best_score.setMinWidth(100);
+//        best_score.setCellValueFactory(new PropertyValueFactory<>("totalScore"));
+//
+//        mainTable.getColumns().clear();
+//        mainTable.getColumns().addAll(player_name, best_score);
+//
+//        ArrayList<Player> list = new ArrayList<>();
+//        try {
+//            while (rs.next()) {
+//                Player p = new Player(rs.getString("name"));
+//                p.setTotalScore(rs.getInt("total_score"));
+//                list.add(p);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        ObservableList<Player> data = FXCollections.observableList(list);
+//        mainTable.setItems(data);
     }
 
     public void newGame(ActionEvent actionEvent) throws InterruptedException {
@@ -172,7 +190,7 @@ public class GuiController {
         butNewGame.setDisable(true);
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("newGame.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/newGame.fxml"));
             Parent root = loader.load();
             ngcList.add(loader.getController());
             ngcList.get(ngcList.size()-1).setGuiController(this);
@@ -193,13 +211,7 @@ public class GuiController {
         outputArea.setText(one + "\n" + outputArea.getText());
     }
 
-    private void formattedOutput(String one, String two) {
-        out(String.format("%-34s%1s%15s", one, "|", two));
-    }
-
     private String drawLine() {
-        //Text t = new Text("-");
-        //int x = (int) (outputArea.getWidth()/t.getLayoutBounds().getWidth());
         return new String(new char[50]).replace("\0", "-");
     }
 
@@ -238,33 +250,35 @@ public class GuiController {
         console.clear();
     }
 
-    private void shutdown() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    public void getClickedBowlingBar(MouseEvent mouseEvent) {
+        switch (((ImageView)mouseEvent.getSource()).getId()){
+            case "iv1":
+                bowlingEntity = getRepository().findById(1).get();
+                mainLabel.setText(bowlingEntity.getName());
+                break;
+            case "iv2":
+                bowlingEntity = getRepository().findById(2).get();
+                mainLabel.setText(bowlingEntity.getName());
+                break;
+            default:
+                break;
         }
-        System.exit(0);
-    }
 
-    static ResultSet sqlExec(String sql) {
-        ResultSet rs = null;
-        try {
-            Statement stmnt = connection.createStatement();
-            rs = stmnt.executeQuery(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return rs;
-    }
+        mainTable.getColumns().clear();
+        mainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-    public void newGameGui(){
-        mainTable.setVisible(false);
-        outputArea.setVisible(true);
-        butLead.setDisable(true);
-        butGames.setDisable(true);
-        console.setDisable(false);
+        TableColumn<Line, Integer> game_title = new TableColumn<>("Line");
+        game_title.setMinWidth(100);
+        game_title.setCellValueFactory(new PropertyValueFactory<>("id"));
+        mainTable.getColumns().add(game_title);
+
+        ArrayList<LineEntity> list = new ArrayList<>();
+//        mm.map(bowlingEntity.getLines(),Line.class);
+        Iterable<LineEntity> i = bowlingEntity.getLines();
+
+        i.forEach(list::add);
+        ObservableList<LineEntity> data = FXCollections.observableList(list);
+        mainTable.setItems(data);
+
     }
 }

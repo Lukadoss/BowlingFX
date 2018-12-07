@@ -1,4 +1,5 @@
-insert into Bowling values (1);
+insert into Bowling (id, name) values (1, 'Duck Bowling Bar');
+insert into Bowling (id, name) values (2, 'Lucky Strike');
 
 insert into Line (id, bowling_id) values (1, 1);
 insert into Line (id, bowling_id) values (2, 1);

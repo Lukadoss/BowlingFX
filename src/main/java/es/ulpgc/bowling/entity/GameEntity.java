@@ -15,6 +15,9 @@ public class GameEntity extends BaseEntity {
     private LineEntity line;
 
     @Column
+    private String name;
+
+    @Column
     private LocalDateTime started;
 
     @Column
@@ -52,8 +55,18 @@ public class GameEntity extends BaseEntity {
         this.ended = ended;
     }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
-        return "GameEntity=[id=" + this.id +", line="+ line.toString() + ", started=" + started + ", ended=" + ended + ", players=]";
+        return "GameEntity=[id=" + this.id +", name="+ name + ", line="+ line.toString() + ", started=" + started + ", ended=" + ended + ", " +
+                "players=]";
     }
 }

@@ -28,11 +28,12 @@ public class BowlingApplication extends Application {
         primaryStage.setTitle("Bowling");
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
+        primaryStage.setOnCloseRequest(event -> System.exit(0));
         primaryStage.show();
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         springContext.stop();
     }
 

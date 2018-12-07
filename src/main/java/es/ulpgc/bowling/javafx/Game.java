@@ -19,7 +19,8 @@ public class Game {
     private List<Player> players;
 
     private Integer totalScore;
-    private String id;
+
+    private String name;
 
     public Game(ArrayList<Player> players) {
         this.startTime = LocalDateTime.now();
@@ -68,5 +69,17 @@ public class Game {
 
     public boolean isRunning() {
         return this.endTime == null;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public Integer getTotalScore() {
+        return totalScore;
+    }
+
+    public String getName() {
+        return name;
     }
 }

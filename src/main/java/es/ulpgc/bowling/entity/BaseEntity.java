@@ -9,13 +9,13 @@ public class BaseEntity implements Serializable {
     @Id
     @Column
     @GeneratedValue(strategy=GenerationType.AUTO)
-    Long id;
+    int id;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 }

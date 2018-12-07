@@ -12,8 +12,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -72,14 +70,14 @@ public class NewGameController {
 
     private void loadPlayersLayer() {
         if (textField.getText().isEmpty()) {
-            ResultSet rs = GuiController.sqlExec("select COUNT(id) AS rowcount from game");
-            try {
-                rs.next();
-                gameName = "Unknown game #" + rs.getInt(1);
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+//            ResultSet rs = GuiController.sqlExec("select COUNT(id) AS rowcount from game");
+//            try {
+//                rs.next();
+//                gameName = "Unknown game #" + rs.getInt(1);
+//                rs.close();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
         } else gameName = textField.getText();
         mainLabel.setText("Choose the number of players");
         textField.setVisible(false);
