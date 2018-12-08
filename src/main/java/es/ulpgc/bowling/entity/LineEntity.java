@@ -29,6 +29,18 @@ public class LineEntity extends BaseEntity {
         this.games = games;
     }
 
+    public GameEntity getRunningGame() {
+        for (GameEntity game : games) {
+            if (game.isRunning()) return game;
+        }
+        return null;
+    }
+
+    public String getRunningGameName() {
+        if (getRunningGame() != null) return getRunningGame().getName();
+        return "----- No game playing -----";
+    }
+
     @Override
     public String toString() {
         return "LineEntity=[id=" + this.id +", bowling=" + bowling.toString() + ", games=]";

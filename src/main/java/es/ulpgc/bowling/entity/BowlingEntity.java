@@ -1,6 +1,7 @@
 package es.ulpgc.bowling.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "BOWLING")
@@ -11,7 +12,6 @@ public class BowlingEntity extends BaseEntity {
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="bowling_id")
-
     private List<LineEntity> lines;
 
     public String getName() {
@@ -28,6 +28,25 @@ public class BowlingEntity extends BaseEntity {
 
     public void setLines(List<LineEntity> lines) {
         this.lines = lines;
+    }
+
+
+    public BowlingEntity(List<LineEntity> lines, String name) {
+        this.lines = lines;
+        this.name = name;
+    }
+
+    public BowlingEntity(String name) {
+        this(new ArrayList<>(), name);
+    }
+
+    public BowlingEntity(){
+        this("");
+    }
+
+    public BowlingEntity addLine(LineEntity line) {
+        this.lines.add(line);
+        return this;
     }
 
     @Override

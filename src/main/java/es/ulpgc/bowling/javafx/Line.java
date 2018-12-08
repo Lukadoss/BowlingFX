@@ -48,6 +48,10 @@ public class Line {
         return "No game playing";
     }
 
+    public void setGames(List<Game> games) {
+        this.games = games;
+    }
+
     public void setFakeID(int id) {
         this.fakeID = id;
     }

@@ -2,6 +2,7 @@ package es.ulpgc.bowling.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "GAME")
@@ -22,6 +23,9 @@ public class GameEntity extends BaseEntity {
 
     @Column
     private LocalDateTime ended;
+
+    @Column
+    private Integer totalScore;
 
     public List<PlayerEntity> getPlayers() {
         return players;
@@ -55,18 +59,54 @@ public class GameEntity extends BaseEntity {
         this.ended = ended;
     }
 
+    public GameEntity(ArrayList<PlayerEntity> players) {
+        this.started = LocalDateTime.now();
+        this.ended = null;
+        this.totalScore = 0;
+        this.players = players;
+    }
+
+    public GameEntity() {
+        this(new ArrayList<>());
+    }
+
+    public GameEntity addPlayer(PlayerEntity player) {
+        if (isRunning()) {
+            if (!players.contains(player)) {
+                this.players.add(player);
+            }
+        }
+
+        return this;
+    }
+
+    public GameEntity removePlayer(PlayerEntity player) {
+        if (isRunning()) {
+            if (players.contains(player)) {
+                this.players.remove(player);
+            }
+        }
+        return this;
+    }
+
+    public void endGame() {
+        this.ended = LocalDateTime.now();
+    }
+
+    public boolean isRunning() {
+        return this.ended == null;
+    }
+
+    public Integer getTotalScore() {
+        return totalScore;
+    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public String toString() {
-        return "GameEntity=[id=" + this.id +", name="+ name + ", line="+ line.toString() + ", started=" + started + ", ended=" + ended + ", " +
-                "players=]";
+        return "GameEntity=[id=" + this.id +", line="+ line.toString() + ", started=" + started + ", ended=" + ended + ", players=]";
     }
 }

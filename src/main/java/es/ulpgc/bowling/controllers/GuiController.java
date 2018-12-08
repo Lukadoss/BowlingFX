@@ -1,10 +1,9 @@
 package es.ulpgc.bowling.controllers;
 
 import es.ulpgc.bowling.entity.BowlingEntity;
+import es.ulpgc.bowling.entity.LineEntity;
 import es.ulpgc.bowling.javafx.Game;
-import es.ulpgc.bowling.javafx.Line;
 import es.ulpgc.bowling.repository.BowlingRepository;
-import es.ulpgc.bowling.repository.GameRepository;
 import es.ulpgc.bowling.repository.LineRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,15 +20,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class GuiController {
@@ -48,12 +43,7 @@ public class GuiController {
     @Autowired
     private LineRepository lineRepo;
 
-    @Autowired
-    private GameRepository gameRepo;
-
     private BowlingEntity bowlingEntity;
-
-    private ModelMapper mm = new ModelMapper();
 
     private ArrayList<NewGameController> ngcList;
 
@@ -275,26 +265,19 @@ public class GuiController {
 
         mainTable.getColumns().clear();
 
-        TableColumn<Line, Integer> lineID = new TableColumn<>("Line number");
+        TableColumn<LineEntity, Integer> lineID = new TableColumn<>("Line number");
         lineID.prefWidthProperty().bind(mainTable.widthProperty().multiply(0.2));
         lineID.setResizable(false);
-        lineID.setCellValueFactory(new PropertyValueFactory<>("fakeID"));
+        lineID.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        TableColumn<Line, Game> lineName = new TableColumn<>("Current game");
+        TableColumn<LineEntity, Game> lineName = new TableColumn<>("Current game");
         lineName.prefWidthProperty().bind(mainTable.widthProperty().multiply(0.8));
         lineName.setResizable(false);
         lineName.setCellValueFactory(new PropertyValueFactory<>("runningGameName"));
 
         mainTable.getColumns().addAll(lineID, lineName);
 
-        Type listType = new TypeToken<List<Line>>() {}.getType();
-        List<Line> lines = mm.map(lineRepo.findByBowlingId(bowlingEntity.getId()), listType);
-
-        for (int i=1;i<=lines.size();i++){
-            lines.get(i-1).setFakeID(i);
-        }
-
-        ObservableList<Line> data = FXCollections.observableList(lines);
+        ObservableList<LineEntity> data = FXCollections.observableList(lineRepo.findByBowlingId(bowlingEntity.getId()));
         mainTable.setItems(data);
 
     }
