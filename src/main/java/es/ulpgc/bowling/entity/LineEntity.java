@@ -9,7 +9,7 @@ public class LineEntity extends BaseEntity {
     @ManyToOne
     private BowlingEntity bowling;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="line_id")
     private List<GameEntity> games;
 

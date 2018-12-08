@@ -10,15 +10,15 @@ public class Line {
 
     Logger logger = LoggerFactory.getLogger(Line.class);
 
-    private Integer lineNumber;
     private List<Game> games;
 
-    public Line(int lineNumber) {
-        this(lineNumber, new ArrayList<>());
+    private int fakeID;
+
+    public Line() {
+        this(new ArrayList<>());
     }
 
-    public Line(int lineNumber, ArrayList<Game> games) {
-        this.lineNumber = lineNumber;
+    public Line(ArrayList<Game> games) {
         this.games = games;
     }
 
@@ -43,8 +43,17 @@ public class Line {
         return null;
     }
 
-    public Integer getLineNumber() {
-        return this.lineNumber;
+    public String getRunningGameName() {
+        if (getRunningGame() != null) return getRunningGame().getName();
+        return "No game playing";
+    }
+
+    public void setFakeID(int id) {
+        this.fakeID = id;
+    }
+
+    public int getFakeID() {
+        return fakeID;
     }
 
     public List<Game> getGames() {

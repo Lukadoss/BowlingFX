@@ -19,7 +19,7 @@ public class BowlingTest {
     @Test
     public void constructorOneLineTest() {
         List<Line> lines = new ArrayList<>();
-        lines.add(new Line(1));
+        lines.add(new Line());
         Bowling bowling = new Bowling(lines,"");
         assertThat(bowling.getLines().size()).isEqualTo(1);
     }
@@ -27,8 +27,8 @@ public class BowlingTest {
     @Test
     public void constructorTwoLinesTest() {
         List<Line> lines = new ArrayList<>();
-        lines.add(new Line(1));
-        lines.add(new Line(2));
+        lines.add(new Line());
+        lines.add(new Line());
         Bowling bowling = new Bowling(lines,"");
         assertThat(bowling.getLines().size()).isEqualTo(2);
     }
@@ -36,7 +36,7 @@ public class BowlingTest {
     @Test
     public void addLineTest() {
         Bowling bowling = new Bowling("");
-        bowling.addLine(new Line(1));
+        bowling.addLine(new Line());
         assertThat(bowling.getLines().size()).isEqualTo(1);
     }
 }

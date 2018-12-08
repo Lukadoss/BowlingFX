@@ -19,10 +19,10 @@ insert into Line (id, bowling_id) values (14, 2);
 insert into Line (id, bowling_id) values (15, 2);
 insert into Line (id, bowling_id) values (16, 2);
 
-insert into Game (id, line_id) values (1, 1);
-insert into Game (id, line_id) values (2, 3);
-insert into Game (id, line_id) values (3, 5);
-insert into Game (id, line_id) values (4, 7);
+insert into Game (id, name, line_id) values (1, 'First game', 1);
+insert into Game (id, name, line_id) values (2, 'Crazy game', 3);
+insert into Game (id, name, line_id) values (3, 'Kids corner', 5);
+insert into Game (id, name, line_id) values (4, 'King of the DUCKS', 7);
 
 insert into Player (id, name, game_id) values (1, 'david', 1);
 insert into Player (id, name, game_id) values (2, 'jan', 1);
