@@ -64,6 +64,10 @@ public class PlayerEntity extends BaseEntity {
         this.maxScore = maxScore;
     }
 
+    public PlayerEntity(){
+        this("Unknown");
+    }
+
     public PlayerEntity(String name) {
         this.name = name;
         this.rolls = new ArrayList<>();

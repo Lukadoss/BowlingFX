@@ -24,9 +24,9 @@ insert into Game (id, name, line_id) values (2, 'Crazy game', 3);
 insert into Game (id, name, line_id) values (3, 'Kids corner', 5);
 insert into Game (id, name, line_id) values (4, 'King of the DUCKS', 7);
 
-insert into Player (id, name, game_id) values (1, 'david', 1);
-insert into Player (id, name, game_id) values (2, 'jan', 1);
-insert into Player (id, name, game_id) values (3, 'tomas', 1);
+insert into Player (id, name, game_id, maxscore) values (1, 'david', 1, 0);
+insert into Player (id, name, game_id, maxscore) values (2, 'jan', 1, 148);
+insert into Player (id, name, game_id, maxscore) values (3, 'tomas', 1, 234);
 insert into Player (id, name, game_id) values (4, 'petr', 1);
 
 insert into Rolls (player_id, rolls) values (1, 1);
