@@ -97,6 +97,7 @@ public class GameEntity extends BaseEntity {
         return this.ended == null;
     }
 
+    public void setTotalScore(int score) {this.totalScore = score; }
     public Integer getTotalScore() {
         return totalScore;
     }

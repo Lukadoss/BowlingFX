@@ -1,9 +1,11 @@
 package es.ulpgc.bowling.controllers;
 
 import es.ulpgc.bowling.entity.BowlingEntity;
+import es.ulpgc.bowling.entity.GameEntity;
 import es.ulpgc.bowling.entity.LineEntity;
 import es.ulpgc.bowling.entity.PlayerEntity;
 import es.ulpgc.bowling.repository.BowlingRepository;
+import es.ulpgc.bowling.repository.GameRepository;
 import es.ulpgc.bowling.repository.LineRepository;
 import es.ulpgc.bowling.repository.PlayerRepository;
 import javafx.collections.FXCollections;
@@ -21,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,6 +50,9 @@ public class GuiController {
     @Autowired
     private PlayerRepository playerRepo;
 
+    @Autowired
+    private GameRepository gameRepo;
+
     private BowlingEntity bowlingEntity;
 
     private ArrayList<NewGameController> ngcList;
@@ -57,78 +63,73 @@ public class GuiController {
     }
 
     public void getListOfGames(ActionEvent actionEvent) {
-//        ResultSet rs = sqlExec("SELECT game.title, SUM(player.total_score) as sum, game.id from game\n" +
-//                "LEFT JOIN player ON game.id = player.game_id\n" +
-//                "GROUP BY game.id ORDER BY sum DESC;");
-//        TableColumn<Game, String> game_title = new TableColumn<>("Game title");
-//        game_title.setMinWidth(100);
-//        game_title.setCellValueFactory(new PropertyValueFactory<>("name"));
-//
-//        TableColumn<Game, String> best_score = new TableColumn<>("Achieved score");
-//        best_score.setMinWidth(100);
-//        best_score.setCellValueFactory(new PropertyValueFactory<>("score"));
-//
-//        TableColumn actionCol = new TableColumn("Game details");
-//        actionCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
-//        Callback<TableColumn<Game, String>, TableCell<Game, String>> cellFactory
-//                = //
-//                new Callback<TableColumn<Game, String>, TableCell<Game, String>>() {
-//                    @Override
-//                    public TableCell call(final TableColumn<Game, String> param) {
-//                        final TableCell<Game, String> cell = new TableCell<Game, String>() {
-//
-//                            final Button btn = new Button("Statistics");
-//
-//                            @Override
-//                            public void updateItem(String item, boolean empty) {
-//                                super.updateItem(item, empty);
-//                                if (empty) {
-//                                    setGraphic(null);
-//                                    setText(null);
-//                                } else {
-//                                    //btn.setOnAction(event -> showGameStats(getTableView().getItems().get(getIndex()).getId()));
-//                                    setGraphic(btn);
-//                                    setText(null);
-//                                }
-//                            }
-//                        };
-//                        return cell;
-//                    }
-//
-//                    private void showGameStats(int id) {
-//                        FXMLLoader root;
-//                        try {
-//                            root = new FXMLLoader(getClass().getClassLoader().getResource(("gameStats.fxml")));
-//                            Stage stage = new Stage(StageStyle.DECORATED);
-//                            stage.setTitle("Game statistics");
-//                            stage.setScene(new Scene(root.load()));
-//                            stage.setResizable(false);
-//                            stage.show();
-//                            root.<GameStatsController>getController().initGame(id);
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                };
-//        actionCol.setStyle("-fx-aligment: CENTER-RIGHT");
-//        actionCol.setCellFactory(cellFactory);
-//        mainTable.getColumns().clear();
-//        mainTable.getColumns().addAll(game_title, best_score, actionCol);
-//
-//        ArrayList<Game> list = new ArrayList<>();
-//        try {
-//            while (rs.next()) {
-////                Game g = new Game(rs.getString(1));
-////                g.setScore(rs.getInt(2));
-////                g.setId(rs.getInt(3));
-////                list.add(g);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        ObservableList<Game> data = FXCollections.observableList(list);
-//        mainTable.setItems(data);
+        mainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TableColumn<GameEntity, String> game_title = new TableColumn<>("Game title");
+        game_title.setMinWidth(100);
+        game_title.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<GameEntity, Integer> best_score = new TableColumn<>("Achieved score");
+        best_score.setMinWidth(100);
+        best_score.setCellValueFactory(new PropertyValueFactory<>("totalScore"));
+
+        TableColumn<GameEntity, Integer> started = new TableColumn<>("Game started");
+        best_score.setMinWidth(100);
+        best_score.setCellValueFactory(new PropertyValueFactory<>("started"));
+
+        TableColumn<GameEntity, Integer> ended = new TableColumn<>("Game Ended");
+        best_score.setMinWidth(100);
+        best_score.setCellValueFactory(new PropertyValueFactory<>("ended"));
+
+        TableColumn actionCol = new TableColumn("Game details");
+        actionCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
+        Callback<TableColumn<GameEntity, String>, TableCell<GameEntity, String>> cellFactory
+                = //
+                new Callback<TableColumn<GameEntity, String>, TableCell<GameEntity, String>>() {
+                    @Override
+                    public TableCell call(final TableColumn<GameEntity, String> param) {
+                        final TableCell<GameEntity, String> cell = new TableCell<GameEntity, String>() {
+
+                            final Button btn = new Button("Statistics");
+
+                            @Override
+                            public void updateItem(String item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty) {
+                                    setGraphic(null);
+                                    setText(null);
+                                } else {
+                                    btn.setOnAction(event -> showGameStats(getTableView().getItems().get(getIndex()).getId()));
+                                    setGraphic(btn);
+                                    setText(null);
+                                }
+                            }
+                        };
+                        return cell;
+                    }
+
+                    private void showGameStats(int id) {
+                        FXMLLoader root;
+                        try {
+                            root = new FXMLLoader(getClass().getClassLoader().getResource(("gameStats.fxml")));
+                            Stage stage = new Stage(StageStyle.DECORATED);
+                            stage.setTitle("Game statistics");
+                            stage.setScene(new Scene(root.load()));
+                            stage.setResizable(false);
+                            stage.show();
+                            root.<GameStatsController>getController().initGame(id);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+        actionCol.setStyle("-fx-aligment: CENTER-RIGHT");
+        actionCol.setCellFactory(cellFactory);
+        mainTable.getColumns().clear();
+        mainTable.getColumns().addAll(game_title, best_score, actionCol);
+
+        ObservableList<GameEntity> data = FXCollections.observableList(gameRepo.findAllByIdGreaterThanEqualOrderByTotalScoreDesc(0));
+        mainTable.setItems(data);
     }
 
     public void getListOfLeaderboard(ActionEvent actionEvent) {

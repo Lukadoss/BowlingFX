@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface GameRepository extends BaseRepository<GameEntity> {
     List<GameEntity> findByLineId(Integer id);
+    List<GameEntity> findAllByIdGreaterThanEqualOrderByTotalScoreDesc(Integer id);
 }

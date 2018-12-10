@@ -19,8 +19,8 @@ insert into Line (id, bowling_id) values (14, 2);
 insert into Line (id, bowling_id) values (15, 2);
 insert into Line (id, bowling_id) values (16, 2);
 
-insert into Game (id, name, line_id) values (1, 'First game', 1);
-insert into Game (id, name, line_id) values (2, 'Crazy game', 3);
+insert into Game (id, name, line_id, totalScore) values (1, 'First game', 1, 382);
+insert into Game (id, name, line_id, totalScore) values (2, 'Crazy game', 3, 221);
 insert into Game (id, name, line_id) values (3, 'Kids corner', 5);
 insert into Game (id, name, line_id) values (4, 'King of the DUCKS', 7);
 
