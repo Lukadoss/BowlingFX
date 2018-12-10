@@ -38,7 +38,7 @@ public class LineEntity extends BaseEntity {
 
     public String getRunningGameName() {
         if (getRunningGame() != null) return getRunningGame().getName();
-        return "----- No game playing -----";
+        return null;
     }
 
     @Override

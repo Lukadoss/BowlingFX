@@ -98,17 +98,8 @@
         </BorderPane>
     </center>
     <left>
-        <VBox fx:id="settingsVBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0"
-              style="-fx-border-color: black; -fx-border-width: 0 1 0 0; -fx-background-color: #eaeaea;" BorderPane.alignment="CENTER">
+        <VBox fx:id="settingsVBox" alignment="TOP_CENTER" disable="true" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: black; -fx-border-width: 0 1 0 0; -fx-background-color: #eaeaea;" BorderPane.alignment="CENTER">
             <children>
-                <Button layoutX="17.0" layoutY="20.0" mnemonicParsing="false" onAction="#newGame" text="New game" wrapText="true">
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
-                    </VBox.margin>
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                </Button>
                 <Button layoutX="17.0" layoutY="10.0" mnemonicParsing="false" onAction="#getListOfLeaderboard" text="Leaderboards">
                     <VBox.margin>
                         <Insets top="20.0" />

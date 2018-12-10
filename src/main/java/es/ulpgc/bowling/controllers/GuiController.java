@@ -2,7 +2,6 @@ package es.ulpgc.bowling.controllers;
 
 import es.ulpgc.bowling.entity.BowlingEntity;
 import es.ulpgc.bowling.entity.LineEntity;
-import es.ulpgc.bowling.javafx.Game;
 import es.ulpgc.bowling.repository.BowlingRepository;
 import es.ulpgc.bowling.repository.LineRepository;
 import javafx.collections.FXCollections;
@@ -20,10 +19,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 @Component
@@ -51,7 +50,7 @@ public class GuiController {
     public void initialize() {
         ngcList = new ArrayList<>();
         resizePanels();
-       // mainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        // mainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     private void resizePanels() {
@@ -70,7 +69,7 @@ public class GuiController {
 
     }
 
-    public void newGameGui(){
+    public void newGameGui() {
         mainTable.setVisible(false);
         outputArea.setVisible(true);
         settingsVBox.setDisable(true);
@@ -181,29 +180,6 @@ public class GuiController {
 //        mainTable.setItems(data);
     }
 
-    public void newGame(ActionEvent actionEvent) throws InterruptedException {
-        console.clear();
-        outputArea.clear();
-        settingsVBox.setDisable(true);
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/newGame.fxml"));
-            Parent root = loader.load();
-            ngcList.add(loader.getController());
-            ngcList.get(ngcList.size()-1).setGuiController(this);
-
-            Stage stage = new Stage();
-            stage.setTitle("New game");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.show();
-            stage.setOnHidden(e->settingsVBox.setDisable(true));
-        } catch (IOException e) {
-            e.printStackTrace();
-            settingsVBox.setDisable(false);
-        }
-    }
-
     private void out(String one) {
         outputArea.setText(one + "\n" + outputArea.getText());
     }
@@ -231,7 +207,7 @@ public class GuiController {
                 case "status":
 //                    out("Game status: "+game.isRunning());
 //                    for(NewGameController c : ngcList) out(c.getGame().getId()+") "+c.getGame().getName());
-                    out("Number of games: "+ngcList.size());
+                    out("Number of games: " + ngcList.size());
                     break;
                 case "players":
 //                    for(Player p : ngcList.get(currentGameId).getPlayers()) out(p.getName());
@@ -248,7 +224,7 @@ public class GuiController {
     }
 
     public void getClickedBowlingBar(MouseEvent mouseEvent) {
-        switch (((Circle)mouseEvent.getSource()).getId()){
+        switch (((Circle) mouseEvent.getSource()).getId()) {
             case "c1":
                 bowlingEntity = bowlRepo.findById(1).get();
                 mainLabel.setText(bowlingEntity.getName());
@@ -270,24 +246,77 @@ public class GuiController {
         lineID.setResizable(false);
         lineID.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        TableColumn<LineEntity, Game> lineName = new TableColumn<>("Current game");
+        TableColumn<LineEntity, Object> lineName = new TableColumn<>("Current game");
         lineName.prefWidthProperty().bind(mainTable.widthProperty().multiply(0.8));
         lineName.setResizable(false);
         lineName.setCellValueFactory(new PropertyValueFactory<>("runningGameName"));
+
+        Callback<TableColumn<LineEntity, Object>, TableCell<LineEntity, Object>> cellFactory
+                = //
+                new Callback<TableColumn<LineEntity, Object>, TableCell<LineEntity, Object>>() {
+                    @Override
+                    public TableCell call(final TableColumn<LineEntity, Object> param) {
+                        final TableCell<LineEntity, Object> cell = new TableCell<LineEntity, Object>() {
+
+                            final Button btn = new Button("Start new game");
+
+                            @Override
+                            public void updateItem(Object item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty) {
+                                    setGraphic(null);
+                                    setText(null);
+                                } else if (item instanceof String) {
+                                    setText((String) item);
+                                } else {
+                                    btn.setOnAction(event -> newGame(new ActionEvent()));
+                                    setGraphic(btn);
+                                    setText(null);
+                                }
+                            }
+                        };
+                        return cell;
+                    }
+
+                    public void newGame(ActionEvent actionEvent) {
+                        console.clear();
+                        outputArea.clear();
+                        settingsVBox.setDisable(true);
+
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/newGame.fxml"));
+                            Parent root = loader.load();
+                            ngcList.add(loader.getController());
+                            ngcList.get(ngcList.size() - 1).setGuiController(GuiController.this);
+
+                            Stage stage = new Stage();
+                            stage.setTitle("New game");
+                            stage.setScene(new Scene(root));
+                            stage.setResizable(false);
+                            stage.show();
+                            stage.setOnHidden(e -> settingsVBox.setDisable(true));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            settingsVBox.setDisable(false);
+                        }
+                    }
+                };
+        lineName.setCellFactory(cellFactory);
 
         mainTable.getColumns().addAll(lineID, lineName);
 
         ObservableList<LineEntity> data = FXCollections.observableList(lineRepo.findByBowlingId(bowlingEntity.getId()));
         mainTable.setItems(data);
 
+        changeWindowItems(true);
     }
 
     private void changeWindowItems(boolean next) {
-        if (next){
+        if (next) {
             bowlingGridPane.setVisible(false);
             mainTable.setVisible(true);
             settingsVBox.setDisable(false);
-        }else{
+        } else {
             bowlingGridPane.setVisible(true);
             mainTable.setVisible(false);
             settingsVBox.setDisable(true);
