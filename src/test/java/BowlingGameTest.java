@@ -5,7 +5,6 @@ import org.junit.Test;
 import static java.util.Arrays.stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class BowlingGameTest {
 
     private PlayerEntity playerScore(int... rolls){

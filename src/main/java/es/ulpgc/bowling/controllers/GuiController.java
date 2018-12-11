@@ -20,7 +20,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -39,7 +38,7 @@ public class GuiController {
     public Label mainLabel;
     public GridPane bowlingGridPane;
     public Circle c1, c2;
-    public VBox settingsVBox;
+    public Button backButton;
 
     @Autowired
     private BowlingRepository bowlRepo;
@@ -63,6 +62,8 @@ public class GuiController {
     }
 
     public void getListOfGames(ActionEvent actionEvent) {
+        changeWindowItems(true);
+
         mainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn<GameEntity, String> game_title = new TableColumn<>("Game title");
@@ -133,6 +134,8 @@ public class GuiController {
     }
 
     public void getListOfLeaderboard(ActionEvent actionEvent) {
+        changeWindowItems(true);
+
         mainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn<PlayerEntity, String> player_name = new TableColumn<>("Player name");
@@ -193,7 +196,7 @@ public class GuiController {
             public void newGame(ActionEvent actionEvent) {
                 console.clear();
                 outputArea.clear();
-                settingsVBox.setDisable(true);
+                backButton.setDisable(true);
 
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/newGame.fxml"));
@@ -206,10 +209,10 @@ public class GuiController {
                     stage.setScene(new Scene(root));
                     stage.setResizable(false);
                     stage.show();
-                    stage.setOnHidden(e -> settingsVBox.setDisable(true));
+                    stage.setOnHidden(e -> changeWindowItems(true));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    settingsVBox.setDisable(false);
+                    backButton.setDisable(false);
                 }
             }
         };
@@ -240,11 +243,11 @@ public class GuiController {
         if (next) {
             bowlingGridPane.setVisible(false);
             mainTable.setVisible(true);
-            settingsVBox.setDisable(false);
+            backButton.setDisable(false);
         } else {
             bowlingGridPane.setVisible(true);
             mainTable.setVisible(false);
-            settingsVBox.setDisable(true);
+            backButton.setDisable(true);
             mainLabel.setText("Bowling bars");
         }
     }
@@ -252,7 +255,7 @@ public class GuiController {
     public void newGameGui() {
         mainTable.setVisible(false);
         outputArea.setVisible(true);
-        settingsVBox.setDisable(true);
+        backButton.setDisable(true);
         console.setDisable(false);
     }
 
