@@ -13,6 +13,8 @@
 *.tar.gz
 *.rar
 *.dll
+*.iml
 
 .idea/**
 target/**
+

@@ -30,10 +30,13 @@ public class BowlingEntity extends BaseEntity {
         this.lines = lines;
     }
 
-
     public BowlingEntity(List<LineEntity> lines, String name) {
         this.lines = lines;
         this.name = name;
+    }
+
+    public BowlingEntity(List<LineEntity> lines) {
+        this(lines, "");
     }
 
     public BowlingEntity(String name) {

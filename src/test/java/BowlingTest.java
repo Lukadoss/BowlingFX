@@ -1,5 +1,5 @@
-import es.ulpgc.bowling.javafx.Bowling;
-import es.ulpgc.bowling.javafx.Line;
+import es.ulpgc.bowling.entity.BowlingEntity;
+import es.ulpgc.bowling.entity.LineEntity;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,31 +12,31 @@ public class BowlingTest {
 
     @Test
     public void constructorEmptyTest() {
-        Bowling bowling = new Bowling("");
+        BowlingEntity bowling = new BowlingEntity();
         assertThat(bowling.getLines().size()).isZero();
     }
 
     @Test
     public void constructorOneLineTest() {
-        List<Line> lines = new ArrayList<>();
-        lines.add(new Line());
-        Bowling bowling = new Bowling(lines,"");
+        List<LineEntity> lines = new ArrayList<>();
+        lines.add(new LineEntity());
+        BowlingEntity bowling = new BowlingEntity(lines);
         assertThat(bowling.getLines().size()).isEqualTo(1);
     }
 
     @Test
     public void constructorTwoLinesTest() {
-        List<Line> lines = new ArrayList<>();
-        lines.add(new Line());
-        lines.add(new Line());
-        Bowling bowling = new Bowling(lines,"");
+        List<LineEntity> lines = new ArrayList<>();
+        lines.add(new LineEntity());
+        lines.add(new LineEntity());
+        BowlingEntity bowling = new BowlingEntity(lines);
         assertThat(bowling.getLines().size()).isEqualTo(2);
     }
 
     @Test
     public void addLineTest() {
-        Bowling bowling = new Bowling("");
-        bowling.addLine(new Line());
+        BowlingEntity bowling = new BowlingEntity();
+        bowling.addLine(new LineEntity());
         assertThat(bowling.getLines().size()).isEqualTo(1);
     }
 }
