@@ -61,7 +61,7 @@ public class FrameEntity extends BaseEntity {
     }
 
     public FrameEntity(){
-        this(null, 0, 0);
+        this(new PlayerEntity(), 0, 0);
     }
 
     public FrameEntity(PlayerEntity player, int roll_index, int frame_index) {
@@ -109,6 +109,6 @@ public class FrameEntity extends BaseEntity {
 
     @Override
     public String toString(){
-        return String.format("FrameEntity %d, score %d", frame_index, score());
+        return String.format("[FrameEntity=%d, score=%d]", frame_index, score());
     }
 }

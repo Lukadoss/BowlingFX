@@ -40,6 +40,7 @@ public class PlayerEntity extends BaseEntity {
     }
 
     public List<Integer> getRolls() {
+        setUpRolls();
         return rolls;
     }
 
@@ -50,8 +51,12 @@ public class PlayerEntity extends BaseEntity {
     public List<FrameEntity> getFrames() {
         return frames;
     }
-    public void setFrames(List<FrameEntity> frames) {
-        this.frames = frames;
+
+    public void setUpRolls() {
+        for (FrameEntity f : frames) {
+            rolls.add(f.getRollOne());
+            rolls.add(f.getRollTwo());
+        }
     }
 
     public Integer getMaxScore() {
@@ -105,10 +110,10 @@ public class PlayerEntity extends BaseEntity {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.name);
-        for (int i = 0; i < rolls.size(); i++) {
-            sb.append(" " + rolls.get(i));
-        }
+        sb.append(this.name+" frames:"+this.frames);
+//        for (int i = 0; i < rolls.size(); i++) {
+//            sb.append(" " + rolls.get(i));
+//        }
         return sb.toString();
     }
 }
