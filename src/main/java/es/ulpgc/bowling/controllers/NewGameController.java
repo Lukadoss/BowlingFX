@@ -1,7 +1,7 @@
 package es.ulpgc.bowling.controllers;
 
-import es.ulpgc.bowling.javafx.Game;
-import es.ulpgc.bowling.javafx.Player;
+import es.ulpgc.bowling.entity.GameEntity;
+import es.ulpgc.bowling.entity.PlayerEntity;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -29,8 +29,8 @@ public class NewGameController {
     private int numOfPlayers;
     private HashMap<Label, TextField> nameFields;
     private ArrayList<String> names;
-    private ArrayList<Player> players;
-    private Game game;
+    private ArrayList<PlayerEntity> players;
+    private GameEntity game;
     private GuiController gc = null;
 
     public void initialize() {
@@ -61,7 +61,7 @@ public class NewGameController {
             });
             if (isOkay.get()) {
                 //game = new Game(gameName);
-                names.forEach(e -> players.add(new Player(e)));
+                names.forEach(e -> players.add(new PlayerEntity(e)));
                 ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
                 gc.newGameGui();
             }
@@ -131,11 +131,11 @@ public class NewGameController {
         }
     }
 
-    public Game getGame(){
+    public GameEntity getGame(){
         return game;
     }
 
-    public ArrayList<Player> getPlayers(){
+    public ArrayList<PlayerEntity> getPlayers(){
         return players;
     }
 

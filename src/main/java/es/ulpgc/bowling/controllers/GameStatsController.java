@@ -1,5 +1,6 @@
 package es.ulpgc.bowling.controllers;
 
+import es.ulpgc.bowling.entity.GameEntity;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -11,11 +12,14 @@ public class GameStatsController {
     public Label gameNameLabel;
     public ListView<String> graphicList;
 
+    private GameEntity game;
+
     public void cancel(ActionEvent actionEvent) {
         ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
     }
 
-    public void initGame(int id){
+    public void initGame(GameEntity game){
+        System.out.println(game);
 //        ResultSet rs = GuiController.sqlExec("SELECT title FROM game WHERE id = "+id);
 //        try {
 //            gameNameLabel.setText(rs.getString(1));

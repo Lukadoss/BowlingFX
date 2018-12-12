@@ -71,16 +71,14 @@ public class GuiController {
         game_title.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         TableColumn<GameEntity, Integer> best_score = new TableColumn<>("Achieved score");
-        best_score.setMinWidth(100);
+        best_score.setMinWidth(50);
         best_score.setCellValueFactory(new PropertyValueFactory<>("totalScore"));
 
         TableColumn<GameEntity, Integer> started = new TableColumn<>("Game started");
-        best_score.setMinWidth(100);
-        best_score.setCellValueFactory(new PropertyValueFactory<>("started"));
+        started.setCellValueFactory(new PropertyValueFactory<>("started"));
 
         TableColumn<GameEntity, Integer> ended = new TableColumn<>("Game Ended");
-        best_score.setMinWidth(100);
-        best_score.setCellValueFactory(new PropertyValueFactory<>("ended"));
+        ended.setCellValueFactory(new PropertyValueFactory<>("ended"));
 
         TableColumn actionCol = new TableColumn("Game details");
         actionCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
@@ -100,7 +98,7 @@ public class GuiController {
                                     setGraphic(null);
                                     setText(null);
                                 } else {
-                                    btn.setOnAction(event -> showGameStats(getTableView().getItems().get(getIndex()).getId()));
+                                    btn.setOnAction(event -> showGameStats(getTableView().getItems().get(getIndex())));
                                     setGraphic(btn);
                                     setText(null);
                                 }
@@ -109,7 +107,7 @@ public class GuiController {
                         return cell;
                     }
 
-                    private void showGameStats(int id) {
+                    private void showGameStats(GameEntity game) {
                         FXMLLoader root;
                         try {
                             root = new FXMLLoader(getClass().getClassLoader().getResource(("gameStats.fxml")));
@@ -118,16 +116,16 @@ public class GuiController {
                             stage.setScene(new Scene(root.load()));
                             stage.setResizable(false);
                             stage.show();
-                            root.<GameStatsController>getController().initGame(id);
+                            root.<GameStatsController>getController().initGame(game);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 };
-        actionCol.setStyle("-fx-aligment: CENTER-RIGHT");
+        actionCol.setStyle("-fx-aligment: CENTER");
         actionCol.setCellFactory(cellFactory);
         mainTable.getColumns().clear();
-        mainTable.getColumns().addAll(game_title, best_score, actionCol);
+        mainTable.getColumns().addAll(game_title, best_score, started, ended, actionCol);
 
         ObservableList<GameEntity> data = FXCollections.observableList(gameRepo.findAllByIdGreaterThanEqualOrderByTotalScoreDesc(0));
         mainTable.setItems(data);
@@ -223,6 +221,7 @@ public class GuiController {
         lineID.prefWidthProperty().bind(mainTable.widthProperty().multiply(0.1));
         lineID.setResizable(false);
         lineID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        lineID.setSortable(false);
 
         TableColumn<LineEntity, Object> lineName = new TableColumn<>("Current game");
         lineName.prefWidthProperty().bind(mainTable.widthProperty().multiply(0.9));
@@ -230,6 +229,7 @@ public class GuiController {
         lineName.setCellValueFactory(new PropertyValueFactory<>("runningGameName"));
         lineName.setCellFactory(cellFactory);
         lineName.setStyle("-fx-alignment: CENTER");
+        lineName.setSortable(false);
 
         mainTable.getColumns().addAll(lineID, lineName);
 

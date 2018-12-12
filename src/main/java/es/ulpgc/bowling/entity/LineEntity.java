@@ -43,6 +43,6 @@ public class LineEntity extends BaseEntity {
 
     @Override
     public String toString() {
-        return "LineEntity=[id=" + this.id +", bowling=" + bowling.toString() + ", games=]";
+        return "LineEntity=[id=" + this.id +", bowling=" + bowling.toString() + "]";
     }
 }

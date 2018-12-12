@@ -8,8 +8,8 @@ import java.util.List;
 @Entity(name = "GAME")
 public class GameEntity extends BaseEntity {
 
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="game_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "game_id")
     private List<PlayerEntity> players;
 
     @ManyToOne
@@ -97,7 +97,10 @@ public class GameEntity extends BaseEntity {
         return this.ended == null;
     }
 
-    public void setTotalScore(int score) {this.totalScore = score; }
+    public void setTotalScore(int score) {
+        this.totalScore = score;
+    }
+
     public Integer getTotalScore() {
         return totalScore;
     }
@@ -108,6 +111,7 @@ public class GameEntity extends BaseEntity {
 
     @Override
     public String toString() {
-        return "GameEntity=[id=" + this.id +", line="+ line.toString() + ", started=" + started + ", ended=" + ended + ", players=]";
+        return "GameEntity=[id=" + this.id + ", line=" + this.line.toString() + ", started=" + this.started + ", ended=" + this.ended + ", players=" +
+                this.players + "]";
     }
 }

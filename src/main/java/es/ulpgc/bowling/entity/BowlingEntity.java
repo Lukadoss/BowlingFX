@@ -10,7 +10,7 @@ public class BowlingEntity extends BaseEntity {
     @Column
     private String name;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="bowling_id")
     private List<LineEntity> lines;
 
@@ -54,6 +54,6 @@ public class BowlingEntity extends BaseEntity {
 
     @Override
     public String toString() {
-        return "BowlingEntity=[id=" + this.id +", name="+ this.name + ", lines=]";
+        return "BowlingEntity=[id=" + this.id +", name="+ this.name + "]";
     }
 }

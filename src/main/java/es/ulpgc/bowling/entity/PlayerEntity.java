@@ -13,17 +13,15 @@ public class PlayerEntity extends BaseEntity {
     @ManyToOne
     private GameEntity game;
 
-    @ElementCollection
-    @CollectionTable(name="ROLLS", joinColumns=@JoinColumn(name="player_id"))
-    @Column
-    private List<Integer> rolls;
-
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="player_id")
     private List<FrameEntity> frames;
 
     @Column
     private Integer maxScore;
+
+    @Transient
+    private List<Integer> rolls;
 
     public String getName() {
         return name;

@@ -1,8 +1,6 @@
 package es.ulpgc.bowling.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity(name = "FRAME")
 public class FrameEntity extends BaseEntity {
@@ -11,10 +9,16 @@ public class FrameEntity extends BaseEntity {
     private PlayerEntity player;
 
     @Column
-    private Integer rollIndex;
+    private Integer roll_index;
 
     @Column
-    private Integer frameIndex;
+    private Integer frame_index;
+
+    @Column
+    private Integer roll_one;
+
+    @Column
+    private Integer roll_two;
 
     public PlayerEntity getPlayer() {
         return player;
@@ -25,49 +29,69 @@ public class FrameEntity extends BaseEntity {
     }
 
     public Integer getRollIndex() {
-        return rollIndex;
+        return roll_index;
     }
 
-    public void setRollIndex(Integer rollIndex) {
-        this.rollIndex = rollIndex;
+    public void setRollIndex(Integer roll_index) {
+        this.roll_index = roll_index;
     }
 
     public Integer getFrameIndex() {
-        return frameIndex;
+        return frame_index;
     }
 
-    public void setFrameIndex(Integer frameIndex) {
-        this.frameIndex = frameIndex;
+    public Integer getRollOne() {
+        return roll_one;
     }
 
-    public FrameEntity(PlayerEntity player, int rollIndex, int frameIndex) {
-        this.rollIndex = rollIndex;
-        this.frameIndex = frameIndex;
+    public void setRollOne(Integer roll_one) {
+        this.roll_one = roll_one;
+    }
+
+    public Integer getRollTwo() {
+        return roll_two;
+    }
+
+    public void setRollTwo(Integer roll_two) {
+        this.roll_two = roll_two;
+    }
+
+    public void setFrameIndex(Integer frame_index) {
+        this.frame_index = frame_index;
+    }
+
+    public FrameEntity(){
+        this(null, 0, 0);
+    }
+
+    public FrameEntity(PlayerEntity player, int roll_index, int frame_index) {
+        this.roll_index = roll_index;
+        this.frame_index = frame_index;
         this.player = player;
     }
 
     public Integer score() {
         if (!isTerminated()) return null;
-        if (isLastFrame() && (isStrike() || isSpare())) return roll(rollIndex) + roll(rollIndex + 1) + roll(rollIndex + 2);
-        if (isSpare()) return roll(rollIndex) + roll(rollIndex + 1) + roll(rollIndex + 2);
+        if (isLastFrame() && (isStrike() || isSpare())) return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
+        if (isSpare()) return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
         if (isStrike()) {
-            if (player.frame(frameIndex + 1) == null) return null;
-            if (player.frame(frameIndex + 1).isStrike() && (player.frame(frameIndex + 2)) == null && !player.frame(frameIndex + 1).isLastFrame()) return null;
-            return roll(rollIndex) + roll(rollIndex + 1) + roll(rollIndex + 2);
+            if (player.frame(frame_index + 1) == null) return null;
+            if (player.frame(frame_index + 1).isStrike() && (player.frame(frame_index + 2)) == null && !player.frame(frame_index + 1).isLastFrame()) return null;
+            return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
         }
-        return roll(rollIndex) + roll(rollIndex + 1);
+        return roll(roll_index) + roll(roll_index + 1);
     }
 
     public boolean isLastFrame() {
-        return this.frameIndex == 9;
+        return this.frame_index == 9;
     }
 
-    private Integer roll(int rollIndex) {
-        return player.getRolls().get(rollIndex);
+    private Integer roll(int roll_index) {
+        return player.getRolls().get(roll_index);
     }
 
     private boolean isTerminated() {
-        return this.rollIndex != player.getRolls().size() - rollsToTerminate();
+        return this.roll_index != player.getRolls().size() - rollsToTerminate();
     }
 
     private int rollsToTerminate() {
@@ -75,16 +99,16 @@ public class FrameEntity extends BaseEntity {
     }
 
     public boolean isSpare() {
-        if (rollIndex + 1 >= player.getRolls().size()) return false;
-        return roll(rollIndex) + roll(rollIndex + 1) == 10;
+        if (roll_index + 1 >= player.getRolls().size()) return false;
+        return roll(roll_index) + roll(roll_index + 1) == 10;
     }
 
     public boolean isStrike() {
-        return roll(rollIndex) == 10;
+        return roll(roll_index) == 10;
     }
 
     @Override
     public String toString(){
-        return String.format("FrameEntity %d, score %d", frameIndex, score());
+        return String.format("FrameEntity %d, score %d", frame_index, score());
     }
 }
