@@ -1,5 +1,8 @@
 package es.ulpgc.bowling.entity;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,6 +13,7 @@ public class GameEntity extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "game_id")
+    @Fetch(FetchMode.SELECT)
     private List<PlayerEntity> players;
 
     @ManyToOne

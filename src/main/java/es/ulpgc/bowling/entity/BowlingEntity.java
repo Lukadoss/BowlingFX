@@ -1,5 +1,8 @@
 package es.ulpgc.bowling.entity;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +15,7 @@ public class BowlingEntity extends BaseEntity {
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="bowling_id")
+    @Fetch(FetchMode.SELECT)
     private List<LineEntity> lines;
 
     public String getName() {
