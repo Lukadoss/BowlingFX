@@ -26,8 +26,6 @@ import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-
 @Component
 public class GuiController {
     public TextArea outputArea;
@@ -52,12 +50,10 @@ public class GuiController {
     private GameRepository gameRepo;
 
     private BowlingEntity currentBowling;
+
     private GameEntity currentGame;
 
-    private ArrayList<NewGameController> ngcList;
-
     public void initialize() {
-        ngcList = new ArrayList<>();
         resizePanels();
     }
 
@@ -300,14 +296,14 @@ public class GuiController {
                     outputArea.clear();
                     break;
                 case "status":
-                    for(NewGameController c : ngcList) out(c.getGame().getId()+") "+c.getGame().getName()+" running="+c.getGame().isRunning());
+                    out("game_id="+currentGame.getId()+", name="+currentGame.getName()+", running="+currentGame.isRunning());
                     break;
                 case "players":
-//                    for(Player p : ngcList.get(currentGameId).getPlayers()) out(p.getName());
+                    out(currentGame.getPlayers().toString());
                     out("Currently playing players:");
                     break;
                 case "game":
-//                    out("Current score for game \""+ngcList.get(currentGameId).getGame().getName()+"\" is "+ngcList.get(currentGameId).getGame().getScore());
+                    out("Current score for game \""+currentGame.getName()+"\" is "+currentGame.getTotalScore());
                     break;
                 default:
                     out("Command not found! ---Write \"help\" to see all commands---");
