@@ -13,6 +13,8 @@ public class LineEntity extends BaseEntity {
     @JoinColumn(name="line_id")
     private List<GameEntity> games;
 
+    public LineEntity() {}
+
     public BowlingEntity getBowling() {
         return bowling;
     }

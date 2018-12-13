@@ -13,7 +13,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -52,7 +51,8 @@ public class GuiController {
     @Autowired
     private GameRepository gameRepo;
 
-    private BowlingEntity bowlingEntity;
+    private BowlingEntity currentBowling;
+    private GameEntity currentGame;
 
     private ArrayList<NewGameController> ngcList;
 
@@ -74,11 +74,8 @@ public class GuiController {
         best_score.setMinWidth(50);
         best_score.setCellValueFactory(new PropertyValueFactory<>("totalScore"));
 
-        TableColumn<GameEntity, Integer> started = new TableColumn<>("Game started");
-        started.setCellValueFactory(new PropertyValueFactory<>("started"));
-
-        TableColumn<GameEntity, Integer> ended = new TableColumn<>("Game Ended");
-        ended.setCellValueFactory(new PropertyValueFactory<>("ended"));
+        TableColumn<GameEntity, String> duration = new TableColumn<>("Game duration");
+        duration.setCellValueFactory(new PropertyValueFactory<>("gameDuration"));
 
         TableColumn actionCol = new TableColumn("Game details");
         actionCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
@@ -108,9 +105,8 @@ public class GuiController {
                     }
 
                     private void showGameStats(GameEntity game) {
-                        FXMLLoader root;
                         try {
-                            root = new FXMLLoader(getClass().getClassLoader().getResource(("gameStats.fxml")));
+                            FXMLLoader root = new FXMLLoader(getClass().getClassLoader().getResource(("gameStats.fxml")));
                             Stage stage = new Stage(StageStyle.DECORATED);
                             stage.setTitle("Game statistics");
                             stage.setScene(new Scene(root.load()));
@@ -125,7 +121,7 @@ public class GuiController {
         actionCol.setStyle("-fx-aligment: CENTER");
         actionCol.setCellFactory(cellFactory);
         mainTable.getColumns().clear();
-        mainTable.getColumns().addAll(game_title, best_score, started, ended, actionCol);
+        mainTable.getColumns().addAll(game_title, best_score, duration, actionCol);
 
         ObservableList<GameEntity> data = FXCollections.observableList(gameRepo.findAllByIdGreaterThanEqualOrderByTotalScoreDesc(0));
         mainTable.setItems(data);
@@ -154,12 +150,12 @@ public class GuiController {
     public void getClickedBowlingBar(MouseEvent mouseEvent) {
         switch (((Circle) mouseEvent.getSource()).getId()) {
             case "c1":
-                bowlingEntity = bowlRepo.findById(1).get();
-                mainLabel.setText(bowlingEntity.getName());
+                currentBowling = bowlRepo.findById(1).get();
+                mainLabel.setText(currentBowling.getName());
                 break;
             case "c2":
-                bowlingEntity = bowlRepo.findById(2).get();
-                mainLabel.setText(bowlingEntity.getName());
+                currentBowling = bowlRepo.findById(2).get();
+                mainLabel.setText(currentBowling.getName());
                 break;
             default:
                 break;
@@ -182,7 +178,7 @@ public class GuiController {
                         } else if (item instanceof String) {
                             setText((String) item);
                         } else {
-                            btn.setOnAction(event -> newGame(new ActionEvent()));
+                            btn.setOnAction(event -> newGame(getTableView().getItems().get(getIndex())));
                             setGraphic(btn);
                             setText(null);
                         }
@@ -191,33 +187,12 @@ public class GuiController {
                 return cell;
             }
 
-            public void newGame(ActionEvent actionEvent) {
-                console.clear();
-                outputArea.clear();
-                backButton.setDisable(true);
 
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/newGame.fxml"));
-                    Parent root = loader.load();
-                    ngcList.add(loader.getController());
-                    ngcList.get(ngcList.size() - 1).setGuiController(GuiController.this);
-
-                    Stage stage = new Stage();
-                    stage.setTitle("New game");
-                    stage.setScene(new Scene(root));
-                    stage.setResizable(false);
-                    stage.show();
-                    stage.setOnHidden(e -> changeWindowItems(true));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    backButton.setDisable(false);
-                }
-            }
         };
 
         mainTable.getColumns().clear();
 
-        TableColumn<LineEntity, Integer> lineID = new TableColumn<>("Line number");
+        TableColumn<LineEntity, Integer> lineID = new TableColumn<>("Line");
         lineID.prefWidthProperty().bind(mainTable.widthProperty().multiply(0.1));
         lineID.setResizable(false);
         lineID.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -233,10 +208,31 @@ public class GuiController {
 
         mainTable.getColumns().addAll(lineID, lineName);
 
-        ObservableList<LineEntity> data = FXCollections.observableList(lineRepo.findByBowlingId(bowlingEntity.getId()));
+        ObservableList<LineEntity> data = FXCollections.observableList(lineRepo.findByBowlingId(currentBowling.getId()));
         mainTable.setItems(data);
 
         changeWindowItems(true);
+    }
+
+    public void newGame(LineEntity line) {
+        console.clear();
+        outputArea.clear();
+        backButton.setDisable(true);
+
+        try {
+            FXMLLoader root = new FXMLLoader(getClass().getResource(("/newGame.fxml")));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.setTitle("New game");
+            stage.setScene(new Scene(root.load()));
+            stage.setResizable(false);
+            stage.show();
+            root.<NewGameController>getController().setUpGC(this);
+            root.<NewGameController>getController().setUpLine(line);
+        } catch (Exception e) {
+            e.printStackTrace();
+            backButton.setDisable(false);
+            changeWindowItems(false);
+        }
     }
 
     private void changeWindowItems(boolean next) {
@@ -256,7 +252,7 @@ public class GuiController {
         mainTable.setVisible(false);
         outputArea.setVisible(true);
         backButton.setDisable(true);
-        console.setDisable(false);
+        console.setVisible(true);
     }
 
     private void resizePanels() {
@@ -304,9 +300,7 @@ public class GuiController {
                     outputArea.clear();
                     break;
                 case "status":
-//                    out("Game status: "+game.isRunning());
-//                    for(NewGameController c : ngcList) out(c.getGame().getId()+") "+c.getGame().getName());
-                    out("Number of games: " + ngcList.size());
+                    for(NewGameController c : ngcList) out(c.getGame().getId()+") "+c.getGame().getName()+" running="+c.getGame().isRunning());
                     break;
                 case "players":
 //                    for(Player p : ngcList.get(currentGameId).getPlayers()) out(p.getName());
@@ -320,5 +314,25 @@ public class GuiController {
             }
         }
         console.clear();
+    }
+
+    public GameRepository getGameRepo() {
+        return gameRepo;
+    }
+
+    public BowlingRepository getBowlRepo() {
+        return bowlRepo;
+    }
+
+    public LineRepository getLineRepo() {
+        return lineRepo;
+    }
+
+    public PlayerRepository getPlayerRepo() {
+        return playerRepo;
+    }
+
+    public void setCurrentGame(GameEntity currentGame) {
+        this.currentGame = currentGame;
     }
 }

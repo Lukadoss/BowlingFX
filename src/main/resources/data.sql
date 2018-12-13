@@ -19,10 +19,18 @@ insert into Line (id, bowling_id) values (14, 2);
 insert into Line (id, bowling_id) values (15, 2);
 insert into Line (id, bowling_id) values (16, 2);
 
-insert into Game (id, name, line_id, totalScore) values (1, 'First game', 1, 382);
-insert into Game (id, name, line_id, totalScore) values (2, 'Crazy game', 11, 221);
-insert into Game (id, name, line_id) values (3, 'Kids corner', 5);
-insert into Game (id, name, line_id) values (4, 'King of the DUCKS', 7);
+insert into Game (id, name, line_id, started, ended, totalScore) values (1, 'First game', 1, CURRENT_TIMESTAMP,
+CURRENT_TIMESTAMP+0.123456789, 382);
+insert into Game (id, name, line_id, started, ended, totalScore) values (2, 'Crazy game', 11, CURRENT_TIMESTAMP,
+CURRENT_TIMESTAMP+0.78135, 221);
+insert into Game (id, name, line_id, started, ended, totalScore) values (3, 'Kids corner', 5, CURRENT_TIMESTAMP,
+CURRENT_TIMESTAMP+0.8887, 0);
+insert into Game (id, name, line_id, started, ended, totalScore) values (4, 'Sloths', 7, CURRENT_TIMESTAMP,
+CURRENT_TIMESTAMP+0.4, 0);
+insert into Game (id, name, line_id) values (5, 'Second game', 1);
+insert into Game (id, name, line_id) values (6, 'Kekeroni game', 11);
+insert into Game (id, name, line_id) values (7, 'Flash winners', 5);
+insert into Game (id, name, line_id) values (8, 'King of the DUCKS', 7);
 
 insert into Player (id, name, game_id, maxscore) values (1, 'david', 1, 0);
 insert into Player (id, name, game_id, maxscore) values (2, 'jan', 1, 148);

@@ -1,6 +1,7 @@
 package es.ulpgc.bowling.entity;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,16 +60,30 @@ public class GameEntity extends BaseEntity {
         this.ended = ended;
     }
 
-    public GameEntity(ArrayList<PlayerEntity> players) {
+    public String getGameDuration() {
+        if (!isRunning()) {
+            Duration duration = Duration.between(started, ended);
+
+            long seconds = duration.getSeconds();
+
+            long hours = seconds / 3600;
+            long minutes = ((seconds % 3600) / 60);
+            long secs = (seconds % 60);
+            return hours + "h " + minutes + "m " + secs + "s";
+        }
+        return "Still running";
+    }
+
+
+    public GameEntity(String name, ArrayList<PlayerEntity> players) {
         this.started = LocalDateTime.now();
         this.ended = null;
         this.totalScore = 0;
+        this.name = name;
         this.players = players;
     }
 
-    public GameEntity() {
-        this(new ArrayList<>());
-    }
+    public GameEntity() {}
 
     public GameEntity addPlayer(PlayerEntity player) {
         if (isRunning()) {
@@ -105,8 +120,16 @@ public class GameEntity extends BaseEntity {
         return totalScore;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setTotalScore(Integer totalScore) {
+        this.totalScore = totalScore;
     }
 
     @Override

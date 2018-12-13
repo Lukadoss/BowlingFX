@@ -6,16 +6,17 @@ import java.io.Serializable;
 @MappedSuperclass
 public class BaseEntity implements Serializable {
 
+    @TableGenerator(name="tab", initialValue=100)
     @Id
     @Column
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    int id;
+    @GeneratedValue(strategy=GenerationType.TABLE, generator = "tab")
+    Integer id;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }

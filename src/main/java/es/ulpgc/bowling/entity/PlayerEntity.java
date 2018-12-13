@@ -23,6 +23,7 @@ public class PlayerEntity extends BaseEntity {
     @Transient
     private List<Integer> rolls;
 
+
     public String getName() {
         return name;
     }
@@ -67,9 +68,7 @@ public class PlayerEntity extends BaseEntity {
         this.maxScore = maxScore;
     }
 
-    public PlayerEntity(){
-        this("Unknown");
-    }
+    public PlayerEntity(){}
 
     public PlayerEntity(String name) {
         this.name = name;

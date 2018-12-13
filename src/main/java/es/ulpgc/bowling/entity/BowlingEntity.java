@@ -43,9 +43,7 @@ public class BowlingEntity extends BaseEntity {
         this(new ArrayList<>(), name);
     }
 
-    public BowlingEntity(){
-        this("");
-    }
+    public BowlingEntity(){}
 
     public BowlingEntity addLine(LineEntity line) {
         this.lines.add(line);

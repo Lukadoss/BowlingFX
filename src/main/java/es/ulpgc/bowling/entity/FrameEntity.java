@@ -60,9 +60,7 @@ public class FrameEntity extends BaseEntity {
         this.frame_index = frame_index;
     }
 
-    public FrameEntity(){
-        this(new PlayerEntity(), 0, 0);
-    }
+    public FrameEntity(){}
 
     public FrameEntity(PlayerEntity player, int roll_index, int frame_index) {
         this.roll_index = roll_index;

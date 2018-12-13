@@ -1,6 +1,7 @@
 package es.ulpgc.bowling.controllers;
 
 import es.ulpgc.bowling.entity.GameEntity;
+import es.ulpgc.bowling.entity.LineEntity;
 import es.ulpgc.bowling.entity.PlayerEntity;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
@@ -11,11 +12,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Component
 public class NewGameController {
     public Label mainLabel;
     public TextField textField;
@@ -26,17 +29,16 @@ public class NewGameController {
 
     private boolean playersLoad = true;
     private String gameName;
-    private int numOfPlayers;
     private HashMap<Label, TextField> nameFields;
     private ArrayList<String> names;
-    private ArrayList<PlayerEntity> players;
+    private GuiController gc;
+
     private GameEntity game;
-    private GuiController gc = null;
+    private LineEntity line;
 
     public void initialize() {
         nameFields = new HashMap<>();
         names = new ArrayList<>();
-        players = new ArrayList<>();
     }
 
     public void cancel(ActionEvent actionEvent) {
@@ -60,24 +62,24 @@ public class NewGameController {
                 }
             });
             if (isOkay.get()) {
-                //game = new Game(gameName);
+                ArrayList<PlayerEntity> players = new ArrayList<>();
                 names.forEach(e -> players.add(new PlayerEntity(e)));
-                ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
+
+                game = new GameEntity(gameName, players);
+                game.setLine(line);
+                game = gc.getGameRepo().save(game);
+
                 gc.newGameGui();
+                gc.mainLabel.setText(gameName);
+                gc.setCurrentGame(game);
+                ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
             }
         }
     }
 
     private void loadPlayersLayer() {
         if (textField.getText().isEmpty()) {
-//            ResultSet rs = GuiController.sqlExec("select COUNT(id) AS rowcount from game");
-//            try {
-//                rs.next();
-//                gameName = "Unknown game #" + rs.getInt(1);
-//                rs.close();
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
+                gameName = "Unknown game #" + gc.getGameRepo().count();
         } else gameName = textField.getText();
         mainLabel.setText("Choose the number of players");
         textField.setVisible(false);
@@ -85,25 +87,8 @@ public class NewGameController {
         buttonGroup.setVisible(true);
     }
 
-    public void checkKey(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.ENTER) {
-            next(new ActionEvent());
-        }
-    }
-
     public void pressNumOfPlayers(ActionEvent actionEvent) {
-        numOfPlayers = Integer.parseInt(actionEvent.getSource().toString().split("'")[1]);
-//        ArrayList<String> list = new ArrayList<>();
-//        ResultSet rs = GuiController.sqlExec("select id, name from player");
-//        try {
-//            while (rs.next()) {
-//                list.add(rs.getString(2) + " (" + rs.getString(1) + ")");
-//            }
-//            rs.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-
+        int numOfPlayers = Integer.parseInt(actionEvent.getSource().toString().split("'")[1]);
         mainLabel.setText("Create or choose players");
         buttonGroup.setVisible(false);
         nextButton.setVisible(true);
@@ -116,30 +101,33 @@ public class NewGameController {
             l.setLayoutY(50 * i - 18);
 
             TextField t = new TextField();
-//            ComboBox t = new ComboBox();
             t.setEditable(true);
-//            t.setVisibleRowCount(5);
             t.setLayoutY(50 * i);
             t.setLayoutX(15);
             t.setPrefHeight(25);
             t.setPrefWidth(240);
             t.setId(i + "");
-//            t.setItems(FXCollections.observableArrayList(list));
 
             nameFields.put(l, t);
             anchorPane.getChildren().addAll(l, t);
         }
     }
 
+    public void checkKey(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            next(new ActionEvent());
+        }
+    }
+
+    public void setUpGC(GuiController gc){
+        this.gc = gc;
+    }
+
     public GameEntity getGame(){
         return game;
     }
 
-    public ArrayList<PlayerEntity> getPlayers(){
-        return players;
-    }
-
-    public void setGuiController(GuiController guiController) {
-        this.gc = guiController;
+    public void setUpLine(LineEntity line) {
+        this.line = line;
     }
 }
