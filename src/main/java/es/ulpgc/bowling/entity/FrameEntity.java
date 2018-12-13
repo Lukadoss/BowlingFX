@@ -20,6 +20,9 @@ public class FrameEntity extends BaseEntity {
     @Column
     private Integer roll_two;
 
+    @Column
+    private Integer roll_three;
+
     public PlayerEntity getPlayer() {
         return player;
     }
@@ -54,6 +57,14 @@ public class FrameEntity extends BaseEntity {
 
     public void setRollTwo(Integer roll_two) {
         this.roll_two = roll_two;
+    }
+
+    public Integer getRollThree() {
+        return roll_three;
+    }
+
+    public void setRollThree(Integer roll_three) {
+        this.roll_three = roll_three;
     }
 
     public void setFrameIndex(Integer frame_index) {

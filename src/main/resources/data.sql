@@ -168,12 +168,12 @@ insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) v
 insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (90, 8, 9, 18, 3, 2);
 
 insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (91, 10, 0, 0, 10);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (92, 10, 1, 2, 10);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (93, 10, 2, 4, 10);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (94, 10, 3, 6, 10);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (95, 10, 4, 8, 10);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (96, 10, 5, 10, 10);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (97, 10, 6, 12, 10);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (98, 10, 7, 14, 10);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (99, 10, 8, 16, 10);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (100, 10, 9, 18, 5, 2);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (92, 10, 1, 1, 10);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (93, 10, 2, 2, 10);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (94, 10, 3, 3, 10);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (95, 10, 4, 4, 10);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (96, 10, 5, 5, 10);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (97, 10, 6, 6, 10);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (98, 10, 7, 7, 10);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (99, 10, 8, 8, 10);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (100, 10, 9, 9, 5, 2);

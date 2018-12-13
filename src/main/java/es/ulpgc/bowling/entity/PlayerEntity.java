@@ -41,8 +41,22 @@ public class PlayerEntity extends BaseEntity {
     }
 
     public List<Integer> getRolls() {
-        setUpRolls();
+        if(rolls.isEmpty()) {
+            setupRolls();
+        }
         return rolls;
+    }
+
+    private void setupRolls() {
+        for (FrameEntity f : frames) {
+            rolls.add(f.getRollOne());
+            if (f.getRollTwo() != null) {
+                rolls.add(f.getRollTwo());
+            }
+            if (f.getRollThree() != null) {
+                rolls.add(f.getRollThree());
+            }
+        }
     }
 
     public void setRolls(List<Integer> rolls) {
@@ -51,13 +65,6 @@ public class PlayerEntity extends BaseEntity {
 
     public List<FrameEntity> getFrames() {
         return frames;
-    }
-
-    public void setUpRolls() {
-        for (FrameEntity f : frames) {
-            rolls.add(f.getRollOne());
-            rolls.add(f.getRollTwo());
-        }
     }
 
     public PlayerEntity(){
