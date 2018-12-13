@@ -75,6 +75,7 @@ public class PlayerEntity extends BaseEntity {
     public PlayerEntity(String name) {
         this.name = name;
         this.rolls = new ArrayList<>();
+        this.frames = new ArrayList<>();
     }
 
     public List<FrameEntity> frames() {
