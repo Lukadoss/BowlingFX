@@ -5,5 +5,5 @@ import es.ulpgc.bowling.entity.PlayerEntity;
 import java.util.List;
 
 public interface PlayerRepository extends BaseRepository<PlayerEntity> {
-    List<PlayerEntity> findByIdGreaterThanEqualOrderByMaxScoreDesc(Integer id);
+    List<PlayerEntity> findByIdGreaterThanEqualOrderByNameDesc(Integer id);
 }

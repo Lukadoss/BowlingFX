@@ -21,9 +21,6 @@ public class PlayerEntity extends BaseEntity {
     @Fetch(FetchMode.SELECT)
     private List<FrameEntity> frames;
 
-    @Column
-    private Integer maxScore;
-
     @Transient
     private List<Integer> rolls;
 
@@ -63,14 +60,6 @@ public class PlayerEntity extends BaseEntity {
         }
     }
 
-    public Integer getMaxScore() {
-        return maxScore;
-    }
-
-    public void setMaxScore(Integer maxScore) {
-        this.maxScore = maxScore;
-    }
-
     public PlayerEntity(){
         this("Unknown");
     }
@@ -107,6 +96,14 @@ public class PlayerEntity extends BaseEntity {
         for (int i = 0; i <= frame; i++) {
             if (frame(i).score() == null) { return null; }
             sum += frame(i).score();
+        }
+        return sum;
+    }
+
+    public Integer sumScore() {
+        Integer sum = 0;
+        for (FrameEntity f : frames) {
+            if (f.score() != null) sum += f.score();
         }
         return sum;
     }

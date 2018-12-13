@@ -30,7 +30,7 @@ public class GameStatsController {
         List<PlayerEntity> playerEntities = game.getPlayers();
         List<String> statistics = new ArrayList<>();
         for (PlayerEntity p : playerEntities) {
-            statistics.add(p.getName() + ":\t" + p.getMaxScore());
+            statistics.add(p.getName() + ":\t" + p.sumScore());
         }
         ObservableList<String> list = FXCollections.observableList(statistics);
         graphicList.setItems(list);

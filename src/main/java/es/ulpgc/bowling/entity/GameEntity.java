@@ -28,9 +28,6 @@ public class GameEntity extends BaseEntity {
     @Column
     private LocalDateTime ended;
 
-    @Column
-    private Integer totalScore;
-
     public List<PlayerEntity> getPlayers() {
         return players;
     }
@@ -66,7 +63,6 @@ public class GameEntity extends BaseEntity {
     public GameEntity(ArrayList<PlayerEntity> players) {
         this.started = LocalDateTime.now();
         this.ended = null;
-        this.totalScore = 0;
         this.players = players;
     }
 
@@ -101,16 +97,16 @@ public class GameEntity extends BaseEntity {
         return this.ended == null;
     }
 
-    public void setTotalScore(int score) {
-        this.totalScore = score;
+    public String getName() {
+        return name;
     }
 
     public Integer getTotalScore() {
-        return totalScore;
-    }
-
-    public String getName() {
-        return name;
+        Integer sum = 0;
+        for (PlayerEntity p : players) {
+            if (p.sumScore() != null) sum += p.sumScore();
+        }
+        return sum;
     }
 
     @Override

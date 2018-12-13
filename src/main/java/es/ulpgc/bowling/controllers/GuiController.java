@@ -8,6 +8,10 @@ import es.ulpgc.bowling.repository.BowlingRepository;
 import es.ulpgc.bowling.repository.GameRepository;
 import es.ulpgc.bowling.repository.LineRepository;
 import es.ulpgc.bowling.repository.PlayerRepository;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -72,7 +76,7 @@ public class GuiController {
 
         TableColumn<GameEntity, Integer> best_score = new TableColumn<>("Achieved score");
         best_score.setMinWidth(50);
-        best_score.setCellValueFactory(new PropertyValueFactory<>("totalScore"));
+        best_score.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getTotalScore()).asObject());
 
         TableColumn<GameEntity, Integer> started = new TableColumn<>("Game started");
         started.setCellValueFactory(new PropertyValueFactory<>("started"));
@@ -127,7 +131,7 @@ public class GuiController {
         mainTable.getColumns().clear();
         mainTable.getColumns().addAll(game_title, best_score, started, ended, actionCol);
 
-        ObservableList<GameEntity> data = FXCollections.observableList(gameRepo.findAllByIdGreaterThanEqualOrderByTotalScoreDesc(0));
+        ObservableList<GameEntity> data = FXCollections.observableList(gameRepo.findAllByIdGreaterThanEqualOrderByStartedDesc(0));
         mainTable.setItems(data);
     }
 
@@ -142,12 +146,12 @@ public class GuiController {
 
         TableColumn<PlayerEntity, String> best_score = new TableColumn<>("Best score");
         best_score.setMinWidth(100);
-        best_score.setCellValueFactory(new PropertyValueFactory<>("maxScore"));
+        best_score.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().sumScore() + ""));
 
         mainTable.getColumns().clear();
         mainTable.getColumns().addAll(player_name, best_score);
 
-        ObservableList<PlayerEntity> data = FXCollections.observableList(playerRepo.findByIdGreaterThanEqualOrderByMaxScoreDesc(0));
+        ObservableList<PlayerEntity> data = FXCollections.observableList(playerRepo.findByIdGreaterThanEqualOrderByNameDesc(0));
         mainTable.setItems(data);
     }
 
