@@ -24,6 +24,7 @@ public class PlayerEntity extends BaseEntity {
     @Transient
     private List<Integer> rolls;
 
+
     public String getName() {
         return name;
     }
@@ -67,9 +68,7 @@ public class PlayerEntity extends BaseEntity {
         return frames;
     }
 
-    public PlayerEntity(){
-        this("Unknown");
-    }
+    public PlayerEntity(){}
 
     public PlayerEntity(String name) {
         this.name = name;
@@ -117,11 +116,12 @@ public class PlayerEntity extends BaseEntity {
 
     @Override
     public String toString() {
+        getRolls();
         StringBuilder sb = new StringBuilder();
-        sb.append(this.name+" frames:"+this.frames);
-//        for (int i = 0; i < rolls.size(); i++) {
-//            sb.append(" " + rolls.get(i));
-//        }
+        sb.append(this.name);
+        for (int i = 0; i < rolls.size(); i++) {
+            sb.append(" " + rolls.get(i));
+        }
         return sb.toString();
     }
 }

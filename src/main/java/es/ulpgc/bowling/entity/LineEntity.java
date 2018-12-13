@@ -17,6 +17,8 @@ public class LineEntity extends BaseEntity {
     @Fetch(FetchMode.SELECT)
     private List<GameEntity> games;
 
+    public LineEntity() {}
+
     public BowlingEntity getBowling() {
         return bowling;
     }
