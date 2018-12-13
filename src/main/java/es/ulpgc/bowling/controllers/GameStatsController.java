@@ -1,18 +1,25 @@
 package es.ulpgc.bowling.controllers;
 
 import es.ulpgc.bowling.entity.GameEntity;
+import es.ulpgc.bowling.entity.PlayerEntity;
+import es.ulpgc.bowling.repository.GameRepository;
+import es.ulpgc.bowling.repository.PlayerRepository;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameStatsController {
     public AnchorPane anchorPane;
     public Label gameNameLabel;
     public ListView<String> graphicList;
-
-    private GameEntity game;
 
     public void cancel(ActionEvent actionEvent) {
         ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
@@ -20,23 +27,15 @@ public class GameStatsController {
 
     public void initGame(GameEntity game){
         System.out.println(game);
-//        ResultSet rs = GuiController.sqlExec("SELECT title FROM game WHERE id = "+id);
-//        try {
-//            gameNameLabel.setText(rs.getString(1));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        rs = GuiController.sqlExec("SELECT name, total_score FROM player LEFT JOIN game WHERE game.id = game_id AND game.id = "+id);
-//        try {
-//            ObservableList<String> list = FXCollections.observableArrayList();
-//            while (rs.next()) {
-//                list.add(String.format("%-32s%s", rs.getString(1), rs.getString(2)));
-//            }
-//            graphicList.setItems(list);
-//            graphicList.setPrefHeight(24*list.size());
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        List<PlayerEntity> playerEntities = game.getPlayers();
+        List<String> statistics = new ArrayList<>();
+        for (PlayerEntity p : playerEntities) {
+            statistics.add(p.getName() + ":\t" + p.getMaxScore());
+        }
+        ObservableList<String> list = FXCollections.observableList(statistics);
+        graphicList.setItems(list);
+        graphicList.setPrefHeight(24 * list.size());
+
         anchorPane.getScene().getWindow().setHeight(anchorPane.getHeight()+graphicList.getPrefHeight());
     }
 }
