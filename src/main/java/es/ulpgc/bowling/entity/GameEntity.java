@@ -122,10 +122,10 @@ public class GameEntity extends BaseEntity {
             if (p.sumScore() != null) sum += p.sumScore();
         }
         return sum;
+
+    }
     public void setName(String name) {
         this.name = name;
-    }
-
     }
 
     @Override

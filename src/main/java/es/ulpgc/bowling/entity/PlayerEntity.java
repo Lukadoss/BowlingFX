@@ -42,7 +42,7 @@ public class PlayerEntity extends BaseEntity {
     }
 
     public List<Integer> getRolls() {
-        if(rolls.isEmpty()) {
+        if(rolls == null || rolls.isEmpty()) {
             setupRolls();
         }
         return rolls;
@@ -68,7 +68,9 @@ public class PlayerEntity extends BaseEntity {
         return frames;
     }
 
-    public PlayerEntity(){}
+    public PlayerEntity(){
+        this("Unknown");
+    }
 
     public PlayerEntity(String name) {
         this.name = name;
