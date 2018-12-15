@@ -9,9 +9,7 @@ import es.ulpgc.bowling.repository.GameRepository;
 import es.ulpgc.bowling.repository.LineRepository;
 import es.ulpgc.bowling.repository.PlayerRepository;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,9 +18,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -39,7 +40,8 @@ public class GuiController {
     public Label mainLabel;
     public GridPane bowlingGridPane;
     public Circle c1, c2;
-    public Button backButton;
+    public Button backButton, topGamesButton, leaderboardsButton;
+    public VBox gameVBox;
 
     @Autowired
     private BowlingRepository bowlRepo;
@@ -148,19 +150,26 @@ public class GuiController {
     }
 
     public void getClickedBowlingBar(MouseEvent mouseEvent) {
-        switch (((Circle) mouseEvent.getSource()).getId()) {
-            case "c1":
-                currentBowling = bowlRepo.findById(1).get();
-                mainLabel.setText(currentBowling.getName());
-                break;
-            case "c2":
-                currentBowling = bowlRepo.findById(2).get();
-                mainLabel.setText(currentBowling.getName());
-                break;
-            default:
-                break;
-        }
+//        switch (((Circle) mouseEvent.getSource()).getId()) {
+//            case "c1":
+//                currentBowling = bowlRepo.findById(1).get();
+//                mainLabel.setText(currentBowling.getName());
+//                break;
+//            case "c2":
+//                currentBowling = bowlRepo.findById(2).get();
+//                mainLabel.setText(currentBowling.getName());
+//                break;
+//            default:
+//                break;
+//        }
+//
+//        openBowlingBar();
+        changeWindowItems(true);
+        currentGame = gameRepo.findById(1).get();
+        newGameGui();
+    }
 
+    private void openBowlingBar() {
         Callback<TableColumn<LineEntity, Object>, TableCell<LineEntity, Object>> cellFactory = new Callback<TableColumn<LineEntity, Object>,
                 TableCell<LineEntity, Object>>() {
             @Override
@@ -197,6 +206,7 @@ public class GuiController {
         lineID.setResizable(false);
         lineID.setCellValueFactory(new PropertyValueFactory<>("id"));
         lineID.setSortable(false);
+        lineID.setStyle("-fx-alignment: CENTER");
 
         TableColumn<LineEntity, Object> lineName = new TableColumn<>("Current game");
         lineName.prefWidthProperty().bind(mainTable.widthProperty().multiply(0.9));
@@ -241,18 +251,39 @@ public class GuiController {
             mainTable.setVisible(true);
             backButton.setDisable(false);
         } else {
-            bowlingGridPane.setVisible(true);
-            mainTable.setVisible(false);
-            backButton.setDisable(true);
-            mainLabel.setText("Bowling bars");
+            if (currentGame==null) {
+                currentBowling=null;
+
+                mainTable.setVisible(false);
+                bowlingGridPane.setVisible(true);
+
+                backButton.setDisable(true);
+
+                mainLabel.setText("Bowling bars");
+            }else{
+                currentGame=null;
+
+                bowlingGridPane.setVisible(false);
+                gameVBox.setVisible(false);
+                mainTable.setVisible(true);
+
+                leaderboardsButton.setDisable(false);
+                topGamesButton.setDisable(false);
+
+                mainLabel.setText(currentBowling.getName());
+                openBowlingBar();
+            }
         }
     }
 
     public void newGameGui() {
         mainTable.setVisible(false);
-        outputArea.setVisible(true);
-        backButton.setDisable(true);
-        console.setVisible(true);
+        topGamesButton.setDisable(true);
+        leaderboardsButton.setDisable(true);
+        backButton.setDisable(false);
+        gameVBox.setVisible(true);
+
+        new GameController(this);
     }
 
     private void resizePanels() {
@@ -260,12 +291,14 @@ public class GuiController {
             mainTable.setPrefWidth(mainPane.getLayoutBounds().getWidth());
             outputArea.setPrefWidth(mainPane.getLayoutBounds().getWidth());
             bowlingGridPane.setPrefWidth(mainPane.getLayoutBounds().getWidth());
+            gameVBox.setPrefWidth(mainPane.getLayoutBounds().getWidth());
         });
 
         mainPane.heightProperty().addListener((observable, oldValue, newValue) -> {
             mainTable.setPrefHeight(mainPane.getLayoutBounds().getHeight());
             outputArea.setPrefHeight(mainPane.getLayoutBounds().getHeight());
             bowlingGridPane.setPrefHeight(mainPane.getLayoutBounds().getHeight());
+            gameVBox.setPrefHeight(mainPane.getLayoutBounds().getHeight());
         });
 
 
@@ -285,7 +318,7 @@ public class GuiController {
 
     @FXML
     private void executeCommand(ActionEvent actionEvent) {
-        if (!console.getText().isEmpty()) {
+        if (!console.getText().isEmpty() && currentGame!=null) {
             out("\n");
             switch (console.getText()) {
                 case "help":
@@ -334,5 +367,22 @@ public class GuiController {
 
     public void setCurrentGame(GameEntity currentGame) {
         this.currentGame = currentGame;
+    }
+
+    public GameEntity getCurrentGame() {
+        return currentGame;
+    }
+
+    public void developConsole(KeyEvent keyEvent) {
+        if(keyEvent.getCode()==KeyCode.SEMICOLON){
+            if (console.isVisible()) {
+                console.setVisible(false);
+                outputArea.setVisible(false);
+            }
+            else{
+                console.setVisible(true);
+                outputArea.setVisible(true);
+            }
+        }
     }
 }

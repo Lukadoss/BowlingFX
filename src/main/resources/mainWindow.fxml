@@ -20,9 +20,9 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.ulpgc.bowling.controllers.GuiController">
+<BorderPane onKeyPressed="#developConsole" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.ulpgc.bowling.controllers.GuiController">
     <center>
-        <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <BorderPane BorderPane.alignment="CENTER">
             <top>
                 <Label fx:id="mainLabel" text="Bowling bars" textAlignment="CENTER" BorderPane.alignment="CENTER">
                     <font>
@@ -33,13 +33,8 @@
             <center>
                 <Pane fx:id="mainPane" BorderPane.alignment="CENTER">
                     <children>
-                        <TextArea fx:id="outputArea" editable="false" prefHeight="304.0" prefWidth="500.0" visible="false">
-                            <font>
-                                <Font name="Monospaced Regular" size="12.0" />
-                            </font>
-                        </TextArea>
-                        <TableView fx:id="mainTable" prefHeight="303.0" prefWidth="500.0" visible="false" />
-                        <GridPane fx:id="bowlingGridPane" alignment="CENTER" prefHeight="292.0" prefWidth="480.0">
+                        <TableView fx:id="mainTable" visible="false" />
+                        <GridPane fx:id="bowlingGridPane" alignment="CENTER">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -82,30 +77,24 @@
                                 </ImageView>
                             </children>
                         </GridPane>
+                  <VBox fx:id="gameVBox" visible="false" />
                     </children>
                     <BorderPane.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </BorderPane.margin>
                 </Pane>
             </center>
-            <bottom>
-                <TextField fx:id="console" onAction="#executeCommand" promptText="this is console for developers.. for now" visible="false" BorderPane.alignment="CENTER">
-                    <BorderPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                    </BorderPane.margin>
-                </TextField>
-            </bottom>
         </BorderPane>
     </center>
-    <left>
+   <left>
         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: black; -fx-border-width: 0 1 0 0; -fx-background-color: #eaeaea;" BorderPane.alignment="CENTER">
             <children>
-                <Button layoutX="17.0" layoutY="10.0" mnemonicParsing="false" onAction="#getListOfLeaderboard" text="Leaderboards">
+                <Button fx:id="leaderboardsButton" layoutX="17.0" layoutY="10.0" mnemonicParsing="false" onAction="#getListOfLeaderboard" text="Leaderboards">
                     <VBox.margin>
                         <Insets top="20.0" />
                     </VBox.margin>
                 </Button>
-                <Button layoutX="17.0" layoutY="35.0" mnemonicParsing="false" onAction="#getListOfGames" text="Top games">
+                <Button fx:id="topGamesButton" layoutX="17.0" layoutY="35.0" mnemonicParsing="false" onAction="#getListOfGames" text="Top games">
                     <VBox.margin>
                         <Insets top="10.0" />
                     </VBox.margin>
@@ -120,7 +109,20 @@
                         <Insets top="10.0" />
                     </VBox.margin>
                 </Button>
+                  <TextArea fx:id="outputArea" editable="false" onKeyPressed="#developConsole" visible="false" wrapText="true">
+                      <font>
+                          <Font name="Monospaced Regular" size="12.0" />
+                      </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+               </VBox.margin>
+                  </TextArea>
+                <TextField fx:id="console" onAction="#executeCommand" onKeyPressed="#developConsole" promptText="hacking console" visible="false">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+               </VBox.margin>
+                </TextField>
             </children>
         </VBox>
-    </left>
+   </left>
 </BorderPane>

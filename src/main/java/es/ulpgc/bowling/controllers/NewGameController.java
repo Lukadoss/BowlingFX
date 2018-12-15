@@ -69,9 +69,9 @@ public class NewGameController {
                 game.setLine(line);
                 game = gc.getGameRepo().save(game);
 
-                gc.newGameGui();
                 gc.mainLabel.setText(gameName);
                 gc.setCurrentGame(game);
+                gc.newGameGui();
 
                 ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
             }
