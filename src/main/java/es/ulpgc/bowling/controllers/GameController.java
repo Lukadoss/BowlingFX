@@ -7,7 +7,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -174,15 +173,20 @@ public class GameController {
     }
 
     private void makeRoll() {
-        ArrayList<Label> currentWindowLabels = new ArrayList<>();
-        for (Node n : ((AnchorPane) playerBoxes.get(gamePosition.get()).getChildren().get(gamePosition.get())).getChildren()) {
-            if (n instanceof Label) currentWindowLabels.add((Label) n);
-        }
+//        ArrayList<Label> currentWindowLabels = new ArrayList<>();
+//        for (Node n : ((AnchorPane) playerBoxes.get(gamePosition.get()).getChildren().get(gamePosition.get())).getChildren()) {
+//            if (n instanceof Label) currentWindowLabels.add((Label) n);
+//        }
         int tmp = r.nextInt(11);
-
-        rollOut.setText(String.valueOf(tmp));
-        currentWindowLabels.get(gamePosition.get()).setText(String.valueOf(tmp));
-
-        gamePosition.getAndIncrement();
+        PlayerEntity p = gc.getCurrentGame().getPlayers().get(gamePosition.get());
+        p.roll(tmp);
+        System.out.println(p);
+        System.out.println(p.getFrames());
+        System.out.println(p.sumScore());
+//
+//        rollOut.setText(String.valueOf(tmp));
+//        currentWindowLabels.get(gamePosition.get()).setText(String.valueOf(tmp));
+//
+//        gamePosition.getAndIncrement();
     }
 }

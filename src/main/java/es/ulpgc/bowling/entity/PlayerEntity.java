@@ -64,10 +64,6 @@ public class PlayerEntity extends BaseEntity {
         this.rolls = rolls;
     }
 
-    public List<FrameEntity> getFrames() {
-        return frames;
-    }
-
     public PlayerEntity(){
         this("Unknown");
     }
@@ -78,8 +74,12 @@ public class PlayerEntity extends BaseEntity {
         this.frames = new ArrayList<>();
     }
 
-    public List<FrameEntity> frames() {
-        ArrayList<FrameEntity> frames = new ArrayList<>();
+    public List<FrameEntity> getFrames() {
+        return frames;
+    }
+
+    public void updateFrames(){
+        frames = new ArrayList<>();
         int frameCnt = 0;
         for (int rollCnt = 0; rollCnt < rolls.size();) {
             FrameEntity frame = new FrameEntity(this, rollCnt, frameCnt);
@@ -87,17 +87,17 @@ public class PlayerEntity extends BaseEntity {
             rollCnt += frame.isLastFrame() ? 3 : (frame.isStrike()) ? 1 : 2;
             frameCnt++;
         }
-        return frames;
     }
 
     public PlayerEntity roll(int pins) {
         rolls.add(pins);
+        updateFrames();
         return this;
     }
 
     public FrameEntity frame(int i) {
-        if (frames().size() <= i) return null;
-        return frames().get(i);
+        if (getFrames().size() <= i) return null;
+        return getFrames().get(i);
     }
 
     public Integer sumScore(int frame) {

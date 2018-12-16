@@ -67,16 +67,16 @@ insert into Player (id, name, game_id) values (33, 'Player 8', 7);
 insert into Player (id, name, game_id) values (34, 'Player 1', 8);
 insert into Player (id, name, game_id) values (35, 'Player 2', 8);
 
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (1, 1, 0, 0, 3, 2);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (2, 1, 1, 2, 1, 4);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (3, 1, 2, 4, 1, 1);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (4, 1, 3, 6, 1, 2);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (5, 1, 4, 8, 2, 1);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (6, 1, 5, 10, 2, 2);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (7, 1, 6, 12, 1, 3);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (8, 1, 7, 14, 1, 4);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (9, 1, 8, 16, 4, 1);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (10, 1, 9, 18, 3, 2);
+-- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (1, 1, 0, 0, 3, 2);
+-- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (2, 1, 1, 2, 1, 4);
+-- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (3, 1, 2, 4, 1, 1);
+-- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (4, 1, 3, 6, 1, 2);
+-- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (5, 1, 4, 8, 2, 1);
+-- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (6, 1, 5, 10, 2, 2);
+-- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (7, 1, 6, 12, 1, 3);
+-- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (8, 1, 7, 14, 1, 4);
+-- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (9, 1, 8, 16, 4, 1);
+-- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (10, 1, 9, 18, 3, 2);
 
 insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (11, 2, 0, 0, 4, 4);
 insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (12, 2, 1, 2, 1, 3);
