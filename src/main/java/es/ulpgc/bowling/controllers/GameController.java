@@ -1,12 +1,14 @@
 package es.ulpgc.bowling.controllers;
 
 import es.ulpgc.bowling.config.Color;
+import es.ulpgc.bowling.entity.FrameEntity;
 import es.ulpgc.bowling.entity.PlayerEntity;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -24,7 +26,6 @@ public class GameController {
     private final GuiController gc;
     private ArrayList<Label> playerLabels;
     private ArrayList<HBox> playerBoxes;
-    private Button rollLab;
     private Label rollOut;
     private AtomicInteger gamePosition;
     private Random r;
@@ -82,7 +83,7 @@ public class GameController {
         rollOut.setStyle("-fx-font: bold 22px System");
         HBox.setMargin(rollOut, new Insets(0, 0, 0, 20));
 
-        rollLab = new Button("Roll!");
+        Button rollLab = new Button("Roll!");
         rollLab.setOnAction(e -> makeRoll());
 
         rollBox.getChildren().addAll(rollLab, rollOut);
@@ -176,32 +177,41 @@ public class GameController {
     }
 
     private void makeRoll() {
-//        ArrayList<Label> currentWindowLabels = new ArrayList<>();
-//        for (Node n : ((AnchorPane) playerBoxes.get(gamePosition.get()).getChildren().get(gamePosition.get())).getChildren()) {
-//            if (n instanceof Label) currentWindowLabels.add((Label) n);
-//        }
         PlayerEntity p = gc.getCurrentGame().getPlayers().get(0);
 
-        if (tmp!=10 && decay==11) decay -= tmp;
+        if (tmp!=10 && decay==11) {
+            if ((p.getFrame(gamePosition.get())!=null && p.getFrame(gamePosition.get()).getRollTwo()!=null)) gamePosition.getAndIncrement();
+            else decay -= tmp;
+        }
         else {
             decay = 11;
             if (!p.getFrame(gamePosition.get()).isLastFrame()) gamePosition.getAndIncrement();
         }
-        tmp = 10;
 
-        rollOut.setText(String.valueOf(tmp));
+        tmp = r.nextInt(decay);
         p.roll(tmp);
+        rollOut.setText("You rolled: "+String.valueOf(tmp));
 
+        writeScore(p);
+    }
 
-        System.out.println(p);
+    private void writeScore(PlayerEntity p) {
+        ArrayList<Label> currentWindowLabels = new ArrayList<>();
+        for (Node n : ((AnchorPane) playerBoxes.get(0).getChildren().get(gamePosition.get())).getChildren()) {
+            if (n instanceof Label) currentWindowLabels.add((Label) n);
+        }
+
+        FrameEntity currFrame = p.getFrame(gamePosition.get());
+        if (currFrame.isStrike()) currentWindowLabels.get(1).setText("X");
+        else if (currFrame.isSpare()) currentWindowLabels.get(1).setText("/");
+        else {
+            currentWindowLabels.get(0).setText(""+currFrame.getRollOne());
+            if (currFrame.getRollTwo()!=null) currentWindowLabels.get(1).setText(""+currFrame.getRollTwo());
+        }
+
+        System.out.println(decay);
+        System.out.println(gamePosition.get());
+        System.out.println(currFrame.getRollOne()+" : "+currFrame.getRollTwo());
         System.out.println(p.getFrames());
-        System.out.println(p.getFrame(gamePosition.get()).getRollOne());
-        System.out.println(p.getFrame(gamePosition.get()).getRollTwo());
-        System.out.println(p.getFrame(gamePosition.get()).getRollThree());
-//
-//        rollOut.setText(String.valueOf(tmp));
-//        currentWindowLabels.get(gamePosition.get()).setText(String.valueOf(tmp));
-//
-//        gamePosition.getAndIncrement();
     }
 }
