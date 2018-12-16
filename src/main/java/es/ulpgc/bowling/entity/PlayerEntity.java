@@ -94,7 +94,7 @@ public class PlayerEntity extends BaseEntity {
             rollCnt += frame.isLastFrame() ? 3 : (frame.isStrike()) ? 1 : 2;
             frameCnt++;
         }else if (frame.isLastFrame()) {
-            if (rollCnt==rolls.size()) frame.setRollThree(rolls.get(rollCnt-1));
+            if (rollCnt==rolls.size() && (frame.isSpare() || frame.isStrike())) frame.setRollThree(rolls.get(rollCnt-1));
             else frame.setRollTwo(rolls.get(rollCnt-2));
         }else frame.setRollTwo(rolls.get(rollCnt-1));
     }

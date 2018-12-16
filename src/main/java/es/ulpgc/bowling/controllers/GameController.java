@@ -185,8 +185,7 @@ public class GameController {
         if (tmp!=10 && decay==11) decay -= tmp;
         else {
             decay = 11;
-            gamePosition.getAndIncrement();
-
+            if (!p.getFrame(gamePosition.get()).isLastFrame()) gamePosition.getAndIncrement();
         }
         tmp = 10;
 

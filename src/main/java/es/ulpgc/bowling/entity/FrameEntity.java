@@ -71,7 +71,8 @@ public class FrameEntity extends BaseEntity {
         this.frame_index = frame_index;
     }
 
-    public FrameEntity(){}
+    public FrameEntity() {
+    }
 
     public FrameEntity(PlayerEntity player, int roll_index, int frame_index) {
         this.roll_index = roll_index;
@@ -81,11 +82,12 @@ public class FrameEntity extends BaseEntity {
 
     public Integer score() {
         if (!isTerminated()) return null;
-        if (isLastFrame() && (isStrike() || isSpare())) return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
+        if (isLastFrame() && (isStrike() || isSpare()) && getRollThree() != null) return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
         if (isSpare()) return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
         if (isStrike()) {
             if (player.getFrame(frame_index + 1) == null) return null;
-            if (player.getFrame(frame_index + 1).isStrike() && (player.getFrame(frame_index + 2)) == null && !player.getFrame(frame_index + 1).isLastFrame()) return null;
+            if (player.getFrame(frame_index + 1).isStrike() && (player.getFrame(frame_index + 2)) == null && !player.getFrame(frame_index + 1).isLastFrame())
+                return null;
             return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
         }
         return roll(roll_index) + roll(roll_index + 1);
@@ -117,7 +119,7 @@ public class FrameEntity extends BaseEntity {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("[FrameEntity=%d, score=%d]", frame_index, score());
     }
 }
