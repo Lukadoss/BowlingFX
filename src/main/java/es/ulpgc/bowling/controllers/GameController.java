@@ -2,30 +2,44 @@ package es.ulpgc.bowling.controllers;
 
 import es.ulpgc.bowling.config.Color;
 import es.ulpgc.bowling.entity.PlayerEntity;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.util.Duration;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameController {
 
     private final GuiController gc;
     private ArrayList<Label> playerLabels;
     private ArrayList<HBox> playerBoxes;
+    private Button rollLab;
+    private Label rollOut;
+    private AtomicInteger gamePosition;
+    private Random r;
 
     public GameController(GuiController guiController) {
         this.gc = guiController;
         playerLabels = new ArrayList<>();
         playerBoxes = new ArrayList<>();
+        r = new Random();
         initGameGui();
     }
 
     private void initGameGui() {
+        gc.gameVBox.getChildren().clear();
         List<PlayerEntity> players = gc.getCurrentGame().getPlayers();
 
         for (int i = 0; i < players.size(); i++) {
@@ -61,20 +75,17 @@ public class GameController {
         VBox.setVgrow(filler, Priority.ALWAYS);
 
         HBox rollBox = new HBox();
-        Label rollOut = new Label();
-        HBox.setMargin(rollOut,new Insets(0,0,0,20));
-        rollOut.setStyle("-fx-font: bold 22px System");
 
-        Button rollLab = new Button("Roll!");
-        rollLab.setOnAction(e->{
-            Random r = new Random();
-            rollOut.setText(r.nextInt(11)+"");
-        });
+        rollOut = new Label();
+        rollOut.setStyle("-fx-font: bold 22px System");
+        HBox.setMargin(rollOut, new Insets(0, 0, 0, 20));
+
+        rollLab = new Button("Roll!");
+        rollLab.setOnAction(e -> makeRoll());
+
         rollBox.getChildren().addAll(rollLab, rollOut);
 
         gc.gameVBox.getChildren().addAll(filler, rollBox);
-
-        startGame();
     }
 
     private void prepareLabels(AnchorPane ap, int pos) {
@@ -141,7 +152,37 @@ public class GameController {
         }
     }
 
-    private void startGame() {
-        System.out.println(gc.gameVBox.getChildren());
+    public void startGame() {
+        gamePosition = new AtomicInteger();
+        playerLabels.get(gamePosition.get()).setText(playerLabels.get(gamePosition.get()).getText() + " - playing");
+        ((Label)((AnchorPane) playerBoxes.get(gamePosition.get()).getChildren().get(gamePosition.get())).getChildren().get(3)).setText("> > >");
+
+        LocalDateTime startTime = LocalDateTime.now();
+
+        gc.clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+
+            java.time.Duration duration = java.time.Duration.between(startTime, LocalDateTime.now());
+            long seconds = duration.getSeconds();
+            int hours = (int) (seconds / 3600);
+            int minutes = (int) ((seconds % 3600) / 60);
+            int secs = (int) (seconds % 60);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            gc.gameTime.setText(LocalDateTime.of(1,1,1,hours, minutes, secs).format(formatter));
+        }), new KeyFrame(Duration.seconds(1)));
+        gc.clock.setCycleCount(Animation.INDEFINITE);
+        gc.clock.play();
+    }
+
+    private void makeRoll() {
+        ArrayList<Label> currentWindowLabels = new ArrayList<>();
+        for (Node n : ((AnchorPane) playerBoxes.get(gamePosition.get()).getChildren().get(gamePosition.get())).getChildren()) {
+            if (n instanceof Label) currentWindowLabels.add((Label) n);
+        }
+        int tmp = r.nextInt(11);
+
+        rollOut.setText(String.valueOf(tmp));
+        currentWindowLabels.get(gamePosition.get()).setText(String.valueOf(tmp));
+
+        gamePosition.getAndIncrement();
     }
 }

@@ -8,6 +8,7 @@ import es.ulpgc.bowling.repository.BowlingRepository;
 import es.ulpgc.bowling.repository.GameRepository;
 import es.ulpgc.bowling.repository.LineRepository;
 import es.ulpgc.bowling.repository.PlayerRepository;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -37,11 +38,12 @@ public class GuiController {
     public TextField console;
     public TableView mainTable;
     public Pane mainPane;
-    public Label mainLabel;
+    public Label mainLabel, gameTime;
     public GridPane bowlingGridPane;
     public Circle c1, c2;
     public Button backButton, topGamesButton, leaderboardsButton;
     public VBox gameVBox;
+    public Timeline clock;
 
     @Autowired
     private BowlingRepository bowlRepo;
@@ -270,7 +272,9 @@ public class GuiController {
                 leaderboardsButton.setDisable(false);
                 topGamesButton.setDisable(false);
 
-                mainLabel.setText(currentBowling.getName());
+//                mainLabel.setText(currentBowling.getName());
+                clock.stop();
+                gameTime.setText("");
                 openBowlingBar();
             }
         }
@@ -283,7 +287,8 @@ public class GuiController {
         backButton.setDisable(false);
         gameVBox.setVisible(true);
 
-        new GameController(this);
+        GameController gc = new GameController(this);
+        gc.startGame();
     }
 
     private void resizePanels() {
