@@ -27,6 +27,9 @@ public class PlayerEntity extends BaseEntity {
     @Transient
     private int frameCnt, rollCnt;
 
+    @Transient
+    private FrameEntity frame;
+
     public String getName() {
         return name;
     }
@@ -83,12 +86,17 @@ public class PlayerEntity extends BaseEntity {
     }
 
     public void updateFrames(){
-        for (;rollCnt < rolls.size();) {
-            FrameEntity frame = new FrameEntity(this, rollCnt, frameCnt);
+        if(rollCnt < rolls.size()) {
+            frame = new FrameEntity(this, rollCnt, frameCnt);
             frames.add(frame);
+            frame.setRollOne(rolls.get(rollCnt));
+
             rollCnt += frame.isLastFrame() ? 3 : (frame.isStrike()) ? 1 : 2;
             frameCnt++;
-        }
+        }else if (frame.isLastFrame()) {
+            if (rollCnt==rolls.size()) frame.setRollThree(rolls.get(rollCnt-1));
+            else frame.setRollTwo(rolls.get(rollCnt-2));
+        }else frame.setRollTwo(rolls.get(rollCnt-1));
     }
 
     public PlayerEntity roll(int pins) {

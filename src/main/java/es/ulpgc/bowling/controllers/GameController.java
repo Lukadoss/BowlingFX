@@ -180,18 +180,25 @@ public class GameController {
 //        for (Node n : ((AnchorPane) playerBoxes.get(gamePosition.get()).getChildren().get(gamePosition.get())).getChildren()) {
 //            if (n instanceof Label) currentWindowLabels.add((Label) n);
 //        }
-        PlayerEntity p = gc.getCurrentGame().getPlayers().get(gamePosition.get());
+        PlayerEntity p = gc.getCurrentGame().getPlayers().get(0);
 
         if (tmp!=10 && decay==11) decay -= tmp;
-        else decay = 11;
-        tmp = r.nextInt(decay);
+        else {
+            decay = 11;
+            gamePosition.getAndIncrement();
+
+        }
+        tmp = 10;
 
         rollOut.setText(String.valueOf(tmp));
         p.roll(tmp);
+
+
         System.out.println(p);
         System.out.println(p.getFrames());
         System.out.println(p.getFrame(gamePosition.get()).getRollOne());
-        System.out.println(p.getFrame(gamePosition.get()).getRollIndex());
+        System.out.println(p.getFrame(gamePosition.get()).getRollTwo());
+        System.out.println(p.getFrame(gamePosition.get()).getRollThree());
 //
 //        rollOut.setText(String.valueOf(tmp));
 //        currentWindowLabels.get(gamePosition.get()).setText(String.valueOf(tmp));
