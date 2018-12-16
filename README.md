@@ -1,4 +1,5 @@
 # BowlingFX
-The independent project for HPDS subject.
+Petr Lukašík
+David Bohmann
 
-![bowling app image](https://ctrlv.cz/shots/2018/10/31/y4jY.png)
+This project has been created in Java 8 and JavaFX. It is based on spring framework that is used for MVC architecture. 
