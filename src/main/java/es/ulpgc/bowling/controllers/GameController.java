@@ -28,12 +28,15 @@ public class GameController {
     private Label rollOut;
     private AtomicInteger gamePosition;
     private Random r;
+    private int decay, tmp;
 
     public GameController(GuiController guiController) {
         this.gc = guiController;
         playerLabels = new ArrayList<>();
         playerBoxes = new ArrayList<>();
         r = new Random();
+        decay = 11;
+        tmp = 0;
         initGameGui();
     }
 
@@ -177,12 +180,18 @@ public class GameController {
 //        for (Node n : ((AnchorPane) playerBoxes.get(gamePosition.get()).getChildren().get(gamePosition.get())).getChildren()) {
 //            if (n instanceof Label) currentWindowLabels.add((Label) n);
 //        }
-        int tmp = r.nextInt(11);
         PlayerEntity p = gc.getCurrentGame().getPlayers().get(gamePosition.get());
+
+        if (tmp!=10 && decay==11) decay -= tmp;
+        else decay = 11;
+        tmp = r.nextInt(decay);
+
+        rollOut.setText(String.valueOf(tmp));
         p.roll(tmp);
         System.out.println(p);
         System.out.println(p.getFrames());
-        System.out.println(p.sumScore());
+        System.out.println(p.getFrame(gamePosition.get()).getRollOne());
+        System.out.println(p.getFrame(gamePosition.get()).getRollIndex());
 //
 //        rollOut.setText(String.valueOf(tmp));
 //        currentWindowLabels.get(gamePosition.get()).setText(String.valueOf(tmp));

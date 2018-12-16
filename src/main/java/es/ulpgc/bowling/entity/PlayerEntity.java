@@ -24,6 +24,8 @@ public class PlayerEntity extends BaseEntity {
     @Transient
     private List<Integer> rolls;
 
+    @Transient
+    private int frameCnt, rollCnt;
 
     public String getName() {
         return name;
@@ -72,6 +74,8 @@ public class PlayerEntity extends BaseEntity {
         this.name = name;
         this.rolls = new ArrayList<>();
         this.frames = new ArrayList<>();
+        frameCnt=0;
+        rollCnt=0;
     }
 
     public List<FrameEntity> getFrames() {
@@ -79,9 +83,7 @@ public class PlayerEntity extends BaseEntity {
     }
 
     public void updateFrames(){
-        frames = new ArrayList<>();
-        int frameCnt = 0;
-        for (int rollCnt = 0; rollCnt < rolls.size();) {
+        for (;rollCnt < rolls.size();) {
             FrameEntity frame = new FrameEntity(this, rollCnt, frameCnt);
             frames.add(frame);
             rollCnt += frame.isLastFrame() ? 3 : (frame.isStrike()) ? 1 : 2;
@@ -95,7 +97,7 @@ public class PlayerEntity extends BaseEntity {
         return this;
     }
 
-    public FrameEntity frame(int i) {
+    public FrameEntity getFrame(int i) {
         if (getFrames().size() <= i) return null;
         return getFrames().get(i);
     }
@@ -103,8 +105,8 @@ public class PlayerEntity extends BaseEntity {
     public Integer sumScore(int frame) {
         Integer sum = 0;
         for (int i = 0; i <= frame; i++) {
-            if (frame(i).score() == null) { return null; }
-            sum += frame(i).score();
+            if (getFrame(i).score() == null) { return null; }
+            sum += getFrame(i).score();
         }
         return sum;
     }

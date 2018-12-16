@@ -84,8 +84,8 @@ public class FrameEntity extends BaseEntity {
         if (isLastFrame() && (isStrike() || isSpare())) return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
         if (isSpare()) return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
         if (isStrike()) {
-            if (player.frame(frame_index + 1) == null) return null;
-            if (player.frame(frame_index + 1).isStrike() && (player.frame(frame_index + 2)) == null && !player.frame(frame_index + 1).isLastFrame()) return null;
+            if (player.getFrame(frame_index + 1) == null) return null;
+            if (player.getFrame(frame_index + 1).isStrike() && (player.getFrame(frame_index + 2)) == null && !player.getFrame(frame_index + 1).isLastFrame()) return null;
             return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
         }
         return roll(roll_index) + roll(roll_index + 1);
