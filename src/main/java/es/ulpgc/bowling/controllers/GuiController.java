@@ -152,23 +152,20 @@ public class GuiController {
     }
 
     public void getClickedBowlingBar(MouseEvent mouseEvent) {
-//        switch (((Circle) mouseEvent.getSource()).getId()) {
-//            case "c1":
-//                currentBowling = bowlRepo.findById(1).get();
-//                mainLabel.setText(currentBowling.getName());
-//                break;
-//            case "c2":
-//                currentBowling = bowlRepo.findById(2).get();
-//                mainLabel.setText(currentBowling.getName());
-//                break;
-//            default:
-//                break;
-//        }
-//
-//        openBowlingBar();
-        changeWindowItems(true);
-        currentGame = gameRepo.findById(1).get();
-        newGameGui();
+        switch (((Circle) mouseEvent.getSource()).getId()) {
+            case "c1":
+                currentBowling = bowlRepo.findById(1).get();
+                mainLabel.setText(currentBowling.getName());
+                break;
+            case "c2":
+                currentBowling = bowlRepo.findById(2).get();
+                mainLabel.setText(currentBowling.getName());
+                break;
+            default:
+                break;
+        }
+
+        openBowlingBar();
     }
 
     private void openBowlingBar() {

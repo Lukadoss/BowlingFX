@@ -67,16 +67,16 @@ insert into Player (id, name, game_id) values (33, 'Player 8', 7);
 insert into Player (id, name, game_id) values (34, 'Player 1', 8);
 insert into Player (id, name, game_id) values (35, 'Player 2', 8);
 
--- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (1, 1, 0, 0, 3, 2);
--- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (2, 1, 1, 2, 1, 4);
--- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (3, 1, 2, 4, 1, 1);
--- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (4, 1, 3, 6, 1, 2);
--- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (5, 1, 4, 8, 2, 1);
--- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (6, 1, 5, 10, 2, 2);
--- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (7, 1, 6, 12, 1, 3);
--- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (8, 1, 7, 14, 1, 4);
--- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (9, 1, 8, 16, 4, 1);
--- insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (10, 1, 9, 18, 3, 2);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (1, 1, 0, 0, 3, 2);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (2, 1, 1, 2, 1, 4);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (3, 1, 2, 4, 1, 1);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (4, 1, 3, 6, 1, 2);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (5, 1, 4, 8, 2, 1);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (6, 1, 5, 10, 2, 2);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (7, 1, 6, 12, 1, 3);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (8, 1, 7, 14, 1, 4);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (9, 1, 8, 16, 4, 1);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (10, 1, 9, 18, 3, 2);
 
 insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (11, 2, 0, 0, 4, 4);
 insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (12, 2, 1, 2, 1, 3);
@@ -100,16 +100,6 @@ insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) v
 insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (29, 3, 8, 16, 2, 5);
 insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (30, 3, 9, 18, 3, 5);
 
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (31, 9, 0, 0, 4, 0);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (32, 9, 1, 2, 1, 0);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (33, 9, 2, 4, 1, 0);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (34, 9, 3, 6, 3, 0);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (35, 9, 4, 8, 1, 0);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (36, 9, 5, 10, 0, 3);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (37, 9, 6, 12, 0, 0);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (38, 9, 7, 14, 0, 3);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (39, 9, 8, 16, 0, 3);
-insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (40, 9, 9, 18, 0, 1);
 
 insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (41, 4, 0, 0, 1, 4);
 insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (42, 4, 1, 2, 1, 3);
@@ -165,6 +155,17 @@ insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) v
 insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (88, 8, 7, 14, 4, 6);
 insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (89, 8, 8, 16, 2, 7);
 insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (90, 8, 9, 18, 3, 2);
+
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (31, 9, 0, 0, 4, 0);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (32, 9, 1, 2, 1, 0);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (33, 9, 2, 4, 1, 0);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (34, 9, 3, 6, 3, 0);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (35, 9, 4, 8, 1, 0);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (36, 9, 5, 10, 0, 3);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (37, 9, 6, 12, 0, 0);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (38, 9, 7, 14, 0, 3);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (39, 9, 8, 16, 0, 3);
+insert into Frame (id, player_id, frame_index, roll_index, roll_one, roll_two) values (40, 9, 9, 18, 0, 1);
 
 insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (91, 10, 0, 0, 10);
 insert into Frame (id, player_id, frame_index, roll_index, roll_one) values (92, 10, 1, 1, 10);
