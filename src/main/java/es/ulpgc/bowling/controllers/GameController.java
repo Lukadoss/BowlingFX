@@ -29,7 +29,7 @@ public class GameController {
     private Label rollOut;
     private AtomicInteger gamePosition;
     private Random r;
-    private int decay, tmp;
+    private int decay, tmp, playerCounter;
 
     public GameController(GuiController guiController) {
         this.gc = guiController;
@@ -38,7 +38,16 @@ public class GameController {
         r = new Random();
         decay = 11;
         tmp = 0;
+        playerCounter = 0;
         initGameGui();
+    }
+
+    private int playerModulo(){
+        return playerCounter%gc.getCurrentGame().getPlayers().size();
+    }
+
+    private boolean nextPlayer(){
+        return ((playerCounter+1)%gc.getCurrentGame().getPlayers().size())!=0;
     }
 
     private void initGameGui() {
@@ -97,20 +106,21 @@ public class GameController {
         Label sc3 = new Label();
         Pane pn = new Pane();
 
-        switch (pos) {
-            case 10:
-                sc3.setAlignment(Pos.CENTER);
-                sc3.setStyle("-fx-font: bold 18px System; -fx-text-alignment: center");
+        if (pos == 10) {
+            sc3.setAlignment(Pos.CENTER);
+            sc3.setStyle("-fx-font: bold 18px System; -fx-text-alignment: center");
 
-                AnchorPane.setBottomAnchor(sc3, 0D);
-                AnchorPane.setLeftAnchor(sc3, 0D);
-                AnchorPane.setRightAnchor(sc3, 0D);
-                AnchorPane.setTopAnchor(sc3, 0D);
-                ap.getChildren().add(sc3);
-                break;
-            case 9:
-                Label sc4 = new Label();
-                Pane pn2 = new Pane();
+            AnchorPane.setBottomAnchor(sc3, 0D);
+            AnchorPane.setLeftAnchor(sc3, 0D);
+            AnchorPane.setRightAnchor(sc3, 0D);
+            AnchorPane.setTopAnchor(sc3, 0D);
+            ap.getChildren().add(sc3);
+        } else {
+            Label sc4 = new Label();
+            Pane pn2 = new Pane();
+            if (pos == 9) {
+                sc4 = new Label();
+                pn2 = new Pane();
                 sc4.setAlignment(Pos.CENTER);
                 sc4.setStyle("-fx-font: bold 18px System;");
 
@@ -123,42 +133,41 @@ public class GameController {
 
                 AnchorPane.setRightAnchor(sc4, 23D);
                 AnchorPane.setTopAnchor(sc4, -4D);
-                ap.getChildren().addAll(pn2, sc4);
-            default:
-                sc1.setAlignment(Pos.CENTER);
-                sc1.setStyle("-fx-font: bold 18px System; -fx-text-fill: white;");
-                sc2.setAlignment(Pos.CENTER);
-                sc2.setStyle("-fx-font: bold 18px System;");
-                sc3.setAlignment(Pos.CENTER);
-                sc3.setStyle("-fx-font: bold 18px System; -fx-text-fill: white;");
+            }
+            sc1.setAlignment(Pos.CENTER);
+            sc1.setStyle("-fx-font: bold 18px System; -fx-text-fill: white;");
+            sc2.setAlignment(Pos.CENTER);
+            sc2.setStyle("-fx-font: bold 18px System;");
+            sc3.setAlignment(Pos.CENTER);
+            sc3.setStyle("-fx-font: bold 18px System; -fx-text-fill: white;");
 
-                pn.setPrefSize(20, 20);
-                pn.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 0 0 1 1; -fx-border-radius: 2; -fx-background-radius: 2;");
+            pn.setPrefSize(20, 20);
+            pn.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 0 0 1 1; -fx-border-radius: 2; -fx-background-radius: 2;");
 
-                AnchorPane.setTopAnchor(pn, 0D);
-                AnchorPane.setRightAnchor(pn, 0D);
+            AnchorPane.setTopAnchor(pn, 0D);
+            AnchorPane.setRightAnchor(pn, 0D);
 
-                AnchorPane.setBottomAnchor(sc1, 27D);
-                AnchorPane.setLeftAnchor(sc1, 0D);
-                AnchorPane.setTopAnchor(sc1, -4D);
-                if (pos != 9) AnchorPane.setRightAnchor(sc1, 20D);
-                else AnchorPane.setRightAnchor(sc1, 40D);
+            AnchorPane.setBottomAnchor(sc1, 27D);
+            AnchorPane.setLeftAnchor(sc1, 0D);
+            AnchorPane.setTopAnchor(sc1, -4D);
+            if (pos != 9) AnchorPane.setRightAnchor(sc1, 20D);
+            else AnchorPane.setRightAnchor(sc1, 40D);
 
-                AnchorPane.setRightAnchor(sc2, 3D);
-                AnchorPane.setTopAnchor(sc2, -4D);
+            AnchorPane.setRightAnchor(sc2, 3D);
+            AnchorPane.setTopAnchor(sc2, -4D);
 
-                AnchorPane.setBottomAnchor(sc3, 0D);
-                AnchorPane.setLeftAnchor(sc3, 0D);
-                AnchorPane.setRightAnchor(sc3, 0D);
+            AnchorPane.setBottomAnchor(sc3, 0D);
+            AnchorPane.setLeftAnchor(sc3, 0D);
+            AnchorPane.setRightAnchor(sc3, 0D);
 
-                ap.getChildren().addAll(sc1, pn, sc2, sc3);
+            ap.getChildren().addAll(pn, pn2, sc1, sc2, sc4, sc3);
         }
     }
 
     public void startGame() {
         gamePosition = new AtomicInteger();
         playerLabels.get(gamePosition.get()).setText(playerLabels.get(gamePosition.get()).getText() + " - playing");
-        ((Label)((AnchorPane) playerBoxes.get(gamePosition.get()).getChildren().get(gamePosition.get())).getChildren().get(3)).setText("> > >");
+        ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
 
         LocalDateTime startTime = LocalDateTime.now();
 
@@ -170,48 +179,101 @@ public class GameController {
             int minutes = (int) ((seconds % 3600) / 60);
             int secs = (int) (seconds % 60);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            gc.gameTime.setText(LocalDateTime.of(1,1,1,hours, minutes, secs).format(formatter));
+            gc.gameTime.setText(LocalDateTime.of(1, 1, 1, hours, minutes, secs).format(formatter));
         }), new KeyFrame(Duration.seconds(1)));
         gc.clock.setCycleCount(Animation.INDEFINITE);
         gc.clock.play();
     }
 
     private void makeRoll() {
-        PlayerEntity p = gc.getCurrentGame().getPlayers().get(0);
+        PlayerEntity p = gc.getCurrentGame().getPlayers().get(playerModulo());
 
-        if (tmp!=10 && decay==11) {
-            if ((p.getFrame(gamePosition.get())!=null && p.getFrame(gamePosition.get()).getRollTwo()!=null)) gamePosition.getAndIncrement();
+        if (tmp != 10 && decay == 11) {
+            if ((p.getFrame(gamePosition.get()) != null && p.getFrame(gamePosition.get()).getRollTwo() != null)) gamePosition.getAndIncrement();
             else decay -= tmp;
-        }
-        else {
+        } else {
             decay = 11;
-            if (!p.getFrame(gamePosition.get()).isLastFrame()) gamePosition.getAndIncrement();
+            if (!p.getFrame(gamePosition.get()).isLastFrame()) {
+                gamePosition.getAndIncrement();
+            }
         }
 
         tmp = r.nextInt(decay);
+//        tmp=10;
+//        tmp=5;
         p.roll(tmp);
-        rollOut.setText("You rolled: "+String.valueOf(tmp));
+        rollOut.setText("You rolled: " + String.valueOf(tmp));
 
         writeScore(p);
     }
 
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+
+    // Description of this crapcode currWindowLabels by indexes: 0 - topleft, 1 - topright, 2 - 2nd topright, 3 - bottom
+    // !!! accessing without arraylist -> add +2 to every index
+    // PS: don't touch, it works.. somehow..
     private void writeScore(PlayerEntity p) {
         ArrayList<Label> currentWindowLabels = new ArrayList<>();
-        for (Node n : ((AnchorPane) playerBoxes.get(0).getChildren().get(gamePosition.get())).getChildren()) {
+        for (Node n : ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren()) {
             if (n instanceof Label) currentWindowLabels.add((Label) n);
         }
 
         FrameEntity currFrame = p.getFrame(gamePosition.get());
-        if (currFrame.isStrike()) currentWindowLabels.get(1).setText("X");
-        else if (currFrame.isSpare()) currentWindowLabels.get(1).setText("/");
-        else {
-            currentWindowLabels.get(0).setText(""+currFrame.getRollOne());
-            if (currFrame.getRollTwo()!=null) currentWindowLabels.get(1).setText(""+currFrame.getRollTwo());
+        if (currFrame.isStrike()) {
+            if (!currFrame.isLastFrame()) currentWindowLabels.get(1).setText("X");
+            else if (currFrame.getRollThree() != null) {
+                currentWindowLabels.get(1).setText("X");
+                currentWindowLabels.get(3).setText("");
+                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get() + 1)).getChildren().get(0)).setText(p.sumScore() + "");
+            } else if (currFrame.getRollTwo() != null) {
+                currentWindowLabels.get(2).setText("X");
+            } else currentWindowLabels.get(0).setText("X");
+        } else if (currFrame.isSpare()) {
+            if (!currFrame.isLastFrame()) currentWindowLabels.get(1).setText("/");
+            else if (currFrame.getRollThree() != null) {
+                currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
+                currentWindowLabels.get(3).setText("");
+                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get() + 1)).getChildren().get(0)).setText(p.sumScore() + "");
+            } else currentWindowLabels.get(2).setText("/");
+        } else {
+            if (currFrame.getRollTwo() != null && !currFrame.isLastFrame()) {
+                currentWindowLabels.get(1).setText("" + currFrame.getRollTwo());
+            } else if (currFrame.getRollTwo() != null) {
+                currentWindowLabels.get(2).setText("" + currFrame.getRollTwo());
+                currentWindowLabels.get(3).setText("");
+                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get() + 1)).getChildren().get(0)).setText(p.sumScore() + "");
+            } else currentWindowLabels.get(0).setText("" + currFrame.getRollOne());
+
+            if (currFrame.getRollThree() != null) {
+                currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
+                currentWindowLabels.get(3).setText("");
+                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get() + 1)).getChildren().get(0)).setText(p.sumScore() + "");
+            }
         }
 
-        System.out.println(decay);
-        System.out.println(gamePosition.get());
-        System.out.println(currFrame.getRollOne()+" : "+currFrame.getRollTwo());
-        System.out.println(p.getFrames());
+        for (int i = p.getFrames().size() - 1; i >= 0; i--) {
+            if (p.getFrame(i).score() != null && ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(i)).getChildren().get(5)).getText().isEmpty()) {
+                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(i)).getChildren().get(5)).setText(p.sumScore(i) + "");
+            }
+        }
+
+        if (currFrame.isStrike() || currFrame.isSpare() || currFrame.getRollTwo() != null) {
+            if (!currFrame.isLastFrame()) currentWindowLabels.get(3).setText("");
+            if (playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get() + 1) != null && !currFrame.isLastFrame()) {
+                //playerCounter++;
+                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get() + 1)).getChildren().get(5)).setText("> > >");
+            }
+        }
     }
 }
