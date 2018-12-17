@@ -1,3 +1,5 @@
+package integration;
+
 import es.ulpgc.bowling.entity.PlayerEntity;
 import org.junit.Before;
 import org.junit.Test;

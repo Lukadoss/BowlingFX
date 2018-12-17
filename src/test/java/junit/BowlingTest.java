@@ -1,3 +1,5 @@
+package junit;
+
 import es.ulpgc.bowling.entity.BowlingEntity;
 import es.ulpgc.bowling.entity.LineEntity;
 import org.junit.Test;
