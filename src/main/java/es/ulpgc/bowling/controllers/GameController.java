@@ -7,10 +7,12 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 
@@ -29,7 +31,8 @@ public class GameController {
     private AtomicInteger gamePosition;
     private Random r;
     private int decay, tmp, playerCounter;
-    private Button rollBut;
+    private HBox rollBox;
+    private ArrayList<Button> rollButts;
 
     public GameController(GuiController guiController) {
         this.gc = guiController;
@@ -75,18 +78,46 @@ public class GameController {
         }
 
         Pane filler = new Pane();
+        Pane filler2 = new Pane();
         VBox.setVgrow(filler, Priority.ALWAYS);
-
-        HBox rollBox = new HBox();
+        HBox.setHgrow(filler2, Priority.ALWAYS);
 
         rollOut = new Label();
         rollOut.setStyle("-fx-font: bold 22px System");
-        HBox.setMargin(rollOut, new Insets(0, 0, 0, 20));
+        rollOut.setAlignment(Pos.CENTER);
+        rollOut.setPadding(new Insets(2, 2, 2, 2));
 
-        rollBut = new Button("Roll!");
-        rollBut.setOnAction(e -> makeRoll());
+        Button rollBut = new Button("Random roll");
+        rollBut.setOnAction(e -> makeRoll(-1));
 
-        rollBox.getChildren().addAll(rollBut, rollOut);
+        FlowPane rollPn = new FlowPane();
+        rollPn.setStyle("-fx-background-color: white; -fx-background-radius: 5; -fx-border-width: 2; -fx-border-color: black; -fx-border-radius: 5");
+        rollPn.setAlignment(Pos.CENTER);
+        rollPn.getChildren().add(rollOut);
+        rollPn.setPrefSize(50, 50);
+
+        rollBox = new HBox();
+        rollBox.setStyle("-fx-border-color: #cbcbcb");
+        rollBox.setPadding(new Insets(5, 5, 5, 5));
+        rollBox.setAlignment(Pos.CENTER_LEFT);
+        rollBox.setFillHeight(true);
+
+        rollButts = new ArrayList<>();
+        for (int i = 0; i <= 10; i++) {
+            Button b = new Button(String.valueOf(i));
+            b.setPrefSize(30, 30);
+            int x = i;
+            b.setOnAction(e -> makeRoll(x));
+            HBox.setMargin(b, new Insets(0, 0, 0, 5));
+            rollButts.add(b);
+        }
+        Separator s = new Separator();
+        s.setOrientation(Orientation.VERTICAL);
+        HBox.setMargin(s, new Insets(0, 5, 0, 10));
+
+        rollBox.getChildren().addAll(rollBut, s);
+        rollBox.getChildren().addAll(rollButts);
+        rollBox.getChildren().addAll(filler2, rollPn);
 
         gc.gameVBox.getChildren().addAll(filler, rollBox);
     }
@@ -175,29 +206,28 @@ public class GameController {
         gc.clock.play();
     }
 
-    private void makeRoll() {
+    private void makeRoll(int roll) {
         PlayerEntity p = gc.getCurrentGame().getPlayers().get(playerModulo());
 
-        tmp = r.nextInt(decay);
-//        tmp = 10;
-//        tmp = 5;
+        if (roll == -1) tmp = r.nextInt(decay);
+        else tmp = roll;
+
         p.roll(tmp);
-        rollOut.setText("You rolled: " + String.valueOf(tmp));
+        rollOut.setText(String.valueOf(tmp));
 
         writeScore(p);
 
-        if (!((Label) ((AnchorPane) playerBoxes.get(gc.getCurrentGame().getPlayers().size() - 1).getChildren().get(10)).getChildren().get(0)).getText()
-                .isEmpty()) {
+        PlayerEntity lastPlayer = gc.getCurrentGame().getPlayers().get(gc.getCurrentGame().getPlayers().size() - 1);
+        if (lastPlayer.getFrames().size() != 0 && lastPlayer.getFrame(lastPlayer.getFrames().size() - 1).isLastFrame() && lastPlayer.getFrame(lastPlayer
+                .getFrames().size() - 1).score() != null) {
             endGame();
             return;
         }
 
         if (tmp != 10 && decay == 11) {
             if ((p.getFrame(gamePosition.get()) != null && p.getFrame(gamePosition.get()).getRollTwo() != null)) {
-                if (!(p.getFrame(gamePosition.get()).isLastFrame() && (p.getFrame(gamePosition.get()).isSpare() || p.getFrame(gamePosition.get()).isStrike())) || p
-                        .getFrame(gamePosition.get())
-                        .getRollThree()
-                        != null) playerCounter++;
+                if (!(p.getFrame(gamePosition.get()).isLastFrame() && (p.getFrame(gamePosition.get()).isSpare() || p.getFrame(gamePosition.get()).isStrike())
+                ) || p.getFrame(gamePosition.get()).getRollThree() != null) playerCounter++;
 
                 if (playerModulo() != 0)
                     ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
@@ -207,13 +237,13 @@ public class GameController {
                 if (!p.getFrame(gamePosition.get()).isLastFrame() && playerModulo() == 0) {
                     gamePosition.getAndIncrement();
                 }
+
+                if (p.getFrame(gamePosition.get()).isLastFrame() && p.getFrame(gamePosition.get()).getRollThree()==null) decay -= tmp;
             } else decay -= tmp;
         } else {
             decay = 11;
-            if (!(p.getFrame(gamePosition.get()).isLastFrame() && (p.getFrame(gamePosition.get()).isSpare() || p.getFrame(gamePosition.get()).isStrike())) || p
-                    .getFrame(gamePosition.get())
-                    .getRollThree()
-                    != null) playerCounter++;
+            if (!(p.getFrame(gamePosition.get()).isLastFrame() && (p.getFrame(gamePosition.get()).isSpare() || p.getFrame(gamePosition.get()).isStrike())) ||
+                    p.getFrame(gamePosition.get()).getRollThree() != null) playerCounter++;
 
             if (playerModulo() != 0)
                 ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
@@ -224,14 +254,21 @@ public class GameController {
                 gamePosition.getAndIncrement();
             }
         }
+
+        rollButts.forEach(e->e.setDisable(false));
+
+        for (int i=decay;i<=10;i++){
+            rollButts.get(i).setDisable(true);
+        }
     }
 
     private void endGame() {
-        rollBut.setDisable(true);
+        rollBox.setDisable(true);
         rollOut.setText("Game ended!");
         gc.getCurrentGame().setEnded(LocalDateTime.now());
         gc.getGameRepo().save(gc.getCurrentGame());
         gc.clock.stop();
+
     }
 
     private int playerModulo() {
@@ -268,8 +305,6 @@ public class GameController {
                 if (currFrame.getRollThree() == 10) currentWindowLabels.get(1).setText("X");
                 else currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
                 currentWindowLabels.get(3).setText("");
-                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get() + 1)).getChildren().get(0)).setText(p.sumScore()
-                        + "");
             } else if (currFrame.getRollTwo() != null) {
                 if (currFrame.getRollTwo() == 10) currentWindowLabels.get(2).setText("X");
                 else currentWindowLabels.get(2).setText("" + currFrame.getRollTwo());
@@ -277,10 +312,9 @@ public class GameController {
         } else if (currFrame.isSpare()) {
             if (!currFrame.isLastFrame()) currentWindowLabels.get(1).setText("/");
             else if (currFrame.getRollThree() != null) {
-                currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
+                if (currFrame.getRollThree() == 10) currentWindowLabels.get(1).setText("X");
+                else currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
                 currentWindowLabels.get(3).setText("");
-                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get() + 1)).getChildren().get(0)).setText(p.sumScore()
-                        + "");
             } else currentWindowLabels.get(2).setText("/");
         } else {
             if (currFrame.getRollTwo() != null && !currFrame.isLastFrame()) {
@@ -288,22 +322,18 @@ public class GameController {
             } else if (currFrame.getRollTwo() != null) {
                 currentWindowLabels.get(2).setText("" + currFrame.getRollTwo());
                 currentWindowLabels.get(3).setText("");
-                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get() + 1)).getChildren().get(0)).setText(p.sumScore()
-                        + "");
             } else currentWindowLabels.get(0).setText("" + currFrame.getRollOne());
 
             if (currFrame.getRollThree() != null) {
                 currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
                 currentWindowLabels.get(3).setText("");
-                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get() + 1)).getChildren().get(0)).setText(p.sumScore()
-                        + "");
             }
         }
 
         for (int i = p.getFrames().size() - 1; i >= 0; i--) {
-            if (p.getFrame(i).score() != null && ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(i)).getChildren().get(5)).getText()
-                    .isEmpty()) {
+            if (p.getFrame(i).score() != null) {
                 ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(i)).getChildren().get(5)).setText(p.sumScore(i) + "");
+                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(10)).getChildren().get(0)).setText(p.sumScore() + "");
             }
         }
 

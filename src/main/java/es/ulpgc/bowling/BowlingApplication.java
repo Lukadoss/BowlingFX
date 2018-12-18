@@ -14,6 +14,7 @@ public class BowlingApplication extends Application {
 
     private ConfigurableApplicationContext springContext;
     private Parent root;
+    private static Stage stage;
 
     @Override
     public void init() throws Exception {
@@ -25,6 +26,7 @@ public class BowlingApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        setPrimaryStage(primaryStage);
         primaryStage.setTitle("Bowling");
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
@@ -37,6 +39,13 @@ public class BowlingApplication extends Application {
         springContext.stop();
     }
 
+    public static Stage getPrimaryStage() {
+        return stage;
+    }
+
+    private void setPrimaryStage(Stage stage) {
+        BowlingApplication.stage = stage;
+    }
 
     public static void main(String[] args) {
         launch(BowlingApplication.class, args);
