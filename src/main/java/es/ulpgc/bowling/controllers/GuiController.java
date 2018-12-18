@@ -14,13 +14,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -34,8 +31,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GuiController {
-    public TextArea outputArea;
-    public TextField console;
     public TableView mainTable;
     public Pane mainPane;
     public Label mainLabel, gameTime;
@@ -43,7 +38,6 @@ public class GuiController {
     public Circle c1, c2;
     public Button backButton, topGamesButton, leaderboardsButton;
     public VBox gameVBox;
-    public Timeline clock;
 
     @Autowired
     private BowlingRepository bowlRepo;
@@ -57,8 +51,9 @@ public class GuiController {
     @Autowired
     private GameRepository gameRepo;
 
-    private BowlingEntity currentBowling;
 
+    Timeline clock;
+    private BowlingEntity currentBowling;
     private GameEntity currentGame;
     private GameController gc;
 
@@ -228,8 +223,6 @@ public class GuiController {
     }
 
     public void newGame(LineEntity line) {
-        console.clear();
-        outputArea.clear();
         backButton.setDisable(true);
 
         try {
@@ -296,14 +289,12 @@ public class GuiController {
     private void resizePanels() {
         mainPane.widthProperty().addListener((observable, oldValue, newValue) -> {
             mainTable.setPrefWidth(mainPane.getLayoutBounds().getWidth());
-            outputArea.setPrefWidth(mainPane.getLayoutBounds().getWidth());
             bowlingGridPane.setPrefWidth(mainPane.getLayoutBounds().getWidth());
             gameVBox.setPrefWidth(mainPane.getLayoutBounds().getWidth());
         });
 
         mainPane.heightProperty().addListener((observable, oldValue, newValue) -> {
             mainTable.setPrefHeight(mainPane.getLayoutBounds().getHeight());
-            outputArea.setPrefHeight(mainPane.getLayoutBounds().getHeight());
             bowlingGridPane.setPrefHeight(mainPane.getLayoutBounds().getHeight());
             gameVBox.setPrefHeight(mainPane.getLayoutBounds().getHeight());
         });
@@ -313,47 +304,6 @@ public class GuiController {
 
     public void goBack(ActionEvent actionEvent) {
         changeWindowItems(false);
-    }
-
-    private void out(String one) {
-        outputArea.setText(one + "\n" + outputArea.getText());
-    }
-
-    private String drawLine() {
-        return new String(new char[50]).replace("\0", "-");
-    }
-
-    @FXML
-    private void executeCommand(ActionEvent actionEvent) {
-        if (!console.getText().isEmpty() && currentGame!=null) {
-            out("\n");
-            switch (console.getText()) {
-                case "help":
-                    out("Commands:\nclear - clears the output area\nstatus - Returns current game status\nplayers - shows all players in game\ngame - returns" +
-                            " sum of current ingame score");
-                    break;
-                case "h":
-                    out("Commands:\nclear - clears the output area\nstatus - Returns current game status\nplayers - shows all players in game\ngame - returns" +
-                            " sum of current ingame score");
-                    break;
-                case "clear":
-                    outputArea.clear();
-                    break;
-                case "status":
-                    out("game_id="+currentGame.getId()+", name="+currentGame.getName()+", running="+currentGame.isRunning());
-                    break;
-                case "players":
-                    out(currentGame.getPlayers().toString());
-                    out("Currently playing players:");
-                    break;
-                case "game":
-                    out("Current score for game \""+currentGame.getName()+"\" is "+currentGame.getTotalScore());
-                    break;
-                default:
-                    out("Command not found! ---Write \"help\" to see all commands---");
-            }
-        }
-        console.clear();
     }
 
     public GameRepository getGameRepo() {
@@ -378,18 +328,5 @@ public class GuiController {
 
     public GameEntity getCurrentGame() {
         return currentGame;
-    }
-
-    public void developConsole(KeyEvent keyEvent) {
-        if(keyEvent.getCode()==KeyCode.SEMICOLON){
-            if (console.isVisible()) {
-                console.setVisible(false);
-                outputArea.setVisible(false);
-            }
-            else{
-                console.setVisible(true);
-                outputArea.setVisible(true);
-            }
-        }
     }
 }
