@@ -83,7 +83,9 @@ public class GameEntity extends BaseEntity {
         this.players = players;
     }
 
-    public GameEntity() {}
+    public GameEntity() {
+        this("Unnamed", new ArrayList<>());
+    }
 
     public GameEntity addPlayer(PlayerEntity player) {
         if (isRunning()) {
