@@ -166,6 +166,9 @@ public class GuiController {
         }
 
         openBowlingBar();
+//        changeWindowItems(true);
+//        currentGame = gameRepo.findById(1).get();
+//        newGameGui();
     }
 
     private void openBowlingBar() {
