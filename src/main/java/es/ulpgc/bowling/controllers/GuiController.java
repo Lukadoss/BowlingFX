@@ -60,6 +60,7 @@ public class GuiController {
     private BowlingEntity currentBowling;
 
     private GameEntity currentGame;
+    private GameController gc;
 
     public void initialize() {
         resizePanels();
@@ -263,6 +264,7 @@ public class GuiController {
 
                 mainLabel.setText("Bowling bars");
             }else{
+                gc.endGame();
                 currentGame=null;
 
                 bowlingGridPane.setVisible(false);
@@ -287,7 +289,7 @@ public class GuiController {
         backButton.setDisable(false);
         gameVBox.setVisible(true);
 
-        GameController gc = new GameController(this);
+        gc = new GameController(this);
         gc.startGame();
     }
 

@@ -30,6 +30,8 @@ public class BowlingApplication extends Application {
         primaryStage.setTitle("Bowling");
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
+        primaryStage.setMinWidth(600);
+        primaryStage.setMinHeight(400);
         primaryStage.setOnCloseRequest(event -> System.exit(0));
         primaryStage.show();
     }
