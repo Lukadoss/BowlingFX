@@ -1,6 +1,8 @@
 package es.ulpgc.bowling.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Entity(name = "FRAME")
 public class FrameEntity extends BaseEntity {
@@ -83,7 +85,8 @@ public class FrameEntity extends BaseEntity {
      */
     public Integer score() {
         if (!isTerminated()) return null;
-        if (isLastFrame() && (isStrike() || isSpare()) && getRollThree() != null) return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
+        if (isLastFrame() && (isStrike() || isSpare()) && getRollThree() != null)
+            return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
         if (isSpare()) return roll(roll_index) + roll(roll_index + 1) + roll(roll_index + 2);
         if (isStrike()) {
             if (player.getFrameOnIndex(frame_index + 1) == null) return null;

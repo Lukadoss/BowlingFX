@@ -61,11 +61,14 @@ public class GameController {
                 AnchorPane ap = new AnchorPane();
                 ap.setMinSize(55, 50);
 
-                if (j == 0) ap.setStyle("-fx-border-color: black; -fx-border-width: 2 1 2 2; -fx-background-radius: 5; -fx-border-radius: 2; " +
-                        "-fx-background-color: " + Color.values()[i].getColor() + ";");
-                else if (j == 10) ap.setStyle("-fx-border-color: black; -fx-border-width: 2 2 2 1; -fx-background-radius: 5; -fx-border-radius: 2; " +
-                        "-fx-background-color: white;");
-                else ap.setStyle("-fx-border-color: black; -fx-border-width: 2 1 2 1; -fx-background-radius: 5; -fx-border-radius: 2; -fx-background-color: " +
+                if (j == 0)
+                    ap.setStyle("-fx-border-color: black; -fx-border-width: 2 1 2 2; -fx-background-radius: 5; -fx-border-radius: 2; " +
+                            "-fx-background-color: " + Color.values()[i].getColor() + ";");
+                else if (j == 10)
+                    ap.setStyle("-fx-border-color: black; -fx-border-width: 2 2 2 1; -fx-background-radius: 5; -fx-border-radius: 2; " +
+                            "-fx-background-color: white;");
+                else
+                    ap.setStyle("-fx-border-color: black; -fx-border-width: 2 1 2 1; -fx-background-radius: 5; -fx-border-radius: 2; -fx-background-color: " +
                             Color.values()[i].getColor() + ";");
 
                 prepareLabels(ap, j);
@@ -122,7 +125,7 @@ public class GameController {
 
 
         HBox finalScoreBox = new HBox();
-        VBox.setMargin(finalScoreBox, new Insets(20,0,0,0));
+        VBox.setMargin(finalScoreBox, new Insets(20, 0, 0, 0));
 
         for (int j = 0; j < 10; j++) {
             AnchorPane ap = new AnchorPane();
@@ -235,8 +238,9 @@ public class GameController {
 
         BowlingApplication.getPrimaryStage().setMinWidth(750);
         BowlingApplication.getPrimaryStage().setMinHeight(100);
-        for (Node n : gc.gameVBox.getChildren()){
-            if (n instanceof HBox) BowlingApplication.getPrimaryStage().setMinHeight(BowlingApplication.getPrimaryStage().getMinHeight()+75);
+        for (Node n : gc.gameVBox.getChildren()) {
+            if (n instanceof HBox)
+                BowlingApplication.getPrimaryStage().setMinHeight(BowlingApplication.getPrimaryStage().getMinHeight() + 75);
         }
     }
 
@@ -295,14 +299,16 @@ public class GameController {
 
                 if (playerModulo() != 0)
                     ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
-                else if (!p.getFrameOnIndex(gamePosition.get()).isLastFrame()) ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().
-                        get(gamePosition.get() + 1)).getChildren().get(5)).setText("> > >");
+                else if (!p.getFrameOnIndex(gamePosition.get()).isLastFrame())
+                    ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().
+                            get(gamePosition.get() + 1)).getChildren().get(5)).setText("> > >");
 
                 if (!p.getFrameOnIndex(gamePosition.get()).isLastFrame() && playerModulo() == 0) {
                     gamePosition.getAndIncrement();
                 }
 
-                if (p.getFrameOnIndex(gamePosition.get()).isLastFrame() && p.getFrameOnIndex(gamePosition.get()).getRollThree() == null) decay -= tmp;
+                if (p.getFrameOnIndex(gamePosition.get()).isLastFrame() && p.getFrameOnIndex(gamePosition.get()).getRollThree() == null)
+                    decay -= tmp;
             } else decay -= tmp;
         } else {
             decay = 11;
@@ -311,8 +317,9 @@ public class GameController {
 
             if (playerModulo() != 0)
                 ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
-            else if (!p.getFrameOnIndex(gamePosition.get()).isLastFrame()) ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().
-                    get(gamePosition.get() + 1)).getChildren().get(5)).setText("> > >");
+            else if (!p.getFrameOnIndex(gamePosition.get()).isLastFrame())
+                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().
+                        get(gamePosition.get() + 1)).getChildren().get(5)).setText("> > >");
 
             if (!p.getFrameOnIndex(gamePosition.get()).isLastFrame() && playerModulo() == 0) {
                 gamePosition.getAndIncrement();
@@ -369,10 +376,11 @@ public class GameController {
             if (p.getFrameOnIndex(i).score() != null) {
                 ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(i)).getChildren().get(5)).setText(p.sumScore(i) + "");
                 ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(10)).getChildren().get(0)).setText(p.sumScore() + "");
-                finalScore.setText(gc.getCurrentGame().getTotalScore()+"");
+                finalScore.setText(gc.getCurrentGame().getTotalScore() + "");
             }
         }
 
-        if ((currFrame.isStrike() || currFrame.isSpare() || currFrame.getRollTwo() != null) && !currFrame.isLastFrame()) currentWindowLabels.get(3).setText("");
+        if ((currFrame.isStrike() || currFrame.isSpare() || currFrame.getRollTwo() != null) && !currFrame.isLastFrame())
+            currentWindowLabels.get(3).setText("");
     }
 }

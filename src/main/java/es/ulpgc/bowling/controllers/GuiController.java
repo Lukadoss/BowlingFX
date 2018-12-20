@@ -254,8 +254,8 @@ public class GuiController {
             mainTable.setVisible(true);
             backButton.setDisable(false);
         } else {
-            if (currentGame==null) {
-                currentBowling=null;
+            if (currentGame == null) {
+                currentBowling = null;
 
                 mainTable.setVisible(false);
                 bowlingGridPane.setVisible(true);
@@ -263,9 +263,9 @@ public class GuiController {
                 backButton.setDisable(true);
 
                 mainLabel.setText("Bowling bars");
-            }else{
+            } else {
                 gc.endGame();
-                currentGame=null;
+                currentGame = null;
 
                 bowlingGridPane.setVisible(false);
                 gameVBox.setVisible(false);
@@ -325,7 +325,7 @@ public class GuiController {
 
     @FXML
     private void executeCommand(ActionEvent actionEvent) {
-        if (!console.getText().isEmpty() && currentGame!=null) {
+        if (!console.getText().isEmpty() && currentGame != null) {
             out("\n");
             switch (console.getText()) {
                 case "help":
@@ -340,14 +340,14 @@ public class GuiController {
                     outputArea.clear();
                     break;
                 case "status":
-                    out("game_id="+currentGame.getId()+", name="+currentGame.getName()+", running="+currentGame.isRunning());
+                    out("game_id=" + currentGame.getId() + ", name=" + currentGame.getName() + ", running=" + currentGame.isRunning());
                     break;
                 case "players":
                     out(currentGame.getPlayers().toString());
                     out("Currently playing players:");
                     break;
                 case "game":
-                    out("Current score for game \""+currentGame.getName()+"\" is "+currentGame.getTotalScore());
+                    out("Current score for game \"" + currentGame.getName() + "\" is " + currentGame.getTotalScore());
                     break;
                 default:
                     out("Command not found! ---Write \"help\" to see all commands---");
@@ -381,12 +381,11 @@ public class GuiController {
     }
 
     public void developConsole(KeyEvent keyEvent) {
-        if(keyEvent.getCode()==KeyCode.SEMICOLON){
+        if (keyEvent.getCode() == KeyCode.SEMICOLON) {
             if (console.isVisible()) {
                 console.setVisible(false);
                 outputArea.setVisible(false);
-            }
-            else{
+            } else {
                 console.setVisible(true);
                 outputArea.setVisible(true);
             }

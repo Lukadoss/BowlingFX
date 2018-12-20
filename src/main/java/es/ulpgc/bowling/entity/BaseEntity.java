@@ -6,10 +6,10 @@ import java.io.Serializable;
 @MappedSuperclass
 public class BaseEntity implements Serializable {
 
-    @TableGenerator(name="tab", initialValue=100)
+    @TableGenerator(name = "tab", initialValue = 100)
     @Id
     @Column
-    @GeneratedValue(strategy=GenerationType.TABLE, generator = "tab")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "tab")
     Integer id;
 
     public Integer getId() {

@@ -16,8 +16,8 @@ public class LineEntity extends BaseEntity {
     @ManyToOne
     private BowlingEntity bowling;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="line_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "line_id")
     @Fetch(FetchMode.SELECT)
     private List<GameEntity> games;
 
@@ -66,6 +66,6 @@ public class LineEntity extends BaseEntity {
      */
     @Override
     public String toString() {
-        return "LineEntity=[id=" + this.id +", bowling=" + bowling.toString() + "]";
+        return "LineEntity=[id=" + this.id + ", bowling=" + bowling.toString() + "]";
     }
 }

@@ -80,7 +80,7 @@ public class NewGameController {
 
     private void loadPlayersLayer() {
         if (textField.getText().isEmpty()) {
-                gameName = "Unknown game #" + gc.getGameRepo().count();
+            gameName = "Unknown game #" + gc.getGameRepo().count();
         } else gameName = textField.getText();
         mainLabel.setText("Choose the number of players");
         textField.setVisible(false);
@@ -120,11 +120,11 @@ public class NewGameController {
         }
     }
 
-    public void setUpGC(GuiController gc){
+    public void setUpGC(GuiController gc) {
         this.gc = gc;
     }
 
-    public GameEntity getGame(){
+    public GameEntity getGame() {
         return game;
     }
 

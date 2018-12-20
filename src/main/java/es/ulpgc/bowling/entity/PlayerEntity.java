@@ -19,8 +19,8 @@ public class PlayerEntity extends BaseEntity {
     @ManyToOne
     private GameEntity game;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="player_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "player_id")
     @Fetch(FetchMode.SELECT)
     private List<FrameEntity> frames;
 
@@ -57,7 +57,7 @@ public class PlayerEntity extends BaseEntity {
     }
 
     public List<Integer> getRolls() {
-        if(rolls == null || rolls.isEmpty()) {
+        if (rolls == null || rolls.isEmpty()) {
             setupRolls();
         }
         return rolls;
@@ -78,7 +78,7 @@ public class PlayerEntity extends BaseEntity {
     /*
      * Constructors
      */
-    public PlayerEntity(){
+    public PlayerEntity() {
         this("Unknown");
     }
 
@@ -86,14 +86,14 @@ public class PlayerEntity extends BaseEntity {
         this.name = name;
         this.rolls = new ArrayList<>();
         this.frames = new ArrayList<>();
-        frameCount =0;
-        rollCount =0;
+        frameCount = 0;
+        rollCount = 0;
     }
 
     /*
      * Additional methods
      */
-    public void updateFrames(){
+    public void updateFrames() {
         if (rollCount < rolls.size()) {
             actualFrame = new FrameEntity(this, rollCount, frameCount);
             frames.add(actualFrame);
@@ -102,7 +102,8 @@ public class PlayerEntity extends BaseEntity {
             rollCount += actualFrame.isLastFrame() ? 3 : (actualFrame.isStrike()) ? 1 : 2;
             frameCount++;
         } else if (actualFrame.isLastFrame()) {
-            if (rollCount == rolls.size() && (actualFrame.isSpare() || actualFrame.isStrike())) actualFrame.setRollThree(rolls.get(rollCount - 1));
+            if (rollCount == rolls.size() && (actualFrame.isSpare() || actualFrame.isStrike()))
+                actualFrame.setRollThree(rolls.get(rollCount - 1));
             else actualFrame.setRollTwo(rolls.get(rollCount - 2));
         } else actualFrame.setRollTwo(rolls.get(rollCount - 1));
     }
@@ -121,7 +122,9 @@ public class PlayerEntity extends BaseEntity {
     public Integer sumScore(int frame) {
         Integer sum = 0;
         for (int i = 0; i <= frame; i++) {
-            if (getFrameOnIndex(i).score() == null) { return null; }
+            if (getFrameOnIndex(i).score() == null) {
+                return null;
+            }
             sum += getFrameOnIndex(i).score();
         }
         return sum;

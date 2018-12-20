@@ -16,8 +16,8 @@ public class BowlingEntity extends BaseEntity {
     @Column
     private String name;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="bowling_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "bowling_id")
     @Fetch(FetchMode.SELECT)
     private List<LineEntity> lines;
 
@@ -43,7 +43,7 @@ public class BowlingEntity extends BaseEntity {
     /*
      * Constructors
      */
-    public BowlingEntity(){
+    public BowlingEntity() {
         this(new ArrayList<>());
     }
 
@@ -69,6 +69,6 @@ public class BowlingEntity extends BaseEntity {
      */
     @Override
     public String toString() {
-        return "BowlingEntity=[id=" + this.id +", name="+ this.name + "]";
+        return "BowlingEntity=[id=" + this.id + ", name=" + this.name + "]";
     }
 }
