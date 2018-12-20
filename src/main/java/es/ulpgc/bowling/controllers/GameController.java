@@ -1,5 +1,6 @@
 package es.ulpgc.bowling.controllers;
 
+import es.ulpgc.bowling.BowlingApplication;
 import es.ulpgc.bowling.config.Color;
 import es.ulpgc.bowling.entity.FrameEntity;
 import es.ulpgc.bowling.entity.PlayerEntity;
@@ -231,8 +232,43 @@ public class GameController {
         }), new KeyFrame(Duration.seconds(1)));
         gc.clock.setCycleCount(Animation.INDEFINITE);
         gc.clock.play();
+
+        BowlingApplication.getPrimaryStage().setMinWidth(750);
+        BowlingApplication.getPrimaryStage().setMinHeight(100);
+        for (Node n : gc.gameVBox.getChildren()){
+            if (n instanceof HBox) BowlingApplication.getPrimaryStage().setMinHeight(BowlingApplication.getPrimaryStage().getMinHeight()+75);
+        }
     }
 
+    public void endGame() {
+        rollBox.setDisable(true);
+        rollOut.setText("Game ended!");
+        gc.getGameRepo().save(gc.getCurrentGame());
+        gc.clock.stop();
+        BowlingApplication.getPrimaryStage().setMinWidth(600);
+        BowlingApplication.getPrimaryStage().setMinHeight(400);
+    }
+
+    private int playerModulo() {
+        return playerCounter % gc.getCurrentGame().getPlayers().size();
+    }
+
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
+
+    // Description of this crapcode currWindowLabels by indexes: 0 - topleft, 1 - topright, 2 - 2nd topright, 3 - bottom
+    // !!! accessing without arraylist -> add +2 to every index
+    // PS: DO NOT TOUCH, it works.. somehow..
     private void makeRoll(int roll) {
         PlayerEntity p = gc.getCurrentGame().getPlayers().get(playerModulo());
 
@@ -247,6 +283,7 @@ public class GameController {
         PlayerEntity lastPlayer = gc.getCurrentGame().getPlayers().get(gc.getCurrentGame().getPlayers().size() - 1);
         if (lastPlayer.getFrames().size() != 0 && lastPlayer.getFrame(lastPlayer.getFrames().size() - 1).isLastFrame() && lastPlayer.getFrame(lastPlayer
                 .getFrames().size() - 1).score() != null) {
+            gc.getCurrentGame().endGame();
             endGame();
             return;
         }
@@ -289,35 +326,6 @@ public class GameController {
         }
     }
 
-    private void endGame() {
-        rollBox.setDisable(true);
-        rollOut.setText("Game ended!");
-        gc.getCurrentGame().setEnded(LocalDateTime.now());
-        gc.getGameRepo().save(gc.getCurrentGame());
-        gc.clock.stop();
-
-    }
-
-    private int playerModulo() {
-        return playerCounter % gc.getCurrentGame().getPlayers().size();
-    }
-
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-
-    // Description of this crapcode currWindowLabels by indexes: 0 - topleft, 1 - topright, 2 - 2nd topright, 3 - bottom
-    // !!! accessing without arraylist -> add +2 to every index
-    // PS: DO NOT TOUCH, it works.. somehow..
     private void writeScore(PlayerEntity p) {
         ArrayList<Label> currentWindowLabels = new ArrayList<>();
         for (Node n : ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren()) {
