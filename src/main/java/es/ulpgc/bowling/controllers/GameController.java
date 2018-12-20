@@ -384,34 +384,31 @@ public class GameController {
         FrameEntity currFrame = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(gamePosition.get());
 
         if (currFrame.isStrike()) {
-            if (!currFrame.isLastFrame()) currentWindowLabels.get(1).setText("X");
+            if (!currFrame.isLastFrame()) {
+                currentWindowLabels.get(1).setText("X");
+                currentWindowLabels.get(3).setText("");
+            }
             else if (currFrame.getRollThree() != null) {
                 if (currFrame.getRollThree() == 10) currentWindowLabels.get(1).setText("X");
                 else currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
-                currentWindowLabels.get(3).setText("");
             } else if (currFrame.getRollTwo() != null) {
                 if (currFrame.getRollTwo() == 10) currentWindowLabels.get(2).setText("X");
                 else currentWindowLabels.get(2).setText("" + currFrame.getRollTwo());
             } else currentWindowLabels.get(0).setText("X");
         } else if (currFrame.isSpare()) {
-            if (!currFrame.isLastFrame()) currentWindowLabels.get(1).setText("/");
+            if (!currFrame.isLastFrame()) {
+                currentWindowLabels.get(1).setText("/");
+                currentWindowLabels.get(3).setText("");
+            }
             else if (currFrame.getRollThree() != null) {
                 if (currFrame.getRollThree() == 10) currentWindowLabels.get(1).setText("X");
                 else currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
-                currentWindowLabels.get(3).setText("");
             } else currentWindowLabels.get(2).setText("/");
         } else {
-            if (currFrame.getRollTwo() != null && !currFrame.isLastFrame()) {
-                currentWindowLabels.get(1).setText("" + currFrame.getRollTwo());
-            } else if (currFrame.getRollTwo() != null) {
-                currentWindowLabels.get(2).setText("" + currFrame.getRollTwo());
-                currentWindowLabels.get(3).setText("");
-            } else currentWindowLabels.get(0).setText("" + currFrame.getRollOne());
+            if (currFrame.getRollTwo() != null) currentWindowLabels.get(1).setText("" + currFrame.getRollTwo());
+            else currentWindowLabels.get(0).setText("" + currFrame.getRollOne());
 
-            if (currFrame.getRollThree() != null) {
-                currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
-                currentWindowLabels.get(3).setText("");
-            }
+            if (currFrame.getRollThree() != null) currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
         }
 
         for (int i = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrames().size() - 1; i >= 0; i--) {
