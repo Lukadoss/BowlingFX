@@ -75,9 +75,9 @@ public class FrameEntity extends BaseEntity {
     }
 
     public FrameEntity() {
-        this(null, -1, -1);
+        //just for Hibernate purposes
     }
-    
+
     /*
      * Additional methods
      */
