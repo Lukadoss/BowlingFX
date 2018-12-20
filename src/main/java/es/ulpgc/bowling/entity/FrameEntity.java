@@ -110,8 +110,8 @@ public class FrameEntity extends BaseEntity {
     }
 
     public boolean isSpare() {
-        if (roll_index + 1 >= player.getRolls().size()) return false;
-        return roll(roll_index) + roll(roll_index + 1) == 10;
+        if (getRollTwo()==null) return false;
+        return getRollOne()+getRollTwo() == 10;
     }
 
     public boolean isStrike() {
