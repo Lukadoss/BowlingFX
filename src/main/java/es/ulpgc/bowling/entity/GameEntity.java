@@ -12,6 +12,9 @@ import java.util.List;
 @Entity(name = "GAME")
 public class GameEntity extends BaseEntity {
 
+    /*
+     * Fields
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "game_id")
     @Fetch(FetchMode.SELECT)
@@ -29,6 +32,9 @@ public class GameEntity extends BaseEntity {
     @Column
     private LocalDateTime ended;
 
+    /*
+     * Getters and setters
+     */
     public List<PlayerEntity> getPlayers() {
         return players;
     }
@@ -45,20 +51,45 @@ public class GameEntity extends BaseEntity {
         this.line = line;
     }
 
-    public LocalDateTime getStarted() {
-        return started;
+    public String getName() {
+        return name;
     }
 
-    public void setStarted(LocalDateTime started) {
-        this.started = started;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDateTime getStarted() {
+        return started;
     }
 
     public LocalDateTime getEnded() {
         return ended;
     }
 
-    public void setEnded(LocalDateTime ended) {
-        this.ended = ended;
+    /*
+     * Constructors
+     */
+    public GameEntity() {
+        this("Unnamed", new ArrayList<>());
+    }
+
+    public GameEntity(String name, ArrayList<PlayerEntity> players) {
+        this.started = LocalDateTime.now();
+        this.ended = null;
+        this.name = name;
+        this.players = players;
+    }
+
+    /*
+     * Additional methods
+     */
+    public void endGame() {
+        this.ended = LocalDateTime.now();
+    }
+
+    public boolean isRunning() {
+        return this.ended == null;
     }
 
     public String getGameDuration() {
@@ -75,25 +106,12 @@ public class GameEntity extends BaseEntity {
         return "Still running";
     }
 
-
-    public GameEntity(String name, ArrayList<PlayerEntity> players) {
-        this.started = LocalDateTime.now();
-        this.ended = null;
-        this.name = name;
-        this.players = players;
-    }
-
-    public GameEntity() {
-        this("Unnamed", new ArrayList<>());
-    }
-
     public GameEntity addPlayer(PlayerEntity player) {
         if (isRunning()) {
             if (!players.contains(player)) {
                 this.players.add(player);
             }
         }
-
         return this;
     }
 
@@ -106,30 +124,17 @@ public class GameEntity extends BaseEntity {
         return this;
     }
 
-    public void endGame() {
-        this.ended = LocalDateTime.now();
-    }
-
-    public boolean isRunning() {
-        return this.ended == null;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public Integer getTotalScore() {
         Integer sum = 0;
         for (PlayerEntity p : players) {
             if (p.sumScore() != null) sum += p.sumScore();
         }
         return sum;
-
-    }
-    public void setName(String name) {
-        this.name = name;
     }
 
+    /*
+     * For debug purposes only
+     */
     @Override
     public String toString() {
         return "GameEntity=[id=" + this.id + ", line=" + this.line.toString() + ", started=" + this.started + ", ended=" + this.ended + ", players=" +

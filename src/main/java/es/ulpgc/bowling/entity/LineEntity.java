@@ -4,11 +4,15 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "LINE")
 public class LineEntity extends BaseEntity {
 
+    /*
+     * Fields
+     */
     @ManyToOne
     private BowlingEntity bowling;
 
@@ -17,8 +21,9 @@ public class LineEntity extends BaseEntity {
     @Fetch(FetchMode.SELECT)
     private List<GameEntity> games;
 
-    public LineEntity() {}
-
+    /*
+     * Getters and setters
+     */
     public BowlingEntity getBowling() {
         return bowling;
     }
@@ -35,6 +40,20 @@ public class LineEntity extends BaseEntity {
         this.games = games;
     }
 
+    /*
+     * Constructors
+     */
+    public LineEntity() {
+        this(new ArrayList<>());
+    }
+
+    public LineEntity(List<GameEntity> games) {
+        this.games = games;
+    }
+
+    /*
+     * Additional methods
+     */
     public GameEntity getRunningGame() {
         for (GameEntity game : games) {
             if (game.isRunning()) return game;
@@ -42,11 +61,9 @@ public class LineEntity extends BaseEntity {
         return null;
     }
 
-    public String getRunningGameName() {
-        if (getRunningGame() != null) return getRunningGame().getName();
-        return null;
-    }
-
+    /*
+     * For debug purposes only
+     */
     @Override
     public String toString() {
         return "LineEntity=[id=" + this.id +", bowling=" + bowling.toString() + "]";

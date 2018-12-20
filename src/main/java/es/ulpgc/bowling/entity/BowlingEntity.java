@@ -10,6 +10,9 @@ import java.util.List;
 @Entity(name = "BOWLING")
 public class BowlingEntity extends BaseEntity {
 
+    /*
+     * Fields
+     */
     @Column
     private String name;
 
@@ -18,6 +21,9 @@ public class BowlingEntity extends BaseEntity {
     @Fetch(FetchMode.SELECT)
     private List<LineEntity> lines;
 
+    /*
+     * Getters and setters
+     */
     public String getName() {
         return name;
     }
@@ -34,26 +40,33 @@ public class BowlingEntity extends BaseEntity {
         this.lines = lines;
     }
 
+    /*
+     * Constructors
+     */
+    public BowlingEntity(){
+        this(new ArrayList<>());
+    }
+
+    public BowlingEntity(List<LineEntity> lines) {
+        this(lines, "Unknown");
+    }
+
     public BowlingEntity(List<LineEntity> lines, String name) {
         this.lines = lines;
         this.name = name;
     }
 
-    public BowlingEntity(List<LineEntity> lines) {
-        this(lines, "");
-    }
-
-    public BowlingEntity(String name) {
-        this(new ArrayList<>(), name);
-    }
-
-    public BowlingEntity(){}
-
+    /*
+     * Additional methods
+     */
     public BowlingEntity addLine(LineEntity line) {
         this.lines.add(line);
         return this;
     }
 
+    /*
+     * For debug purposes only
+     */
     @Override
     public String toString() {
         return "BowlingEntity=[id=" + this.id +", name="+ this.name + "]";

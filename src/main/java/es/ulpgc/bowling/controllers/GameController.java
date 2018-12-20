@@ -281,7 +281,7 @@ public class GameController {
         writeScore(p);
 
         PlayerEntity lastPlayer = gc.getCurrentGame().getPlayers().get(gc.getCurrentGame().getPlayers().size() - 1);
-        if (lastPlayer.getFrames().size() != 0 && lastPlayer.getFrame(lastPlayer.getFrames().size() - 1).isLastFrame() && lastPlayer.getFrame(lastPlayer
+        if (lastPlayer.getFrames().size() != 0 && lastPlayer.getFrameOnIndex(lastPlayer.getFrames().size() - 1).isLastFrame() && lastPlayer.getFrameOnIndex(lastPlayer
                 .getFrames().size() - 1).score() != null) {
             gc.getCurrentGame().endGame();
             endGame();
@@ -289,32 +289,32 @@ public class GameController {
         }
 
         if (tmp != 10 && decay == 11) {
-            if ((p.getFrame(gamePosition.get()) != null && p.getFrame(gamePosition.get()).getRollTwo() != null)) {
-                if (!(p.getFrame(gamePosition.get()).isLastFrame() && (p.getFrame(gamePosition.get()).isSpare() || p.getFrame(gamePosition.get()).isStrike())
-                ) || p.getFrame(gamePosition.get()).getRollThree() != null) playerCounter++;
+            if ((p.getFrameOnIndex(gamePosition.get()) != null && p.getFrameOnIndex(gamePosition.get()).getRollTwo() != null)) {
+                if (!(p.getFrameOnIndex(gamePosition.get()).isLastFrame() && (p.getFrameOnIndex(gamePosition.get()).isSpare() || p.getFrameOnIndex(gamePosition.get()).isStrike())
+                ) || p.getFrameOnIndex(gamePosition.get()).getRollThree() != null) playerCounter++;
 
                 if (playerModulo() != 0)
                     ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
-                else if (!p.getFrame(gamePosition.get()).isLastFrame()) ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().
+                else if (!p.getFrameOnIndex(gamePosition.get()).isLastFrame()) ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().
                         get(gamePosition.get() + 1)).getChildren().get(5)).setText("> > >");
 
-                if (!p.getFrame(gamePosition.get()).isLastFrame() && playerModulo() == 0) {
+                if (!p.getFrameOnIndex(gamePosition.get()).isLastFrame() && playerModulo() == 0) {
                     gamePosition.getAndIncrement();
                 }
 
-                if (p.getFrame(gamePosition.get()).isLastFrame() && p.getFrame(gamePosition.get()).getRollThree() == null) decay -= tmp;
+                if (p.getFrameOnIndex(gamePosition.get()).isLastFrame() && p.getFrameOnIndex(gamePosition.get()).getRollThree() == null) decay -= tmp;
             } else decay -= tmp;
         } else {
             decay = 11;
-            if (!(p.getFrame(gamePosition.get()).isLastFrame() && (p.getFrame(gamePosition.get()).isSpare() || p.getFrame(gamePosition.get()).isStrike())) ||
-                    p.getFrame(gamePosition.get()).getRollThree() != null) playerCounter++;
+            if (!(p.getFrameOnIndex(gamePosition.get()).isLastFrame() && (p.getFrameOnIndex(gamePosition.get()).isSpare() || p.getFrameOnIndex(gamePosition.get()).isStrike())) ||
+                    p.getFrameOnIndex(gamePosition.get()).getRollThree() != null) playerCounter++;
 
             if (playerModulo() != 0)
                 ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
-            else if (!p.getFrame(gamePosition.get()).isLastFrame()) ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().
+            else if (!p.getFrameOnIndex(gamePosition.get()).isLastFrame()) ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().
                     get(gamePosition.get() + 1)).getChildren().get(5)).setText("> > >");
 
-            if (!p.getFrame(gamePosition.get()).isLastFrame() && playerModulo() == 0) {
+            if (!p.getFrameOnIndex(gamePosition.get()).isLastFrame() && playerModulo() == 0) {
                 gamePosition.getAndIncrement();
             }
         }
@@ -332,7 +332,7 @@ public class GameController {
             if (n instanceof Label) currentWindowLabels.add((Label) n);
         }
 
-        FrameEntity currFrame = p.getFrame(gamePosition.get());
+        FrameEntity currFrame = p.getFrameOnIndex(gamePosition.get());
 
         if (currFrame.isStrike()) {
             if (!currFrame.isLastFrame()) currentWindowLabels.get(1).setText("X");
@@ -366,7 +366,7 @@ public class GameController {
         }
 
         for (int i = p.getFrames().size() - 1; i >= 0; i--) {
-            if (p.getFrame(i).score() != null) {
+            if (p.getFrameOnIndex(i).score() != null) {
                 ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(i)).getChildren().get(5)).setText(p.sumScore(i) + "");
                 ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(10)).getChildren().get(0)).setText(p.sumScore() + "");
                 finalScore.setText(gc.getCurrentGame().getTotalScore()+"");

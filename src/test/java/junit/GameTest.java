@@ -1,26 +1,30 @@
 package junit;
 
 import es.ulpgc.bowling.entity.GameEntity;
+import es.ulpgc.bowling.entity.LineEntity;
 import es.ulpgc.bowling.entity.PlayerEntity;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GameTest {
 
-    public GameEntity game;
-    public PlayerEntity player2;
-    public PlayerEntity player1;
+    private GameEntity game;
+    private PlayerEntity player2;
+    private PlayerEntity player1;
+    private LineEntity line;
 
     @Before
     public void init() {
         player1 = new PlayerEntity("John");
         player2 = new PlayerEntity("Jack");
+        line = new LineEntity();
     }
 
     @Test
@@ -39,6 +43,28 @@ public class GameTest {
         assertThat(game.getPlayers()).contains(player1, player2);
         assertThat(game.getStarted()).isBeforeOrEqualTo(LocalDateTime.now());
         assertThat(game.getEnded()).isNull();
+    }
+
+    @Test
+    public void testSetPlayers() {
+        game = new GameEntity();
+        List<PlayerEntity> players = new ArrayList<PlayerEntity>(){{ add(player1); add(player2); }};
+        game.setPlayers(players);
+        assertThat(game.getPlayers()).contains(player1, player2);
+    }
+
+    @Test
+    public void testSetLine() {
+        game = new GameEntity();
+        game.setLine(line);
+        assertThat(game.getLine()).isEqualTo(line);
+    }
+
+    @Test
+    public void testSetName() {
+        game = new GameEntity();
+        game.setName("NewGame");
+        assertThat(game.getName()).isEqualTo("NewGame");
     }
 
     @Test
