@@ -74,6 +74,10 @@ public class FrameEntity extends BaseEntity {
         this.player = player;
     }
 
+    public FrameEntity() {
+        this(null, -1, -1);
+    }
+    
     /*
      * Additional methods
      */
