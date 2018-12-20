@@ -1,5 +1,6 @@
 package es.ulpgc.bowling.controllers;
 
+import es.ulpgc.bowling.config.Color;
 import es.ulpgc.bowling.entity.BowlingEntity;
 import es.ulpgc.bowling.entity.GameEntity;
 import es.ulpgc.bowling.entity.LineEntity;
@@ -183,9 +184,24 @@ public class GuiController {
                             setGraphic(null);
                             setText(null);
                         } else if (item instanceof String) {
-                            setText((String) item);
+                            btn.setText((String)item);
+                            btn.setStyle("-fx-text-fill: "+ Color.RED);
+                            btn.setOnAction(event -> {
+                                mainTable.setVisible(false);
+                                topGamesButton.setDisable(true);
+                                leaderboardsButton.setDisable(true);
+                                backButton.setDisable(false);
+                                gameVBox.setVisible(true);
+
+                                currentGame = gameRepo.findById(getTableView().getItems().get(getIndex()).getRunningGame().getId()).get();
+                                gc = new GameController(getController());
+                                gc.loadGame();
+                            });
+                            setGraphic(btn);
+                            setText(null);
                         } else {
                             btn.setOnAction(event -> newGame(getTableView().getItems().get(getIndex())));
+                            btn.setStyle("-fx-text-fill: "+ Color.GREEN);
                             setGraphic(btn);
                             setText(null);
                         }
@@ -220,6 +236,10 @@ public class GuiController {
         mainTable.setItems(data);
 
         changeWindowItems(true);
+    }
+
+    private GuiController getController() {
+        return this;
     }
 
     public void newGame(LineEntity line) {
@@ -258,6 +278,7 @@ public class GuiController {
                 mainLabel.setText("Bowling bars");
             }else{
                 gc.endGame();
+                gc = null;
                 currentGame=null;
 
                 bowlingGridPane.setVisible(false);
@@ -267,7 +288,7 @@ public class GuiController {
                 leaderboardsButton.setDisable(false);
                 topGamesButton.setDisable(false);
 
-//                mainLabel.setText(currentBowling.getName());
+                mainLabel.setText(currentBowling.getName());
                 clock.stop();
                 gameTime.setText("");
                 openBowlingBar();

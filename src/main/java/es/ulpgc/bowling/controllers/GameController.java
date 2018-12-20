@@ -89,7 +89,7 @@ public class GameController {
         rollOut.setPadding(new Insets(2, 2, 2, 2));
 
         Button rollBut = new Button("Random roll");
-        rollBut.setOnAction(e -> makeRoll(-1));
+        rollBut.setOnAction(e -> makeRoll(-1, false));
 
         FlowPane rollPn = new FlowPane();
         rollPn.setStyle("-fx-background-color: white; -fx-background-radius: 5; -fx-border-width: 2; -fx-border-color: black; -fx-border-radius: 5");
@@ -108,7 +108,7 @@ public class GameController {
             Button b = new Button(String.valueOf(i));
             b.setPrefSize(30, 30);
             int x = i;
-            b.setOnAction(e -> makeRoll(x));
+            b.setOnAction(e -> makeRoll(x, false));
             HBox.setMargin(b, new Insets(0, 0, 0, 5));
             rollButts.add(b);
         }
@@ -122,7 +122,7 @@ public class GameController {
 
 
         HBox finalScoreBox = new HBox();
-        VBox.setMargin(finalScoreBox, new Insets(20,0,0,0));
+        VBox.setMargin(finalScoreBox, new Insets(20, 0, 0, 0));
 
         for (int j = 0; j < 10; j++) {
             AnchorPane ap = new AnchorPane();
@@ -132,7 +132,8 @@ public class GameController {
         }
         AnchorPane ap = new AnchorPane();
         ap.setMinSize(55, 50);
-        ap.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 5; -fx-border-radius: 2; " + "-fx-background-color: rgba(255,255,255,0.82);");
+        ap.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 5; -fx-border-radius: 2; " + "-fx-background-color: rgba(255,255," +
+                "255,0.82);");
         HBox.setHgrow(ap, Priority.ALWAYS);
 
         finalScore = new Label("");
@@ -220,8 +221,46 @@ public class GameController {
 
         LocalDateTime startTime = LocalDateTime.now();
 
-        gc.clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+        setUpClock(startTime);
+        gc.clock.setCycleCount(Animation.INDEFINITE);
+        gc.clock.play();
 
+        BowlingApplication.getPrimaryStage().setMinWidth(750);
+        BowlingApplication.getPrimaryStage().setMinHeight(100);
+        for (Node n : gc.gameVBox.getChildren()) {
+            if (n instanceof HBox) BowlingApplication.getPrimaryStage().setMinHeight(BowlingApplication.getPrimaryStage().getMinHeight() + 75);
+        }
+    }
+
+    public void loadGame() {
+        gamePosition = new AtomicInteger();
+        LocalDateTime startTime;
+
+        if (gc.getCurrentGame().getStarted() != null) startTime = gc.getCurrentGame().getStarted();
+        else startTime = LocalDateTime.now();
+
+        setUpClock(startTime);
+        gc.clock.setCycleCount(Animation.INDEFINITE);
+        gc.clock.play();
+
+        BowlingApplication.getPrimaryStage().setMinWidth(750);
+        BowlingApplication.getPrimaryStage().setMinHeight(100);
+        for (Node n : gc.gameVBox.getChildren()) {
+            if (n instanceof HBox) BowlingApplication.getPrimaryStage().setMinHeight(BowlingApplication.getPrimaryStage().getMinHeight() + 75);
+        }
+
+        FrameEntity tmpFrame = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(gamePosition.get());
+        while (tmpFrame != null) {
+            if (tmpFrame.getRollOne() != null) makeRoll(tmpFrame.getRollOne(), true);
+            if (tmpFrame.getRollTwo() != null) makeRoll(tmpFrame.getRollTwo(), true);
+            if (tmpFrame.getRollThree() != null) makeRoll(tmpFrame.getRollThree(), true);
+            tmpFrame = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(gamePosition.get());
+        }
+        ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
+    }
+
+    private void setUpClock(LocalDateTime startTime) {
+        gc.clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
             java.time.Duration duration = java.time.Duration.between(startTime, LocalDateTime.now());
             long seconds = duration.getSeconds();
             int hours = (int) (seconds / 3600);
@@ -230,14 +269,6 @@ public class GameController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             gc.gameTime.setText(LocalDateTime.of(1, 1, 1, hours, minutes, secs).format(formatter));
         }), new KeyFrame(Duration.seconds(1)));
-        gc.clock.setCycleCount(Animation.INDEFINITE);
-        gc.clock.play();
-
-        BowlingApplication.getPrimaryStage().setMinWidth(750);
-        BowlingApplication.getPrimaryStage().setMinHeight(100);
-        for (Node n : gc.gameVBox.getChildren()){
-            if (n instanceof HBox) BowlingApplication.getPrimaryStage().setMinHeight(BowlingApplication.getPrimaryStage().getMinHeight()+75);
-        }
     }
 
     public void endGame() {
@@ -269,16 +300,17 @@ public class GameController {
     // Description of this crapcode currWindowLabels by indexes: 0 - topleft, 1 - topright, 2 - 2nd topright, 3 - bottom
     // !!! accessing without arraylist -> add +2 to every index
     // PS: DO NOT TOUCH, it works.. somehow..
-    private void makeRoll(int roll) {
+    private void makeRoll(int roll, boolean load) {
         PlayerEntity p = gc.getCurrentGame().getPlayers().get(playerModulo());
 
         if (roll == -1) tmp = r.nextInt(decay);
         else tmp = roll;
 
-        p.roll(tmp);
+        if (!load) p.roll(tmp);
+
         rollOut.setText(String.valueOf(tmp));
 
-        writeScore(p);
+        writeScore();
 
         PlayerEntity lastPlayer = gc.getCurrentGame().getPlayers().get(gc.getCurrentGame().getPlayers().size() - 1);
         if (lastPlayer.getFrames().size() != 0 && lastPlayer.getFrame(lastPlayer.getFrames().size() - 1).isLastFrame() && lastPlayer.getFrame(lastPlayer
@@ -302,7 +334,8 @@ public class GameController {
                     gamePosition.getAndIncrement();
                 }
 
-                if (p.getFrame(gamePosition.get()).isLastFrame() && p.getFrame(gamePosition.get()).getRollThree() == null) decay -= tmp;
+                if (p.getFrame(gamePosition.get()).isLastFrame() &&
+                        p.getFrame(gamePosition.get()).getRollThree() == null) decay -= tmp;
             } else decay -= tmp;
         } else {
             decay = 11;
@@ -326,13 +359,13 @@ public class GameController {
         }
     }
 
-    private void writeScore(PlayerEntity p) {
+    private void writeScore() {
         ArrayList<Label> currentWindowLabels = new ArrayList<>();
         for (Node n : ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren()) {
             if (n instanceof Label) currentWindowLabels.add((Label) n);
         }
 
-        FrameEntity currFrame = p.getFrame(gamePosition.get());
+        FrameEntity currFrame = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(gamePosition.get());
 
         if (currFrame.isStrike()) {
             if (!currFrame.isLastFrame()) currentWindowLabels.get(1).setText("X");
@@ -365,14 +398,16 @@ public class GameController {
             }
         }
 
-        for (int i = p.getFrames().size() - 1; i >= 0; i--) {
-            if (p.getFrame(i).score() != null) {
-                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(i)).getChildren().get(5)).setText(p.sumScore(i) + "");
-                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(10)).getChildren().get(0)).setText(p.sumScore() + "");
-                finalScore.setText(gc.getCurrentGame().getTotalScore()+"");
+        for (int i = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrames().size() - 1; i >= 0; i--) {
+            if (gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(i).score() != null) {
+                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(i)).getChildren().get(5)).setText(gc.getCurrentGame().getPlayers()
+                        .get(playerModulo()).sumScore(i) + "");
+                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(10)).getChildren().get(0)).setText(gc.getCurrentGame().getPlayers()
+                        .get(playerModulo()).sumScore() + "");
+                finalScore.setText(gc.getCurrentGame().getTotalScore() + "");
             }
         }
 
-        if ((currFrame.isStrike() || currFrame.isSpare() || currFrame.getRollTwo() != null) && !currFrame.isLastFrame()) currentWindowLabels.get(3).setText("");
+        if ((currFrame.isStrike() || currFrame.isSpare() || currFrame.getRollTwo() == null) && !currFrame.isLastFrame()) currentWindowLabels.get(3).setText("");
     }
 }
