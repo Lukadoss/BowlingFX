@@ -33,24 +33,12 @@ public class FrameEntity extends BaseEntity {
         return player;
     }
 
-    public void setPlayer(PlayerEntity player) {
-        this.player = player;
-    }
-
     public Integer getRollIndex() {
         return roll_index;
     }
 
-    public void setRollIndex(Integer roll_index) {
-        this.roll_index = roll_index;
-    }
-
     public Integer getFrameIndex() {
         return frame_index;
-    }
-
-    public void setFrameIndex(Integer frame_index) {
-        this.frame_index = frame_index;
     }
 
     public Integer getRollOne() {
@@ -135,6 +123,7 @@ public class FrameEntity extends BaseEntity {
      */
     @Override
     public String toString() {
-        return String.format("[FrameEntity=%d, score=%d]", frame_index, score());
+        return "[FrameEntity=" + this.id + ", roll 1=" + this.roll_one + ", roll 2=" +
+                this.roll_two + ", roll 3=" + this.roll_three + ", score=" + score() + "]";
     }
 }

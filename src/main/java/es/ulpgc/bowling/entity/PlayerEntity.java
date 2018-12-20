@@ -56,10 +56,6 @@ public class PlayerEntity extends BaseEntity {
         return frames;
     }
 
-    public void setFrames(List<FrameEntity> frames) {
-        this.frames = frames;
-    }
-
     public List<Integer> getRolls() {
         if(rolls == null || rolls.isEmpty()) {
             setupRolls();
@@ -67,32 +63,16 @@ public class PlayerEntity extends BaseEntity {
         return rolls;
     }
 
-    public void setRolls(List<Integer> rolls) {
-        this.rolls = rolls;
-    }
-
     public int getFrameCount() {
         return frameCount;
-    }
-
-    public void setFrameCount(int frameCount) {
-        this.frameCount = frameCount;
     }
 
     public int getRollCount() {
         return rollCount;
     }
 
-    public void setRollCount(int rollCount) {
-        this.rollCount = rollCount;
-    }
-
     public FrameEntity getActualFrame() {
         return actualFrame;
-    }
-
-    public void setActualFrame(FrameEntity actualFrame) {
-        this.actualFrame = actualFrame;
     }
 
     /*
@@ -114,7 +94,7 @@ public class PlayerEntity extends BaseEntity {
      * Additional methods
      */
     public void updateFrames(){
-        if(rollCount < rolls.size()) {
+        if (rollCount < rolls.size()) {
             actualFrame = new FrameEntity(this, rollCount, frameCount);
             frames.add(actualFrame);
             actualFrame.setRollOne(rolls.get(rollCount));
