@@ -101,6 +101,15 @@ public class LineEntity extends BaseEntity {
         return null;
     }
 
+    /**
+     * Find name of running game for GUI
+     * @return name of running game
+     */
+    public String getRunningGameName() {
+        if (getRunningGame() != null) return getRunningGame().getName();
+        return null;
+    }
+
     /*
      * For debug purposes only
      */

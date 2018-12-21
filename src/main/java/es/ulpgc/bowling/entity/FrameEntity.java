@@ -184,7 +184,7 @@ public class FrameEntity extends BaseEntity {
      * @return boolean indicating Spare
      */
     public boolean isSpare() {
-        if (roll_index + 1 >= player.getRolls().size()) return false;
+        if (roll_two == null) return false;
         return roll(roll_index) + roll(roll_index + 1) == 10;
     }
 

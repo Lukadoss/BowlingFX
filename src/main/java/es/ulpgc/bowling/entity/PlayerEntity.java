@@ -228,11 +228,14 @@ public class PlayerEntity extends BaseEntity {
         return sum;
     }
 
+    /**
+     * Clear this entity from memory
+     */
     public void clearEntity(){
         this.rolls = new ArrayList<>();
         this.frames = new ArrayList<>();
-        frameCnt=0;
-        rollCnt=0;
+        frameCount=0;
+        rollCount=0;
     }
 
     /*

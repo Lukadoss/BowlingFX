@@ -259,8 +259,8 @@ public class GameController {
 
         List<FrameEntity> tmpList = new ArrayList<>();
         int counter = 0;
-        while (gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(counter)!=null) {
-            tmpList.add(gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(counter));
+        while (gc.getCurrentGame().getPlayers().get(playerModulo()).getFrameOnIndex(counter)!=null) {
+            tmpList.add(gc.getCurrentGame().getPlayers().get(playerModulo()).getFrameOnIndex(counter));
             playerCounter++;
             if (playerModulo()==0) counter++;
         }
@@ -269,12 +269,13 @@ public class GameController {
             gc.getFrameRepo().deleteAllByPlayerId(p.getId());
         }
 
+        playerCounter=0;
+
         for (FrameEntity frame : tmpList) {
             if (frame.getRollOne()!=null) makeRoll(frame.getRollOne());
             if (frame.getRollTwo()!=null) makeRoll(frame.getRollTwo());
             if (frame.getRollThree()!=null) makeRoll(frame.getRollThree());
         }
-        playerCounter=0;
 
         ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
     }
@@ -326,10 +327,11 @@ public class GameController {
 
         if (tmp != 10 && decay == 11) {
             if ((p.getFrameOnIndex(gamePosition.get()) != null && p.getFrameOnIndex(gamePosition.get()).getRollTwo() != null)) {
-                if (p.getFrame(gamePosition.get()).isLastFrame() && p.getFrame(gamePosition.get()).getRollThree() == null) decay -= tmp;
+                if (p.getFrameOnIndex(gamePosition.get()).isLastFrame() && p.getFrameOnIndex(gamePosition.get()).getRollThree() == null)
+                    decay -= tmp;
 
                 if (!(p.getFrameOnIndex(gamePosition.get()).isLastFrame() && (p.getFrameOnIndex(gamePosition.get()).isSpare() || p.getFrameOnIndex(gamePosition.get()).isStrike())
-                ) || p.getFrameOnIndex(gamePosition.get()).getRollThree() != null) playerCounter++;
+                ) || p.getFrameOnIndex(gamePosition.get()).getRollThree() != null) {
                     decay = 11;
                     playerCounter++;
                 }
@@ -373,7 +375,7 @@ public class GameController {
             if (n instanceof Label) currentWindowLabels.add((Label) n);
         }
 
-        FrameEntity currFrame = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(gamePosition.get());
+        FrameEntity currFrame = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrameOnIndex(gamePosition.get());
 
         if (currFrame.isStrike()) {
             if (!currFrame.isLastFrame()) {
@@ -407,7 +409,7 @@ public class GameController {
         }
 
         for (int i = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrames().size() - 1; i >= 0; i--) {
-            if (gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(i).score() != null) {
+            if (gc.getCurrentGame().getPlayers().get(playerModulo()).getFrameOnIndex(i).score() != null) {
                 ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(i)).getChildren().get(5)).setText(gc.getCurrentGame().getPlayers()
                         .get(playerModulo()).sumScore(i) + "");
                 ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(10)).getChildren().get(0)).setText(gc.getCurrentGame().getPlayers()
