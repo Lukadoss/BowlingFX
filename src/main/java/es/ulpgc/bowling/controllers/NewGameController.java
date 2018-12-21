@@ -42,6 +42,9 @@ public class NewGameController {
     }
 
     public void cancel(ActionEvent actionEvent) {
+        gc.backButton.setDisable(false);
+        gc.leaderboardsButton.setDisable(false);
+        gc.topGamesButton.setDisable(false);
         ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
     }
 

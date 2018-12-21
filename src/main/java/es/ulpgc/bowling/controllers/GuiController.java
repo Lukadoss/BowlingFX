@@ -186,15 +186,18 @@ public class GuiController {
                             btn.setText((String)item);
                             btn.setStyle("-fx-text-fill: "+ Color.RED);
                             btn.setOnAction(event -> {
-                                mainTable.setVisible(false);
-                                topGamesButton.setDisable(true);
-                                leaderboardsButton.setDisable(true);
-                                backButton.setDisable(false);
-                                gameVBox.setVisible(true);
+                                if (!backButton.isDisable()) {
+                                    mainTable.setVisible(false);
+                                    topGamesButton.setDisable(true);
+                                    leaderboardsButton.setDisable(true);
+                                    backButton.setDisable(false);
+                                    gameVBox.setVisible(true);
 
-                                currentGame = gameRepo.findById(getTableView().getItems().get(getIndex()).getRunningGame().getId()).get();
-                                gc = new GameController(getController());
-                                gc.loadGame();
+                                    currentGame = gameRepo.findById(getTableView().getItems().get(getIndex()).getRunningGame().getId()).get();
+                                    mainLabel.setText(currentGame.getName());
+                                    gc = new GameController(getController());
+                                    gc.loadGame();
+                                }
                             });
                             setGraphic(btn);
                             setText(null);
@@ -242,21 +245,24 @@ public class GuiController {
     }
 
     public void newGame(LineEntity line) {
-        backButton.setDisable(true);
-
-        try {
-            FXMLLoader root = new FXMLLoader(getClass().getResource(("/newGame.fxml")));
-            Stage stage = new Stage(StageStyle.DECORATED);
-            stage.setTitle("New game");
-            stage.setScene(new Scene(root.load()));
-            stage.setResizable(false);
-            stage.show();
-            root.<NewGameController>getController().setUpGC(this);
-            root.<NewGameController>getController().setUpLine(line);
-        } catch (Exception e) {
-            e.printStackTrace();
-            backButton.setDisable(false);
-            changeWindowItems(false);
+        if (!backButton.isDisable()) {
+            backButton.setDisable(true);
+            topGamesButton.setDisable(true);
+            leaderboardsButton.setDisable(true);
+            try {
+                FXMLLoader root = new FXMLLoader(getClass().getResource(("/newGame.fxml")));
+                Stage stage = new Stage(StageStyle.DECORATED);
+                stage.setTitle("New game");
+                stage.setScene(new Scene(root.load()));
+                stage.setResizable(false);
+                stage.show();
+                root.<NewGameController>getController().setUpGC(this);
+                root.<NewGameController>getController().setUpLine(line);
+            } catch (Exception e) {
+                e.printStackTrace();
+                backButton.setDisable(false);
+                changeWindowItems(false);
+            }
         }
     }
 

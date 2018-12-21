@@ -270,6 +270,7 @@ public class GameController {
             if (frame.getRollTwo()!=null) makeRoll(frame.getRollTwo());
             if (frame.getRollThree()!=null) makeRoll(frame.getRollThree());
         }
+        playerCounter=0;
 
         ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
     }
