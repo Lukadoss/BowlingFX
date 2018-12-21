@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,9 +25,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Component
 public class GameController {
 
-    private final GuiController gc;
+    private GuiController gc;
     private ArrayList<HBox> playerBoxes;
     private Label rollOut, finalScore;
     private AtomicInteger gamePosition;
@@ -34,6 +36,8 @@ public class GameController {
     private int decay, tmp, playerCounter;
     private HBox rollBox;
     private ArrayList<Button> rollButts;
+
+    public GameController(){}
 
     public GameController(GuiController guiController) {
         this.gc = guiController;
@@ -135,7 +139,8 @@ public class GameController {
         }
         AnchorPane ap = new AnchorPane();
         ap.setMinSize(55, 50);
-        ap.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 5; -fx-border-radius: 2; " + "-fx-background-color: rgba(255,255,255,0.82);");
+        ap.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-background-radius: 5; -fx-border-radius: 2; " + "-fx-background-color: rgba(255,255," +
+                "255,0.82);");
         HBox.setHgrow(ap, Priority.ALWAYS);
 
         finalScore = new Label("");
@@ -223,16 +228,25 @@ public class GameController {
 
         LocalDateTime startTime = LocalDateTime.now();
 
-        gc.clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+        setUpClock(startTime);
+        gc.clock.setCycleCount(Animation.INDEFINITE);
+        gc.clock.play();
 
-            java.time.Duration duration = java.time.Duration.between(startTime, LocalDateTime.now());
-            long seconds = duration.getSeconds();
-            int hours = (int) (seconds / 3600);
-            int minutes = (int) ((seconds % 3600) / 60);
-            int secs = (int) (seconds % 60);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            gc.gameTime.setText(LocalDateTime.of(1, 1, 1, hours, minutes, secs).format(formatter));
-        }), new KeyFrame(Duration.seconds(1)));
+        BowlingApplication.getPrimaryStage().setMinWidth(750);
+        BowlingApplication.getPrimaryStage().setMinHeight(100);
+        for (Node n : gc.gameVBox.getChildren()) {
+            if (n instanceof HBox) BowlingApplication.getPrimaryStage().setMinHeight(BowlingApplication.getPrimaryStage().getMinHeight() + 75);
+        }
+    }
+
+    public void loadGame() {
+        gamePosition = new AtomicInteger();
+        LocalDateTime startTime;
+
+        if (gc.getCurrentGame().getStarted() != null) startTime = gc.getCurrentGame().getStarted();
+        else startTime = LocalDateTime.now();
+
+        setUpClock(startTime);
         gc.clock.setCycleCount(Animation.INDEFINITE);
         gc.clock.play();
 
@@ -242,6 +256,39 @@ public class GameController {
             if (n instanceof HBox)
                 BowlingApplication.getPrimaryStage().setMinHeight(BowlingApplication.getPrimaryStage().getMinHeight() + 75);
         }
+
+        List<FrameEntity> tmpList = new ArrayList<>();
+        int counter = 0;
+        while (gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(counter)!=null) {
+            tmpList.add(gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(counter));
+            playerCounter++;
+            if (playerModulo()==0) counter++;
+        }
+        for (PlayerEntity p : gc.getCurrentGame().getPlayers()){
+            p.clearEntity();
+            gc.getFrameRepo().deleteAllByPlayerId(p.getId());
+        }
+
+        for (FrameEntity frame : tmpList) {
+            if (frame.getRollOne()!=null) makeRoll(frame.getRollOne());
+            if (frame.getRollTwo()!=null) makeRoll(frame.getRollTwo());
+            if (frame.getRollThree()!=null) makeRoll(frame.getRollThree());
+        }
+        playerCounter=0;
+
+        ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
+    }
+
+    private void setUpClock(LocalDateTime startTime) {
+        gc.clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            java.time.Duration duration = java.time.Duration.between(startTime, LocalDateTime.now());
+            long seconds = duration.getSeconds();
+            int hours = (int) (seconds / 3600);
+            int minutes = (int) ((seconds % 3600) / 60);
+            int secs = (int) (seconds % 60);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            gc.gameTime.setText(LocalDateTime.of(1, 1, 1, hours, minutes, secs).format(formatter));
+        }), new KeyFrame(Duration.seconds(1)));
     }
 
     public void endGame() {
@@ -257,22 +304,6 @@ public class GameController {
         return playerCounter % gc.getCurrentGame().getPlayers().size();
     }
 
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-
-    // Description of this crapcode currWindowLabels by indexes: 0 - topleft, 1 - topright, 2 - 2nd topright, 3 - bottom
-    // !!! accessing without arraylist -> add +2 to every index
-    // PS: DO NOT TOUCH, it works.. somehow..
     private void makeRoll(int roll) {
         PlayerEntity p = gc.getCurrentGame().getPlayers().get(playerModulo());
 
@@ -280,9 +311,10 @@ public class GameController {
         else tmp = roll;
 
         p.roll(tmp);
+
         rollOut.setText(String.valueOf(tmp));
 
-        writeScore(p);
+        writeScore();
 
         PlayerEntity lastPlayer = gc.getCurrentGame().getPlayers().get(gc.getCurrentGame().getPlayers().size() - 1);
         if (lastPlayer.getFrames().size() != 0 && lastPlayer.getFrameOnIndex(lastPlayer.getFrames().size() - 1).isLastFrame() && lastPlayer.getFrameOnIndex(lastPlayer
@@ -294,8 +326,13 @@ public class GameController {
 
         if (tmp != 10 && decay == 11) {
             if ((p.getFrameOnIndex(gamePosition.get()) != null && p.getFrameOnIndex(gamePosition.get()).getRollTwo() != null)) {
+                if (p.getFrame(gamePosition.get()).isLastFrame() && p.getFrame(gamePosition.get()).getRollThree() == null) decay -= tmp;
+
                 if (!(p.getFrameOnIndex(gamePosition.get()).isLastFrame() && (p.getFrameOnIndex(gamePosition.get()).isSpare() || p.getFrameOnIndex(gamePosition.get()).isStrike())
                 ) || p.getFrameOnIndex(gamePosition.get()).getRollThree() != null) playerCounter++;
+                    decay = 11;
+                    playerCounter++;
+                }
 
                 if (playerModulo() != 0)
                     ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
@@ -306,9 +343,6 @@ public class GameController {
                 if (!p.getFrameOnIndex(gamePosition.get()).isLastFrame() && playerModulo() == 0) {
                     gamePosition.getAndIncrement();
                 }
-
-                if (p.getFrameOnIndex(gamePosition.get()).isLastFrame() && p.getFrameOnIndex(gamePosition.get()).getRollThree() == null)
-                    decay -= tmp;
             } else decay -= tmp;
         } else {
             decay = 11;
@@ -333,54 +367,54 @@ public class GameController {
         }
     }
 
-    private void writeScore(PlayerEntity p) {
+    private void writeScore() {
         ArrayList<Label> currentWindowLabels = new ArrayList<>();
         for (Node n : ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren()) {
             if (n instanceof Label) currentWindowLabels.add((Label) n);
         }
 
-        FrameEntity currFrame = p.getFrameOnIndex(gamePosition.get());
+        FrameEntity currFrame = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(gamePosition.get());
 
         if (currFrame.isStrike()) {
-            if (!currFrame.isLastFrame()) currentWindowLabels.get(1).setText("X");
+            if (!currFrame.isLastFrame()) {
+                currentWindowLabels.get(1).setText("X");
+                currentWindowLabels.get(3).setText("");
+            }
             else if (currFrame.getRollThree() != null) {
                 if (currFrame.getRollThree() == 10) currentWindowLabels.get(1).setText("X");
                 else currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
-                currentWindowLabels.get(3).setText("");
             } else if (currFrame.getRollTwo() != null) {
                 if (currFrame.getRollTwo() == 10) currentWindowLabels.get(2).setText("X");
                 else currentWindowLabels.get(2).setText("" + currFrame.getRollTwo());
             } else currentWindowLabels.get(0).setText("X");
         } else if (currFrame.isSpare()) {
-            if (!currFrame.isLastFrame()) currentWindowLabels.get(1).setText("/");
+            if (!currFrame.isLastFrame()) {
+                currentWindowLabels.get(1).setText("/");
+                currentWindowLabels.get(3).setText("");
+            }
             else if (currFrame.getRollThree() != null) {
                 if (currFrame.getRollThree() == 10) currentWindowLabels.get(1).setText("X");
                 else currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
-                currentWindowLabels.get(3).setText("");
             } else currentWindowLabels.get(2).setText("/");
         } else {
-            if (currFrame.getRollTwo() != null && !currFrame.isLastFrame()) {
-                currentWindowLabels.get(1).setText("" + currFrame.getRollTwo());
-            } else if (currFrame.getRollTwo() != null) {
-                currentWindowLabels.get(2).setText("" + currFrame.getRollTwo());
-                currentWindowLabels.get(3).setText("");
-            } else currentWindowLabels.get(0).setText("" + currFrame.getRollOne());
-
-            if (currFrame.getRollThree() != null) {
-                currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
-                currentWindowLabels.get(3).setText("");
+            if (currFrame.getRollTwo() != null) {
+                if (currFrame.isLastFrame()) currentWindowLabels.get(2).setText("" + currFrame.getRollTwo());
+                else currentWindowLabels.get(1).setText("" + currFrame.getRollTwo());
             }
+            else currentWindowLabels.get(0).setText("" + currFrame.getRollOne());
+
+            if (currFrame.getRollThree() != null) currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
         }
 
-        for (int i = p.getFrames().size() - 1; i >= 0; i--) {
-            if (p.getFrameOnIndex(i).score() != null) {
-                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(i)).getChildren().get(5)).setText(p.sumScore(i) + "");
-                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(10)).getChildren().get(0)).setText(p.sumScore() + "");
+        for (int i = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrames().size() - 1; i >= 0; i--) {
+            if (gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(i).score() != null) {
+                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(i)).getChildren().get(5)).setText(gc.getCurrentGame().getPlayers()
+                        .get(playerModulo()).sumScore(i) + "");
+                ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(10)).getChildren().get(0)).setText(gc.getCurrentGame().getPlayers()
+                        .get(playerModulo()).sumScore() + "");
                 finalScore.setText(gc.getCurrentGame().getTotalScore() + "");
             }
         }
 
-        if ((currFrame.isStrike() || currFrame.isSpare() || currFrame.getRollTwo() != null) && !currFrame.isLastFrame())
-            currentWindowLabels.get(3).setText("");
     }
 }

@@ -19,7 +19,8 @@ insert into Line (id, bowling_id) values (14, 2);
 insert into Line (id, bowling_id) values (15, 2);
 insert into Line (id, bowling_id) values (16, 2);
 
-insert into Game (id, name, line_id, started) values (1, 'First game', 1, CURRENT_TIMESTAMP);
+insert into Game (id, name, line_id, started, ended) values (1, 'First game', 1, CURRENT_TIMESTAMP,
+CURRENT_TIMESTAMP+0.123456);
 insert into Game (id, name, line_id, started, ended) values (2, 'Crazy game', 11, CURRENT_TIMESTAMP,
 CURRENT_TIMESTAMP+0.78135);
 insert into Game (id, name, line_id, started, ended) values (3, 'Kids corner', 5, CURRENT_TIMESTAMP,

@@ -1,26 +1,21 @@
 package es.ulpgc.bowling.controllers;
 
+import es.ulpgc.bowling.config.Color;
 import es.ulpgc.bowling.entity.BowlingEntity;
 import es.ulpgc.bowling.entity.GameEntity;
 import es.ulpgc.bowling.entity.LineEntity;
 import es.ulpgc.bowling.entity.PlayerEntity;
-import es.ulpgc.bowling.repository.BowlingRepository;
-import es.ulpgc.bowling.repository.GameRepository;
-import es.ulpgc.bowling.repository.LineRepository;
-import es.ulpgc.bowling.repository.PlayerRepository;
+import es.ulpgc.bowling.repository.*;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -34,8 +29,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GuiController {
-    public TextArea outputArea;
-    public TextField console;
     public TableView mainTable;
     public Pane mainPane;
     public Label mainLabel, gameTime;
@@ -43,7 +36,6 @@ public class GuiController {
     public Circle c1, c2;
     public Button backButton, topGamesButton, leaderboardsButton;
     public VBox gameVBox;
-    public Timeline clock;
 
     @Autowired
     private BowlingRepository bowlRepo;
@@ -57,8 +49,11 @@ public class GuiController {
     @Autowired
     private GameRepository gameRepo;
 
-    private BowlingEntity currentBowling;
+    @Autowired
+    private FrameRepository frameRepo;
 
+    Timeline clock;
+    private BowlingEntity currentBowling;
     private GameEntity currentGame;
     private GameController gc;
 
@@ -188,9 +183,27 @@ public class GuiController {
                             setGraphic(null);
                             setText(null);
                         } else if (item instanceof String) {
-                            setText((String) item);
+                            btn.setText((String)item);
+                            btn.setStyle("-fx-text-fill: "+ Color.RED);
+                            btn.setOnAction(event -> {
+                                if (!backButton.isDisable()) {
+                                    mainTable.setVisible(false);
+                                    topGamesButton.setDisable(true);
+                                    leaderboardsButton.setDisable(true);
+                                    backButton.setDisable(false);
+                                    gameVBox.setVisible(true);
+
+                                    currentGame = gameRepo.findById(getTableView().getItems().get(getIndex()).getRunningGame().getId()).get();
+                                    mainLabel.setText(currentGame.getName());
+                                    gc = new GameController(getController());
+                                    gc.loadGame();
+                                }
+                            });
+                            setGraphic(btn);
+                            setText(null);
                         } else {
                             btn.setOnAction(event -> newGame(getTableView().getItems().get(getIndex())));
+                            btn.setStyle("-fx-text-fill: "+ Color.GREEN);
                             setGraphic(btn);
                             setText(null);
                         }
@@ -227,24 +240,29 @@ public class GuiController {
         changeWindowItems(true);
     }
 
-    public void newGame(LineEntity line) {
-        console.clear();
-        outputArea.clear();
-        backButton.setDisable(true);
+    private GuiController getController() {
+        return this;
+    }
 
-        try {
-            FXMLLoader root = new FXMLLoader(getClass().getResource(("/newGame.fxml")));
-            Stage stage = new Stage(StageStyle.DECORATED);
-            stage.setTitle("New game");
-            stage.setScene(new Scene(root.load()));
-            stage.setResizable(false);
-            stage.show();
-            root.<NewGameController>getController().setUpGC(this);
-            root.<NewGameController>getController().setUpLine(line);
-        } catch (Exception e) {
-            e.printStackTrace();
-            backButton.setDisable(false);
-            changeWindowItems(false);
+    public void newGame(LineEntity line) {
+        if (!backButton.isDisable()) {
+            backButton.setDisable(true);
+            topGamesButton.setDisable(true);
+            leaderboardsButton.setDisable(true);
+            try {
+                FXMLLoader root = new FXMLLoader(getClass().getResource(("/newGame.fxml")));
+                Stage stage = new Stage(StageStyle.DECORATED);
+                stage.setTitle("New game");
+                stage.setScene(new Scene(root.load()));
+                stage.setResizable(false);
+                stage.show();
+                root.<NewGameController>getController().setUpGC(this);
+                root.<NewGameController>getController().setUpLine(line);
+            } catch (Exception e) {
+                e.printStackTrace();
+                backButton.setDisable(false);
+                changeWindowItems(false);
+            }
         }
     }
 
@@ -265,6 +283,7 @@ public class GuiController {
                 mainLabel.setText("Bowling bars");
             } else {
                 gc.endGame();
+                gc = null;
                 currentGame = null;
 
                 bowlingGridPane.setVisible(false);
@@ -274,7 +293,7 @@ public class GuiController {
                 leaderboardsButton.setDisable(false);
                 topGamesButton.setDisable(false);
 
-//                mainLabel.setText(currentBowling.getName());
+                mainLabel.setText(currentBowling.getName());
                 clock.stop();
                 gameTime.setText("");
                 openBowlingBar();
@@ -296,14 +315,12 @@ public class GuiController {
     private void resizePanels() {
         mainPane.widthProperty().addListener((observable, oldValue, newValue) -> {
             mainTable.setPrefWidth(mainPane.getLayoutBounds().getWidth());
-            outputArea.setPrefWidth(mainPane.getLayoutBounds().getWidth());
             bowlingGridPane.setPrefWidth(mainPane.getLayoutBounds().getWidth());
             gameVBox.setPrefWidth(mainPane.getLayoutBounds().getWidth());
         });
 
         mainPane.heightProperty().addListener((observable, oldValue, newValue) -> {
             mainTable.setPrefHeight(mainPane.getLayoutBounds().getHeight());
-            outputArea.setPrefHeight(mainPane.getLayoutBounds().getHeight());
             bowlingGridPane.setPrefHeight(mainPane.getLayoutBounds().getHeight());
             gameVBox.setPrefHeight(mainPane.getLayoutBounds().getHeight());
         });
@@ -313,47 +330,6 @@ public class GuiController {
 
     public void goBack(ActionEvent actionEvent) {
         changeWindowItems(false);
-    }
-
-    private void out(String one) {
-        outputArea.setText(one + "\n" + outputArea.getText());
-    }
-
-    private String drawLine() {
-        return new String(new char[50]).replace("\0", "-");
-    }
-
-    @FXML
-    private void executeCommand(ActionEvent actionEvent) {
-        if (!console.getText().isEmpty() && currentGame != null) {
-            out("\n");
-            switch (console.getText()) {
-                case "help":
-                    out("Commands:\nclear - clears the output area\nstatus - Returns current game status\nplayers - shows all players in game\ngame - returns" +
-                            " sum of current ingame score");
-                    break;
-                case "h":
-                    out("Commands:\nclear - clears the output area\nstatus - Returns current game status\nplayers - shows all players in game\ngame - returns" +
-                            " sum of current ingame score");
-                    break;
-                case "clear":
-                    outputArea.clear();
-                    break;
-                case "status":
-                    out("game_id=" + currentGame.getId() + ", name=" + currentGame.getName() + ", running=" + currentGame.isRunning());
-                    break;
-                case "players":
-                    out(currentGame.getPlayers().toString());
-                    out("Currently playing players:");
-                    break;
-                case "game":
-                    out("Current score for game \"" + currentGame.getName() + "\" is " + currentGame.getTotalScore());
-                    break;
-                default:
-                    out("Command not found! ---Write \"help\" to see all commands---");
-            }
-        }
-        console.clear();
     }
 
     public GameRepository getGameRepo() {
@@ -372,23 +348,15 @@ public class GuiController {
         return playerRepo;
     }
 
+    public FrameRepository getFrameRepo() {
+        return frameRepo;
+    }
+
     public void setCurrentGame(GameEntity currentGame) {
         this.currentGame = currentGame;
     }
 
     public GameEntity getCurrentGame() {
         return currentGame;
-    }
-
-    public void developConsole(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.SEMICOLON) {
-            if (console.isVisible()) {
-                console.setVisible(false);
-                outputArea.setVisible(false);
-            } else {
-                console.setVisible(true);
-                outputArea.setVisible(true);
-            }
-        }
     }
 }
