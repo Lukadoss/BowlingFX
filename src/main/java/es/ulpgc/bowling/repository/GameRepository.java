@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * GameRepository class is a repository for GameEntity class
+ *
  * @author David Bohmann
  */
 public interface GameRepository extends BaseRepository<GameEntity> {

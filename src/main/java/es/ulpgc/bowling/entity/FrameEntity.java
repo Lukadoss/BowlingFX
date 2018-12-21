@@ -6,6 +6,7 @@ import javax.persistence.ManyToOne;
 
 /**
  * FrameEntity representing Frame
+ *
  * @author David Bohmann
  */
 @Entity(name = "FRAME")
@@ -56,6 +57,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Get player
+     *
      * @return Player
      */
     public PlayerEntity getPlayer() {
@@ -64,6 +66,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Get roll index
+     *
      * @return Roll index
      */
     public Integer getRollIndex() {
@@ -72,6 +75,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Get frame index
+     *
      * @return Frame index
      */
     public Integer getFrameIndex() {
@@ -80,6 +84,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Get first roll
+     *
      * @return First roll
      */
     public Integer getRollOne() {
@@ -88,6 +93,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Set first roll
+     *
      * @param roll_one First roll
      */
     public void setRollOne(Integer roll_one) {
@@ -96,6 +102,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Get second roll
+     *
      * @return Second roll
      */
     public Integer getRollTwo() {
@@ -104,6 +111,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Set second roll
+     *
      * @param roll_two Second roll
      */
     public void setRollTwo(Integer roll_two) {
@@ -112,6 +120,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Get third roll
+     *
      * @return Third roll
      */
     public Integer getRollThree() {
@@ -120,6 +129,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Set third roll
+     *
      * @param roll_three Third roll
      */
     public void setRollThree(Integer roll_three) {
@@ -132,8 +142,9 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Constructor with player as parent object, roll index and frame index
-     * @param player PlayerEntity
-     * @param roll_index Roll index
+     *
+     * @param player      PlayerEntity
+     * @param roll_index  Roll index
      * @param frame_index Frame index
      */
     public FrameEntity(PlayerEntity player, int roll_index, int frame_index) {
@@ -155,6 +166,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Compute score of the frame
+     *
      * @return score of frame
      */
     public Integer score() {
@@ -173,6 +185,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Is the frame last frame
+     *
      * @return boolean indicating last frame
      */
     public boolean isLastFrame() {
@@ -181,6 +194,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Is the frame Spare
+     *
      * @return boolean indicating Spare
      */
     public boolean isSpare() {
@@ -190,6 +204,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Is the frame Strike
+     *
      * @return boolean indicating Strike
      */
     public boolean isStrike() {
@@ -202,6 +217,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Get roll on given roll index
+     *
      * @param roll_index Roll index
      * @return Roll on the index
      */
@@ -211,6 +227,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * Is the frame terminated
+     *
      * @return boolean indicating terminated frame
      */
     private boolean isTerminated() {
@@ -219,6 +236,7 @@ public class FrameEntity extends BaseEntity {
 
     /**
      * How many rolls to terminate the frame
+     *
      * @return Nubmer of rolls to terminate frame
      */
     private int rollsToTerminate() {
@@ -228,8 +246,10 @@ public class FrameEntity extends BaseEntity {
     /*
      * For debug purposes only
      */
+
     /**
      * toString method for debug purposes
+     *
      * @return String representation of FrameEntity
      */
     @Override

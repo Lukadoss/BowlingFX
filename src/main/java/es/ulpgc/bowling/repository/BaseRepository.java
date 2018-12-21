@@ -5,6 +5,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * Base repository is a parent to all repository classes in the project
+ *
  * @param <T> Entity class
  * @author David Bohmann
  */

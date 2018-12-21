@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * LineEntity representing Line object
+ *
  * @author David Bohmann
  */
 @Entity(name = "LINE")
@@ -37,6 +38,7 @@ public class LineEntity extends BaseEntity {
 
     /**
      * Get bowling
+     *
      * @return BowlingEntity
      */
     public BowlingEntity getBowling() {
@@ -45,6 +47,7 @@ public class LineEntity extends BaseEntity {
 
     /**
      * Set bowling
+     *
      * @param bowling BowlingEntity
      */
     public void setBowling(BowlingEntity bowling) {
@@ -53,6 +56,7 @@ public class LineEntity extends BaseEntity {
 
     /**
      * Get games
+     *
      * @return list of games
      */
     public List<GameEntity> getGames() {
@@ -61,6 +65,7 @@ public class LineEntity extends BaseEntity {
 
     /**
      * Set games
+     *
      * @param games List of games
      */
     public void setGames(List<GameEntity> games) {
@@ -80,6 +85,7 @@ public class LineEntity extends BaseEntity {
 
     /**
      * Constructor with list of games
+     *
      * @param games List of games
      */
     public LineEntity(List<GameEntity> games) {
@@ -92,6 +98,7 @@ public class LineEntity extends BaseEntity {
 
     /**
      * Find game that is currently running on line
+     *
      * @return
      */
     public GameEntity getRunningGame() {
@@ -103,6 +110,7 @@ public class LineEntity extends BaseEntity {
 
     /**
      * Find name of running game for GUI
+     *
      * @return name of running game
      */
     public String getRunningGameName() {
@@ -116,6 +124,7 @@ public class LineEntity extends BaseEntity {
 
     /**
      * toString method for debug purposes
+     *
      * @return String representation of LineEntity
      */
     @Override

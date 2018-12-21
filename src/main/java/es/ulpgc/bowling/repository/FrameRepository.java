@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * FrameRepository class is a repository for FrameEntity class
+ *
  * @author David Bohmann
  */
 public interface FrameRepository extends BaseRepository<FrameEntity> {

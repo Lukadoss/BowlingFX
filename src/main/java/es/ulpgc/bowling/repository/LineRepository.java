@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * LineRepository class is a repository for LineEntity class
+ *
  * @author David Bohmann
  */
 public interface LineRepository extends BaseRepository<LineEntity> {

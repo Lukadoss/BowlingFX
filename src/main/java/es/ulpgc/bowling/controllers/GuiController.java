@@ -183,8 +183,8 @@ public class GuiController {
                             setGraphic(null);
                             setText(null);
                         } else if (item instanceof String) {
-                            btn.setText((String)item);
-                            btn.setStyle("-fx-text-fill: "+ Color.RED);
+                            btn.setText((String) item);
+                            btn.setStyle("-fx-text-fill: " + Color.RED);
                             btn.setOnAction(event -> {
                                 if (!backButton.isDisable()) {
                                     mainTable.setVisible(false);
@@ -203,7 +203,7 @@ public class GuiController {
                             setText(null);
                         } else {
                             btn.setOnAction(event -> newGame(getTableView().getItems().get(getIndex())));
-                            btn.setStyle("-fx-text-fill: "+ Color.GREEN);
+                            btn.setStyle("-fx-text-fill: " + Color.GREEN);
                             setGraphic(btn);
                             setText(null);
                         }

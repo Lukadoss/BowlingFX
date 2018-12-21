@@ -2,6 +2,7 @@ package es.ulpgc.bowling.config;
 
 /**
  * Enum representing colors used in application
+ *
  * @author Petr Lukasik
  */
 public enum Color {

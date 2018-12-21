@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * PlayerEntity representing Player
+ *
  * @author David Bohmann
  */
 @Entity(name = "PLAYER")
@@ -61,6 +62,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Get name of player
+     *
      * @return Name of player
      */
     public String getName() {
@@ -69,6 +71,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Set name of player
+     *
      * @param name Name of player
      */
     public void setName(String name) {
@@ -77,6 +80,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Get game
+     *
      * @return GameEntity
      */
     public GameEntity getGame() {
@@ -85,6 +89,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Set game
+     *
      * @param game GameEntity
      */
     public void setGame(GameEntity game) {
@@ -93,6 +98,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Get list of frames
+     *
      * @return List of frames
      */
     public List<FrameEntity> getFrames() {
@@ -101,6 +107,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Get list of Rolls
+     *
      * @return List of Rolls
      */
     public List<Integer> getRolls() {
@@ -112,6 +119,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Get count of frames
+     *
      * @return Count of frames
      */
     public int getFrameCount() {
@@ -120,6 +128,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Get count of rolls
+     *
      * @return Count of rolls
      */
     public int getRollCount() {
@@ -128,6 +137,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Get current frame
+     *
      * @return Current frame
      */
     public FrameEntity getActualFrame() {
@@ -147,6 +157,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Constructor with name of the player
+     *
      * @param name Name of player
      */
     public PlayerEntity(String name) {
@@ -181,6 +192,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Method to roll the pins
+     *
      * @param pins Number of pins to roll
      * @return PlayerEntity after roll
      */
@@ -192,6 +204,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Get frame on specified indec
+     *
      * @param i index
      * @return Frame on index
      */
@@ -202,6 +215,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Get score until specified frame
+     *
      * @param frame number of frame
      * @return Score until frame
      */
@@ -218,6 +232,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * Get complete score
+     *
      * @return Complete score
      */
     public Integer sumScore() {
@@ -231,11 +246,11 @@ public class PlayerEntity extends BaseEntity {
     /**
      * Clear this entity from memory
      */
-    public void clearEntity(){
+    public void clearEntity() {
         this.rolls = new ArrayList<>();
         this.frames = new ArrayList<>();
-        frameCount=0;
-        rollCount=0;
+        frameCount = 0;
+        rollCount = 0;
     }
 
     /*
@@ -264,6 +279,7 @@ public class PlayerEntity extends BaseEntity {
 
     /**
      * toString method for debug purposes
+     *
      * @return String representation of PlayerEntity
      */
     @Override

@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * GameEntity representing Game
+ *
  * @author David Bohmann
  */
 @Entity(name = "GAME")
@@ -57,6 +58,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Get list of players
+     *
      * @return List of players
      */
     public List<PlayerEntity> getPlayers() {
@@ -65,6 +67,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Set list of players
+     *
      * @param players List of players
      */
     public void setPlayers(List<PlayerEntity> players) {
@@ -73,6 +76,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Get line
+     *
      * @return LineEntity
      */
     public LineEntity getLine() {
@@ -81,6 +85,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Set line
+     *
      * @param line LineEntity
      */
     public void setLine(LineEntity line) {
@@ -89,6 +94,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Get name of game
+     *
      * @return Name of game
      */
     public String getName() {
@@ -97,6 +103,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Set name of game
+     *
      * @param name Name of game
      */
     public void setName(String name) {
@@ -105,6 +112,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Get start time of game
+     *
      * @return Start time of game
      */
     public LocalDateTime getStarted() {
@@ -113,6 +121,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Get end time of game
+     *
      * @return End time of game
      */
     public LocalDateTime getEnded() {
@@ -132,7 +141,8 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Constructor with name of game and list of players
-     * @param name Name of game
+     *
+     * @param name    Name of game
      * @param players List of players
      */
     public GameEntity(String name, ArrayList<PlayerEntity> players) {
@@ -155,6 +165,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Check if game is still running
+     *
      * @return true if game is running
      */
     public boolean isRunning() {
@@ -163,6 +174,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Get formatted difference between end and start time of game, if game still running, return message about running
+     *
      * @return String representation of duration of the game.
      */
     public String getGameDuration() {
@@ -181,6 +193,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Add player to the game, if he is not there already
+     *
      * @param player PlayerEntity
      * @return GameEntity with added player
      */
@@ -195,6 +208,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Remove player from the game, if he is there
+     *
      * @param player PlayerEntity
      * @return GameEntity with removed player
      */
@@ -209,6 +223,7 @@ public class GameEntity extends BaseEntity {
 
     /**
      * Get sum of scores of players of the game
+     *
      * @return score of the game
      */
     public Integer getTotalScore() {
@@ -222,8 +237,10 @@ public class GameEntity extends BaseEntity {
     /*
      * For debug purposes only
      */
+
     /**
      * toString method for debug purposes
+     *
      * @return String representation of GameEntity
      */
     @Override

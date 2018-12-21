@@ -12,6 +12,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 /**
  * Main class of the application, SpringBoot entry point.
  * Loads the JavaFX necessary files and loads GUI
+ *
  * @author David Bohmann
  */
 @SpringBootApplication

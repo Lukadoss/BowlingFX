@@ -37,7 +37,8 @@ public class GameController {
     private HBox rollBox;
     private ArrayList<Button> rollButts;
 
-    public GameController(){}
+    public GameController() {
+    }
 
     public GameController(GuiController guiController) {
         this.gc = guiController;
@@ -235,7 +236,8 @@ public class GameController {
         BowlingApplication.getPrimaryStage().setMinWidth(750);
         BowlingApplication.getPrimaryStage().setMinHeight(100);
         for (Node n : gc.gameVBox.getChildren()) {
-            if (n instanceof HBox) BowlingApplication.getPrimaryStage().setMinHeight(BowlingApplication.getPrimaryStage().getMinHeight() + 75);
+            if (n instanceof HBox)
+                BowlingApplication.getPrimaryStage().setMinHeight(BowlingApplication.getPrimaryStage().getMinHeight() + 75);
         }
     }
 
@@ -259,22 +261,22 @@ public class GameController {
 
         List<FrameEntity> tmpList = new ArrayList<>();
         int counter = 0;
-        while (gc.getCurrentGame().getPlayers().get(playerModulo()).getFrameOnIndex(counter)!=null) {
+        while (gc.getCurrentGame().getPlayers().get(playerModulo()).getFrameOnIndex(counter) != null) {
             tmpList.add(gc.getCurrentGame().getPlayers().get(playerModulo()).getFrameOnIndex(counter));
             playerCounter++;
-            if (playerModulo()==0) counter++;
+            if (playerModulo() == 0) counter++;
         }
-        for (PlayerEntity p : gc.getCurrentGame().getPlayers()){
+        for (PlayerEntity p : gc.getCurrentGame().getPlayers()) {
             p.clearEntity();
             gc.getFrameRepo().deleteAllByPlayerId(p.getId());
         }
 
-        playerCounter=0;
+        playerCounter = 0;
 
         for (FrameEntity frame : tmpList) {
-            if (frame.getRollOne()!=null) makeRoll(frame.getRollOne());
-            if (frame.getRollTwo()!=null) makeRoll(frame.getRollTwo());
-            if (frame.getRollThree()!=null) makeRoll(frame.getRollThree());
+            if (frame.getRollOne() != null) makeRoll(frame.getRollOne());
+            if (frame.getRollTwo() != null) makeRoll(frame.getRollTwo());
+            if (frame.getRollThree() != null) makeRoll(frame.getRollThree());
         }
 
         ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
@@ -381,8 +383,7 @@ public class GameController {
             if (!currFrame.isLastFrame()) {
                 currentWindowLabels.get(1).setText("X");
                 currentWindowLabels.get(3).setText("");
-            }
-            else if (currFrame.getRollThree() != null) {
+            } else if (currFrame.getRollThree() != null) {
                 if (currFrame.getRollThree() == 10) currentWindowLabels.get(1).setText("X");
                 else currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
             } else if (currFrame.getRollTwo() != null) {
@@ -393,8 +394,7 @@ public class GameController {
             if (!currFrame.isLastFrame()) {
                 currentWindowLabels.get(1).setText("/");
                 currentWindowLabels.get(3).setText("");
-            }
-            else if (currFrame.getRollThree() != null) {
+            } else if (currFrame.getRollThree() != null) {
                 if (currFrame.getRollThree() == 10) currentWindowLabels.get(1).setText("X");
                 else currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
             } else currentWindowLabels.get(2).setText("/");
@@ -402,8 +402,7 @@ public class GameController {
             if (currFrame.getRollTwo() != null) {
                 if (currFrame.isLastFrame()) currentWindowLabels.get(2).setText("" + currFrame.getRollTwo());
                 else currentWindowLabels.get(1).setText("" + currFrame.getRollTwo());
-            }
-            else currentWindowLabels.get(0).setText("" + currFrame.getRollOne());
+            } else currentWindowLabels.get(0).setText("" + currFrame.getRollOne());
 
             if (currFrame.getRollThree() != null) currentWindowLabels.get(1).setText("" + currFrame.getRollThree());
         }

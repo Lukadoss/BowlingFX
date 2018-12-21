@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * BowlingEntity representing Bowling bar object
+ *
  * @author David Bohmann
  */
 @Entity(name = "BOWLING")
@@ -37,6 +38,7 @@ public class BowlingEntity extends BaseEntity {
 
     /**
      * Get name of Bowling bar
+     *
      * @return name of Bowling bar
      */
     public String getName() {
@@ -45,6 +47,7 @@ public class BowlingEntity extends BaseEntity {
 
     /**
      * Set name of Bowling bar
+     *
      * @param name Name of Bowling bar
      */
     public void setName(String name) {
@@ -53,6 +56,7 @@ public class BowlingEntity extends BaseEntity {
 
     /**
      * Get list of lines
+     *
      * @return List of lines
      */
     public List<LineEntity> getLines() {
@@ -61,6 +65,7 @@ public class BowlingEntity extends BaseEntity {
 
     /**
      * Set list of lines
+     *
      * @param lines List of lines
      */
     public void setLines(List<LineEntity> lines) {
@@ -80,6 +85,7 @@ public class BowlingEntity extends BaseEntity {
 
     /**
      * Constructor with list of lines, Unknown name
+     *
      * @param lines List of lines
      */
     public BowlingEntity(List<LineEntity> lines) {
@@ -88,8 +94,9 @@ public class BowlingEntity extends BaseEntity {
 
     /**
      * Constructor with name and list of lines
+     *
      * @param lines list of lines
-     * @param name name of Bowling bar
+     * @param name  name of Bowling bar
      */
     public BowlingEntity(List<LineEntity> lines, String name) {
         this.lines = lines;
@@ -102,6 +109,7 @@ public class BowlingEntity extends BaseEntity {
 
     /**
      * Add line to list of lines
+     *
      * @param line Line to add
      * @return BowlingEntity with added line
      */
@@ -116,6 +124,7 @@ public class BowlingEntity extends BaseEntity {
 
     /**
      * toString method for debug purposes
+     *
      * @return String representation of BowlingEntity
      */
     @Override
