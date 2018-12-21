@@ -5,10 +5,7 @@ import es.ulpgc.bowling.entity.BowlingEntity;
 import es.ulpgc.bowling.entity.GameEntity;
 import es.ulpgc.bowling.entity.LineEntity;
 import es.ulpgc.bowling.entity.PlayerEntity;
-import es.ulpgc.bowling.repository.BowlingRepository;
-import es.ulpgc.bowling.repository.GameRepository;
-import es.ulpgc.bowling.repository.LineRepository;
-import es.ulpgc.bowling.repository.PlayerRepository;
+import es.ulpgc.bowling.repository.*;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -52,6 +49,8 @@ public class GuiController {
     @Autowired
     private GameRepository gameRepo;
 
+    @Autowired
+    private FrameRepository frameRepo;
 
     Timeline clock;
     private BowlingEntity currentBowling;
@@ -341,6 +340,10 @@ public class GuiController {
 
     public PlayerRepository getPlayerRepo() {
         return playerRepo;
+    }
+
+    public FrameRepository getFrameRepo() {
+        return frameRepo;
     }
 
     public void setCurrentGame(GameEntity currentGame) {

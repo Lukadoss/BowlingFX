@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,9 +25,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Component
 public class GameController {
 
-    private final GuiController gc;
+    private GuiController gc;
     private ArrayList<HBox> playerBoxes;
     private Label rollOut, finalScore;
     private AtomicInteger gamePosition;
@@ -34,6 +36,8 @@ public class GameController {
     private int decay, tmp, playerCounter;
     private HBox rollBox;
     private ArrayList<Button> rollButts;
+
+    public GameController(){}
 
     public GameController(GuiController guiController) {
         this.gc = guiController;
@@ -89,7 +93,7 @@ public class GameController {
         rollOut.setPadding(new Insets(2, 2, 2, 2));
 
         Button rollBut = new Button("Random roll");
-        rollBut.setOnAction(e -> makeRoll(-1, false));
+        rollBut.setOnAction(e -> makeRoll(-1));
 
         FlowPane rollPn = new FlowPane();
         rollPn.setStyle("-fx-background-color: white; -fx-background-radius: 5; -fx-border-width: 2; -fx-border-color: black; -fx-border-radius: 5");
@@ -108,7 +112,7 @@ public class GameController {
             Button b = new Button(String.valueOf(i));
             b.setPrefSize(30, 30);
             int x = i;
-            b.setOnAction(e -> makeRoll(x, false));
+            b.setOnAction(e -> makeRoll(x));
             HBox.setMargin(b, new Insets(0, 0, 0, 5));
             rollButts.add(b);
         }
@@ -249,31 +253,24 @@ public class GameController {
             if (n instanceof HBox) BowlingApplication.getPrimaryStage().setMinHeight(BowlingApplication.getPrimaryStage().getMinHeight() + 75);
         }
 
-        FrameEntity tmpFrame = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(gamePosition.get());
-        gc.getCurrentGame().getPlayers().get(playerModulo()).getRolls();
-        while (tmpFrame != null) {
-            int tmpr2 = -1, tmpr3 = -1;
-            if (tmpFrame.getRollThree() != null) {
-                tmpr3 = tmpFrame.getRollThree();
-                tmpFrame.setRollThree(null);
-            }
-            if (tmpFrame.getRollTwo() != null) {
-                tmpr2 = tmpFrame.getRollTwo();
-                tmpFrame.setRollTwo(null);
-            }
-            if (tmpFrame.getRollOne() != null) makeRoll(tmpFrame.getRollOne(), true);
-
-            if (tmpr2 != -1) {
-                tmpFrame.setRollTwo(tmpr2);
-                makeRoll(tmpFrame.getRollTwo(), true);
-            }
-            if (tmpr3 != -1) {
-                tmpFrame.setRollThree(tmpr3);
-                makeRoll(tmpFrame.getRollThree(), true);
-            }
-            gc.getCurrentGame().getPlayers().get(playerModulo()).getRolls();
-            tmpFrame = gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(gamePosition.get());
+        List<FrameEntity> tmpList = new ArrayList<>();
+        int counter = 0;
+        while (gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(counter)!=null) {
+            tmpList.add(gc.getCurrentGame().getPlayers().get(playerModulo()).getFrame(counter));
+            playerCounter++;
+            if (playerModulo()==0) counter++;
         }
+        for (PlayerEntity p : gc.getCurrentGame().getPlayers()){
+            p.clearEntity();
+            gc.getFrameRepo().deleteAllByPlayerId(p.getId());
+        }
+
+        for (FrameEntity frame : tmpList) {
+            if (frame.getRollOne()!=null) makeRoll(frame.getRollOne());
+            if (frame.getRollTwo()!=null) makeRoll(frame.getRollTwo());
+            if (frame.getRollThree()!=null) makeRoll(frame.getRollThree());
+        }
+
         ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
     }
 
@@ -302,29 +299,13 @@ public class GameController {
         return playerCounter % gc.getCurrentGame().getPlayers().size();
     }
 
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-    // -------___-_---_--_- DANGER ZONE --__---_--__- DANGER ZONE --- __-_--___-- DANGER ZONE ---__-___-------____---_---
-
-    // Description of this crapcode currWindowLabels by indexes: 0 - topleft, 1 - topright, 2 - 2nd topright, 3 - bottom
-    // !!! accessing without arraylist -> add +2 to every index
-    // PS: DO NOT TOUCH, it works.. somehow..
-    private void makeRoll(int roll, boolean load) {
+    private void makeRoll(int roll) {
         PlayerEntity p = gc.getCurrentGame().getPlayers().get(playerModulo());
 
         if (roll == -1) tmp = r.nextInt(decay);
         else tmp = roll;
 
-        if (!load) p.roll(tmp);
+        p.roll(tmp);
 
         rollOut.setText(String.valueOf(tmp));
 
