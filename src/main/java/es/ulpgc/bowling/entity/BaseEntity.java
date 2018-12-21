@@ -3,6 +3,10 @@ package es.ulpgc.bowling.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * Base entity is a parent to all entity classes in the project
+ * @author David Bohmann
+ */
 @MappedSuperclass
 public class BaseEntity implements Serializable {
 

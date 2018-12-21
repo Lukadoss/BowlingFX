@@ -7,15 +7,25 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * LineEntity representing Line object
+ * @author David Bohmann
+ */
 @Entity(name = "LINE")
 public class LineEntity extends BaseEntity {
 
     /*
      * Fields
      */
+    /**
+     * Bowling bar - parent of line
+     */
     @ManyToOne
     private BowlingEntity bowling;
 
+    /**
+     * List of games
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "line_id")
     @Fetch(FetchMode.SELECT)
@@ -24,18 +34,35 @@ public class LineEntity extends BaseEntity {
     /*
      * Getters and setters
      */
+
+    /**
+     * Get bowling
+     * @return BowlingEntity
+     */
     public BowlingEntity getBowling() {
         return bowling;
     }
 
+    /**
+     * Set bowling
+     * @param bowling BowlingEntity
+     */
     public void setBowling(BowlingEntity bowling) {
         this.bowling = bowling;
     }
 
+    /**
+     * Get games
+     * @return list of games
+     */
     public List<GameEntity> getGames() {
         return games;
     }
 
+    /**
+     * Set games
+     * @param games List of games
+     */
     public void setGames(List<GameEntity> games) {
         this.games = games;
     }
@@ -43,16 +70,29 @@ public class LineEntity extends BaseEntity {
     /*
      * Constructors
      */
+
+    /**
+     * Empty constructor, create empty list of games
+     */
     public LineEntity() {
         this(new ArrayList<>());
     }
 
+    /**
+     * Constructor with list of games
+     * @param games List of games
+     */
     public LineEntity(List<GameEntity> games) {
         this.games = games;
     }
 
     /*
      * Additional methods
+     */
+
+    /**
+     * Find game that is currently running on line
+     * @return
      */
     public GameEntity getRunningGame() {
         for (GameEntity game : games) {
@@ -63,6 +103,11 @@ public class LineEntity extends BaseEntity {
 
     /*
      * For debug purposes only
+     */
+
+    /**
+     * toString method for debug purposes
+     * @return String representation of LineEntity
      */
     @Override
     public String toString() {

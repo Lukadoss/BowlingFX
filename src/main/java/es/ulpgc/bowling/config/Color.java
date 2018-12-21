@@ -1,5 +1,9 @@
 package es.ulpgc.bowling.config;
 
+/**
+ * Enum representing colors used in application
+ * @author Petr Lukasik
+ */
 public enum Color {
     RED("#FF3333"),
     BLUE("#3333FF"),

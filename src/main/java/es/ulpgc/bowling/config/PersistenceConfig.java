@@ -14,6 +14,11 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+/**
+ * Persistence configuration of the application
+ * App uses H2 embedded database
+ * @author David Bohmann
+ */
 @Configuration
 @EnableJpaRepositories(basePackages = "es.ulpgc.bowling")
 public class PersistenceConfig {
