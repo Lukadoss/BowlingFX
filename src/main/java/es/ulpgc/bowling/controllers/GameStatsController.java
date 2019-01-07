@@ -13,15 +13,39 @@ import javafx.scene.layout.AnchorPane;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller for playing game
+ *
+ * @author Petr Lukasik
+ */
 public class GameStatsController {
+    /**
+     * Main container for stats
+     */
     public AnchorPane anchorPane;
+
+    /**
+     * Label for game name
+     */
     public Label gameNameLabel;
+
+    /**
+     * List of players
+     */
     public ListView<String> graphicList;
 
+    /**
+     * Cancel button method, hides window
+     * @param actionEvent
+     */
     public void cancel(ActionEvent actionEvent) {
         ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
     }
 
+    /**
+     * Initialization of stats window, displays score for players in chosen game
+     * @param game
+     */
     public void initGame(GameEntity game) {
         System.out.println(game);
         List<PlayerEntity> playerEntities = game.getPlayers();

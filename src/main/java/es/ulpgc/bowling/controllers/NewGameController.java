@@ -18,19 +18,60 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Controller for playing game
+ *
+ * @author Petr Lukasik
+ */
 @Component
 public class NewGameController {
+    /**
+     * Label for name
+     */
     public Label mainLabel;
+
+    /**
+     * Main textfield for gamename
+     */
     public TextField textField;
-    public Button nextButton;
-    public Button b1, b2, b3, b4, b5, b6, b7, b8;
+
+    /**
+     * Button control elements
+     */
+    public Button nextButton, b1, b2, b3, b4, b5, b6, b7, b8;
+
+    /**
+     * Group of player number buttons
+     */
     public Group buttonGroup;
+
+    /**
+     * Main container
+     */
     public AnchorPane anchorPane;
 
+    /**
+     * Temporary help boolean
+     */
     private boolean playersLoad = true;
+    /**
+     * New game name
+     */
     private String gameName;
+
+    /**
+     * Textfields of name of players
+     */
     private HashMap<Label, TextField> nameFields;
+
+    /**
+     * Array of player names
+     */
     private ArrayList<String> names;
+
+    /**
+     * Gui controller
+     */
     private GuiController gc;
 
     private GameEntity game;
@@ -41,6 +82,10 @@ public class NewGameController {
         names = new ArrayList<>();
     }
 
+    /**
+     * Method executed when cancel button is pressed. Returns main window to previsous state and hides new game window
+     * @param actionEvent
+     */
     public void cancel(ActionEvent actionEvent) {
         gc.backButton.setDisable(false);
         gc.leaderboardsButton.setDisable(false);
@@ -48,6 +93,10 @@ public class NewGameController {
         ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
     }
 
+    /**
+     * Next button pressed, event depends on current state
+     * @param actionEvent
+     */
     public void next(ActionEvent actionEvent) {
         if (playersLoad) {
             playersLoad = false;
@@ -81,6 +130,9 @@ public class NewGameController {
         }
     }
 
+    /**
+     * Prepares next window with choosing number of player
+     */
     private void loadPlayersLayer() {
         if (textField.getText().isEmpty()) {
             gameName = "Unknown game #" + gc.getGameRepo().count();
@@ -91,6 +143,10 @@ public class NewGameController {
         buttonGroup.setVisible(true);
     }
 
+    /**
+     * Method defining pressed number of players
+     * @param actionEvent
+     */
     public void pressNumOfPlayers(ActionEvent actionEvent) {
         int numOfPlayers = Integer.parseInt(actionEvent.getSource().toString().split("'")[1]);
         mainLabel.setText("Create or choose players");
@@ -117,11 +173,19 @@ public class NewGameController {
         }
     }
 
+    /**
+     * Checking key input, on enter move next
+     * @param keyEvent
+     */
     public void checkKey(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.ENTER) {
             next(new ActionEvent());
         }
     }
+
+    /*
+     *  Getters and setters
+     */
 
     public void setUpGC(GuiController gc) {
         this.gc = gc;

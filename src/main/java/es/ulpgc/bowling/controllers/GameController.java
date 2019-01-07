@@ -25,21 +25,63 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Controller for playing game
+ *
+ * @author Petr Lukasik
+ */
 @Component
 public class GameController {
 
+    /**
+     * Main gui controller
+     */
     private GuiController gc;
+
+    /**
+     * List of HBoxes of players
+     */
     private ArrayList<HBox> playerBoxes;
+
+    /**
+     * Summary labels
+     */
     private Label rollOut, finalScore;
+
+    /**
+     * Current player
+     */
     private AtomicInteger gamePosition;
+
+    /**
+     * Random instance
+     */
     private Random r;
+
+    /**
+     * Temporary integers for game
+     */
     private int decay, tmp, playerCounter;
+
+    /**
+     * Bottom settings container
+     */
     private HBox rollBox;
+
+    /**
+     * List of roll buttons
+     */
     private ArrayList<Button> rollButts;
 
-    public GameController() {
-    }
+    /**
+     * Default controller
+     */
+    public GameController() { }
 
+    /**
+     * Called controller with default game settings
+     * @param guiController gui controller
+     */
     public GameController(GuiController guiController) {
         this.gc = guiController;
         playerBoxes = new ArrayList<>();
@@ -50,6 +92,9 @@ public class GameController {
         initGameGui();
     }
 
+    /**
+     * Game graphic initialization, prepares graphics for every player and setups bottom roll container
+     */
     private void initGameGui() {
         gc.gameVBox.getChildren().clear();
         List<PlayerEntity> players = gc.getCurrentGame().getPlayers();
@@ -159,6 +204,11 @@ public class GameController {
         gc.gameVBox.getChildren().addAll(finalScoreBox, filler, rollBox);
     }
 
+    /**
+     * Method preparing labels in every frame for score writing
+     * @param ap frame window
+     * @param pos player position
+     */
     private void prepareLabels(AnchorPane ap, int pos) {
         Label sc1 = new Label();
         Label sc2 = new Label();
@@ -223,6 +273,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Starts a new game, starts clock and sets minimal height for main window
+     */
     public void startGame() {
         gamePosition = new AtomicInteger();
         ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
@@ -241,6 +294,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Loads not finished game, sets min height for main window, rewrites scoring into frames
+     */
     public void loadGame() {
         gamePosition = new AtomicInteger();
         LocalDateTime startTime;
@@ -282,6 +338,10 @@ public class GameController {
         ((Label) ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren().get(5)).setText("> > >");
     }
 
+    /**
+     * Formatting for clock counter
+     * @param startTime time of start
+     */
     private void setUpClock(LocalDateTime startTime) {
         gc.clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
             java.time.Duration duration = java.time.Duration.between(startTime, LocalDateTime.now());
@@ -294,6 +354,9 @@ public class GameController {
         }), new KeyFrame(Duration.seconds(1)));
     }
 
+    /**
+     * Ends current game, stops clock
+     */
     public void endGame() {
         rollBox.setDisable(true);
         rollOut.setText("Game ended!");
@@ -303,10 +366,18 @@ public class GameController {
         BowlingApplication.getPrimaryStage().setMinHeight(400);
     }
 
+    /**
+     * Returns position of current player
+     * @return position
+     */
     private int playerModulo() {
         return playerCounter % gc.getCurrentGame().getPlayers().size();
     }
 
+    /**
+     * Executes a roll for current player and calculate roll function, calls gui writing
+     * @param roll pins downed
+     */
     private void makeRoll(int roll) {
         PlayerEntity p = gc.getCurrentGame().getPlayers().get(playerModulo());
 
@@ -371,6 +442,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Writes score into frame gui, transforms score into numbers or characters
+     */
     private void writeScore() {
         ArrayList<Label> currentWindowLabels = new ArrayList<>();
         for (Node n : ((AnchorPane) playerBoxes.get(playerModulo()).getChildren().get(gamePosition.get())).getChildren()) {
