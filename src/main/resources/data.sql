@@ -27,10 +27,10 @@ insert into Game (id, name, line_id, started, ended) values (3, 'Kids corner', 5
 CURRENT_TIMESTAMP+0.8887);
 insert into Game (id, name, line_id, started, ended) values (4, 'Sloths', 7,
 CURRENT_TIMESTAMP, CURRENT_TIMESTAMP+0.4);
-insert into Game (id, name, line_id) values (5, 'Second game', 1);
-insert into Game (id, name, line_id) values (6, 'Kekeroni game', 11);
-insert into Game (id, name, line_id) values (7, 'Flash winners', 5);
-insert into Game (id, name, line_id) values (8, 'King of the DUCKS', 7);
+insert into Game (id, name, line_id, started) values (5, 'Second game', 1, CURRENT_TIMESTAMP);
+insert into Game (id, name, line_id, started) values (6, 'Kekeroni game', 11, CURRENT_TIMESTAMP);
+insert into Game (id, name, line_id, started) values (7, 'Flash winners', 5, CURRENT_TIMESTAMP);
+insert into Game (id, name, line_id, started) values (8, 'King of the DUCKS', 7, CURRENT_TIMESTAMP);
 
 insert into Player (id, name, game_id) values (1, 'david', 1);
 insert into Player (id, name, game_id) values (2, 'jan', 1);
